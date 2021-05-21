@@ -20,5 +20,11 @@ public class Collectable {
 		 }
 		 return collectables;
 	}
+	
+	public static int[][] CreateSolids(int boardSize) {
+		int[][] solids = new int[4][2];
+		
+		return solids;
+	}
 }
 
