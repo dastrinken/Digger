@@ -8,10 +8,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import jserver.Board;
+import jserver.Symbol;
 import jserver.XSendAdapter;
 import plotter.Graphic;
 import java.awt.FlowLayout;
+
 import javax.swing.SwingConstants;
+import java.awt.Dimension;
 
 /**
  * This program is a Remake of the original game "Digger" released in 1983
@@ -24,7 +27,7 @@ import javax.swing.SwingConstants;
  */
 
 public class StartGame extends Thread implements KeyListener {
-
+	
 	protected static Board board;
 	protected static Graphic graphic;
 	protected static XSendAdapter xsend;
@@ -53,9 +56,10 @@ public class StartGame extends Thread implements KeyListener {
 		 * int screenWidth = (int) screensize.getWidth() / 2; int screenHeight = (int)
 		 * screensize.getHeight() / 2;
 		 */
-		
 		board = new Board();
-		board.setSize(790, 600);
+		board.setSize(725, 590);
+		
+		Symbol symbol;
 
 		graphic = board.getGraphic();
 		graphic.setVisible(false);
@@ -75,6 +79,8 @@ public class StartGame extends Thread implements KeyListener {
 			for (int j = 0; j < boardSize; j++) {
 				if (i != posX || j != posY) {
 					board.receiveMessage("image " + i + " " + j + " ./images/erde_test.png \n");
+					symbol = board.getSymbol(i, j);
+					symbol.getImageObject().setWorldWidth(0);
 				}
 			}
 		}
@@ -83,17 +89,21 @@ public class StartGame extends Thread implements KeyListener {
 		
 		
 		JPanel southPanel = new JPanel();
+		southPanel.setPreferredSize(new Dimension(500, 17));
 		southPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 		
 		JLabel livesDisplay = new JLabel("Leben");
+		livesDisplay.setPreferredSize(new Dimension(190, 14));
 		livesDisplay.setHorizontalAlignment(SwingConstants.LEFT);
 		southPanel.add(livesDisplay);
 		
 		JLabel lvlDisplay = new JLabel("Level");
+		lvlDisplay.setPreferredSize(new Dimension(99, 14));
 		lvlDisplay.setHorizontalAlignment(SwingConstants.CENTER);
 		southPanel.add(lvlDisplay);
 		
 		JLabel ptDisplay = new JLabel("Punkte");
+		ptDisplay.setPreferredSize(new Dimension(190, 14));
 		ptDisplay.setVerticalAlignment(SwingConstants.BOTTOM);
 		ptDisplay.setHorizontalAlignment(SwingConstants.RIGHT);
 		southPanel.add(ptDisplay);

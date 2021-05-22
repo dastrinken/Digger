@@ -10,9 +10,9 @@ public class Collectable {
 		 for(int i = 0; i < collectables.length; i++ ) {
 				 posX = (int) (Math.random()*20);
 				 posY = (int) (Math.random()*20);
+				 //while collectable x & y same as player position, reroll
 				 while(posX == boardSize-1 && posX == posY) {
 					 posY = (int) (Math.random()*20);
-					 System.out.println("Tomate auf Startplatz aussortiert");
 				 }
 				 collectables[i][0] = posX;
 				 collectables[i][1] = posY;
