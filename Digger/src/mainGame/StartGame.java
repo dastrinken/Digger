@@ -17,8 +17,8 @@ import javax.swing.SwingConstants;
 import java.awt.Dimension;
 
 /**
- * This program is a Remake of the original game "Digger" released in 1983
- * as part of a study project by Armin Prinz & Sebastian Ziegler
+ * This program is a Remake of the original game "Digger" released in 1983 as
+ * part of a study project by Armin Prinz & Sebastian Ziegler
  * 
  * @author Armin Prinz
  * @author Sebastian Ziegler
@@ -27,7 +27,7 @@ import java.awt.Dimension;
  */
 
 public class StartGame extends Thread implements KeyListener {
-	
+
 	protected static Board board;
 	protected static Graphic graphic;
 	protected static XSendAdapter xsend;
@@ -37,20 +37,21 @@ public class StartGame extends Thread implements KeyListener {
 	private int posY = boardSize - 1;
 
 	public static void main(String[] args) {
-		//Neues Spiel starten. 
+		// Neues Spiel starten.
 		StartGame digger = new StartGame();
-		
+
 		Player player = new Player();
 		player.setLives(3);
 		player.setPoints(0);
-		
+
 		digger.setUpBoard();
-		digger.setUpCollectables();
-		//TODO: Spiel fortsetzen und Highscore
+		digger.setUpItems();
+		// TODO: Spiel fortsetzen und Highscore
 	}
 
 	public void setUpBoard() {
-		// TODO: Level als Parameter übergeben und Board nach Abschluss eines Levels neu aufsetzen!
+		// TODO: Level als Parameter übergeben und Board nach Abschluss eines Levels neu
+		// aufsetzen!
 		/*
 		 * Dimension screensize = java.awt.Toolkit.getDefaultToolkit().getScreenSize ();
 		 * int screenWidth = (int) screensize.getWidth() / 2; int screenHeight = (int)
@@ -58,7 +59,7 @@ public class StartGame extends Thread implements KeyListener {
 		 */
 		board = new Board();
 		board.setSize(725, 590);
-		
+
 		Symbol symbol;
 
 		graphic = board.getGraphic();
@@ -74,7 +75,7 @@ public class StartGame extends Thread implements KeyListener {
 		xsend.formen("none");
 		xsend.rahmen(XSendAdapter.BLACK);
 		board.receiveMessage("image " + posX + " " + posY + " ./images/digger_test.jpg \n");
-		
+
 		for (int i = 0; i < boardSize; i++) {
 			for (int j = 0; j < boardSize; j++) {
 				if (i != posX || j != posY) {
@@ -84,53 +85,48 @@ public class StartGame extends Thread implements KeyListener {
 				}
 			}
 		}
-		
+
 		graphic.setVisible(true);
-		
-		
+
 		JPanel southPanel = new JPanel();
 		southPanel.setPreferredSize(new Dimension(500, 17));
 		southPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-		
+
 		JLabel livesDisplay = new JLabel("Leben");
 		livesDisplay.setPreferredSize(new Dimension(190, 14));
 		livesDisplay.setHorizontalAlignment(SwingConstants.LEFT);
 		southPanel.add(livesDisplay);
-		
+
 		JLabel lvlDisplay = new JLabel("Level");
 		lvlDisplay.setPreferredSize(new Dimension(99, 14));
 		lvlDisplay.setHorizontalAlignment(SwingConstants.CENTER);
 		southPanel.add(lvlDisplay);
-		
+
 		JLabel ptDisplay = new JLabel("Punkte");
 		ptDisplay.setPreferredSize(new Dimension(190, 14));
 		ptDisplay.setVerticalAlignment(SwingConstants.BOTTOM);
 		ptDisplay.setHorizontalAlignment(SwingConstants.RIGHT);
 		southPanel.add(ptDisplay);
-		
+
 		graphic.addSouthComponent(southPanel);
 	}
-	
-	public void setUpCollectables() {
-		int xCollectable = 1000;
-		int yCollectable = 1000;
-		
-		int[][] collectableArray = Collectable.CreateCollectables(boardSize);
-		LevelManager.setCollectableArray(collectableArray);
+
+	public void setUpItems() {
+		int xCollectable;
+		int yCollectable;
+
+		int[][] collectableArray = Items.CreateCollectables(boardSize);
+		GameManager.setCollectableArray(collectableArray);
 		
 		for (int i = 0; i < collectableArray.length; i++) {
-			 for(int j = 0; j < 2; j++) {
-				 if(j == 0) {
-					 xCollectable = collectableArray[i][j];
-				 }
-				 else {
-					 yCollectable = collectableArray[i][j];
-					 board.receiveMessage("image " + xCollectable + " " + yCollectable + " ./images/erde_tomato.png \n");
-				 }
-			 }
+			xCollectable = collectableArray[i][0];
+			yCollectable = collectableArray[i][1];
+			board.receiveMessage("image " + xCollectable + " " + yCollectable + " ./images/erde_tomato.png \n");
 		}
+		
+		int[][] solidArray = Items.CreateSolids(boardSize, collectableArray);
 	}
-	
+
 	public static void nextLevel() {
 		System.out.println("Gewonnen!");
 	}
@@ -143,33 +139,33 @@ public class StartGame extends Thread implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		int keyCode = e.getKeyCode();
-		//UP
+		// UP
 		if (keyCode == 87 || keyCode == 38) {
 			if (posY < boardSize - 1) {
 				++posY;
 				board.receiveMessage("image " + posX + " " + (posY - 1) + " -\n");
 			}
-		//LEFT
+			// LEFT
 		} else if (keyCode == 65 || keyCode == 37) {
 			if (posX > 0) {
 				--posX;
 				board.receiveMessage("image " + (posX + 1) + " " + posY + " -\n");
 			}
-		//DOWN
+			// DOWN
 		} else if (keyCode == 83 || keyCode == 40) {
 			if (posY > 0) {
 				--posY;
 				board.receiveMessage("image " + posX + " " + (posY + 1) + " -\n");
 			}
-		//RIGHT
+			// RIGHT
 		} else if (keyCode == 68 || keyCode == 39) {
 			if (posX < boardSize - 1) {
 				++posX;
 				board.receiveMessage("image " + (posX - 1) + " " + posY + " -\n");
 			}
 		}
-		
-		LevelManager.checkPosition(posX, posY);
+
+		GameManager.checkPosition(posX, posY);
 		board.receiveMessage("image " + posX + " " + posY + " ./images/digger_test.jpg \n");
 	}
 
