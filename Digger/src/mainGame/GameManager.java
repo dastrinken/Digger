@@ -30,8 +30,8 @@ public class GameManager implements KeyListener {
 	private static int[][] collectableArray;
 	private static int collectableCounter = 5;
 	
-	private static Board board;
-	private static Graphic graphic;
+	public static Board board;
+	public Graphic graphic;
 	private static XSendAdapter xsend;
 
 	private int boardSize = 20;
