@@ -11,10 +11,11 @@ package mainGame;
  */
 
 public class StartGame {
-
+	static GameManager manager;
+	
 	public static void main(String[] args) {
 		// Neues Spiel starten.
-		GameManager manager = new GameManager(1);
+		manager = new GameManager(1);
 		manager.setUpBoard();
 		manager.setUpItems();
 
@@ -23,5 +24,8 @@ public class StartGame {
 
 	public static void nextLevel() {
 		System.out.println("Gewonnen!");
+		manager.graphic.dispose();
+		manager.setUpBoard();
+		manager.setUpItems();
 	}
 }
