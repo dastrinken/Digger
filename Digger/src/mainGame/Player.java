@@ -5,39 +5,23 @@ public class Player {
 	int lives;
 	String name;
 	
-	
-	public Player() {
+	public Player(int lives, int points) {
 		super();
+		this.lives = lives;
+		this.points = points;
 	}
-
 
 	public int getPoints() {
 		return points;
 	}
 
-
 	public void setPoints(int points) {
 		this.points = points;
 		System.out.println(points);
 	}
-
-
-	public int getLives() {
-		return lives;
-	}
-
-
-	public void setLives(int lives) {
-		this.lives = lives;
-	}
-
-
-	public String getName() {
-		return name;
-	}
-
-
-	public void setName(String name) {
-		this.name = name;
+	
+	public void incPoints() {
+		++this.points;
+		GameManager.updatePoints(this.points);
 	}
 }
