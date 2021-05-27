@@ -12,10 +12,10 @@ package mainGame;
 
 public class StartGame {
 	static GameManager manager;
-	
+	//Test
 	public static void main(String[] args) {
 		// Neues Spiel starten.
-		manager = new GameManager(1);
+		manager = new GameManager();
 		manager.setUpBoard();
 		manager.setUpItems();
 
