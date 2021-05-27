@@ -14,17 +14,16 @@ public class StartGame {
 	static GameManager manager;
 	//Test
 	public static void main(String[] args) {
-		// Neues Spiel starten.
+		// Start a new game
 		manager = new GameManager();
 		manager.setUpBoard();
 		manager.setUpItems();
-
-		// TODO: Spiel fortsetzen und Highscore
+		// TODO: Savegames & Highscore
 	}
 
 	public static void nextLevel() {
 		System.out.println("Gewonnen!");
-		manager.graphic.dispose();
+		GameManager.graphic.dispose();
 		manager.setUpBoard();
 		manager.setUpItems();
 	}

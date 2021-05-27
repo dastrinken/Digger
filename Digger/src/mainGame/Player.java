@@ -46,7 +46,7 @@ public class Player {
 	public void resetCounter() {
 		ptCounter = 5;
 		/* TODO: Level und Counter fest definieren! zb: switch-case?
-		 * Eventuell Level mit als PArameter übergeben?
+		 * Eventuell Level mit als Parameter übergeben?
 		switch (this.level) {
 		case 1:
 			counter = 5;
