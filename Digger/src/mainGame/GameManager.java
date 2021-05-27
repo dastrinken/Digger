@@ -260,4 +260,16 @@ public class GameManager implements KeyListener {
 		// TODO Auto-generated method stub
 
 	}
+	
+//	Possible idea: cleaning board between levels (maybe some sort of animation)
+//	Showing Points, lives etc. Maybe a Button for saving the game?
+//	public void cleanBoard() {
+//		for (int i = 0; i < boardSize; i++) {
+//			for (int j = 0; j < boardSize; j++) {
+//				if (i != posX || j != posY) {
+//					board.receiveMessage("image " + i + " " + j + " - \n");
+//				}
+//			}
+//		}
+//	}
 }

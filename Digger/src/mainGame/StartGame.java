@@ -23,6 +23,7 @@ public class StartGame {
 
 	public static void nextLevel() {
 		System.out.println("Gewonnen!");
+		//manager.cleanBoard(); -- See GameManager.java
 		GameManager.graphic.dispose();
 		manager.setUpBoard();
 		manager.setUpItems();
