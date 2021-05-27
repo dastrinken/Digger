@@ -4,6 +4,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -13,22 +15,26 @@ import jserver.Board;
 import jserver.Symbol;
 import jserver.XSendAdapter;
 import plotter.Graphic;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.GraphicsEnvironment;
 
 // TODO: Unbewegliche Objekte (solids) einfügen,
 // TODO: Gegner generieren?
 
 public class GameManager implements KeyListener {
 	// TODO: Player dynamisch generieren lassen wenn "Spiel fortsetzen"!
-	private int level;
 	private static int lives = 3;
 	private static int points = 0;
 	private static Player player = new Player(lives, points);
+	private static int level = player.level;
+	
 	public static JLabel ptDisplay;
 	public JLabel lvlDisplay;
 	public JLabel livesDisplay;
 	
 	private static int[][] collectableArray;
-	private static int collectableCounter = 5;
+	static int collectableCounter = player.getPtCounter();
 	
 	public static Board board;
 	public Graphic graphic;
@@ -38,9 +44,26 @@ public class GameManager implements KeyListener {
 	private int posX = boardSize - 1;
 	private int posY = boardSize - 1;
 	
-	public GameManager(int level) {
+	//Custom font
+	public static Font customFont = createCustomFont(13);
+	
+	public GameManager() {
 		super();
-		this.level = level;
+	}
+
+	public static Font createCustomFont(int size) {
+		try {
+		    //create the font to use. Specify the size!
+		    customFont = Font.createFont(Font.TRUETYPE_FONT, new File("./other/PressStart2P-Regular.ttf")).deriveFont((float)size);
+		    GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		    //register the font
+		    ge.registerFont(customFont);
+		} catch (IOException e) {
+		    e.printStackTrace();
+		} catch(FontFormatException e) {
+		    e.printStackTrace();
+		}
+		return customFont;
 	}
 
 	public static void updatePoints(int points) {
@@ -55,6 +78,9 @@ public class GameManager implements KeyListener {
 		GameManager.collectableArray = getCollectableArray;
 	}
 
+	/**
+	 * @wbp.parser.entryPoint
+	 */
 	public void setUpBoard() {
 		// TODO: Level als Parameter übergeben und Board nach Abschluss eines Levels neu
 		// aufsetzen!
@@ -64,7 +90,7 @@ public class GameManager implements KeyListener {
 		 * screensize.getHeight() / 2;
 		 */
 		board = new Board();
-		board.setSize(725, 590);
+		board.setSize(1020, 760);
 
 		Symbol symbol;
 
@@ -80,14 +106,12 @@ public class GameManager implements KeyListener {
 		xsend.flaeche(0x9E5C2D);
 		xsend.formen("none");
 		xsend.rahmen(XSendAdapter.BLACK);
-		board.receiveMessage("image " + posX + " " + posY + " ./images/digger_test.jpg \n");
+		board.receiveMessage("image " + posX + " " + posY + " ./images/digger.png \n");
 
 		for (int i = 0; i < boardSize; i++) {
 			for (int j = 0; j < boardSize; j++) {
 				if (i != posX || j != posY) {
-					board.receiveMessage("image " + i + " " + j + " ./images/erde_test.png \n");
-					symbol = board.getSymbol(i, j);
-					symbol.getImageObject().setWorldWidth(0);
+					board.receiveMessage("image " + i + " " + j + " ./images/earth.png \n");
 				}
 			}
 		}
@@ -95,22 +119,24 @@ public class GameManager implements KeyListener {
 		graphic.setVisible(true);
 
 		JPanel southPanel = new JPanel();
-		southPanel.setPreferredSize(new Dimension(500, 17));
+		southPanel.setPreferredSize(new Dimension(500, 20));
 		southPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 
 		livesDisplay = new JLabel(player.lives+" Lives");
-		livesDisplay.setPreferredSize(new Dimension(190, 14));
+		livesDisplay.setFont(customFont);
+		livesDisplay.setPreferredSize(new Dimension(190, 16));
 		livesDisplay.setHorizontalAlignment(SwingConstants.LEFT);
 		southPanel.add(livesDisplay);
 
-		lvlDisplay = new JLabel("Level "+this.level);
-		lvlDisplay.setPreferredSize(new Dimension(99, 14));
+		lvlDisplay = new JLabel("Level "+player.level);
+		lvlDisplay.setFont(customFont);
+		lvlDisplay.setPreferredSize(new Dimension(99, 18));
 		lvlDisplay.setHorizontalAlignment(SwingConstants.CENTER);
 		southPanel.add(lvlDisplay);
 
 		ptDisplay = new JLabel(player.points+" Points");
-		ptDisplay.setPreferredSize(new Dimension(190, 14));
-		ptDisplay.setVerticalAlignment(SwingConstants.BOTTOM);
+		ptDisplay.setFont(customFont);
+		ptDisplay.setPreferredSize(new Dimension(190, 16));
 		ptDisplay.setHorizontalAlignment(SwingConstants.RIGHT);
 		southPanel.add(ptDisplay);
 
@@ -127,7 +153,12 @@ public class GameManager implements KeyListener {
 		for (int i = 0; i < collectableArray.length; i++) {
 			xCollectable = collectableArray[i][0];
 			yCollectable = collectableArray[i][1];
-			board.receiveMessage("image " + xCollectable + " " + yCollectable + " ./images/erde_tomato.png \n");
+			if(i % 2 == 0) {
+				board.receiveMessage("image " + xCollectable + " " + yCollectable + " ./images/earth_tomato.png \n");
+			}
+			else {
+				board.receiveMessage("image " + xCollectable + " " + yCollectable + " ./images/earth_onion.png \n");
+			}
 		}
 		
 		int[][] solidArray = Items.CreateSolids(boardSize, collectableArray);
@@ -155,9 +186,12 @@ public class GameManager implements KeyListener {
 		board.receiveMessage("image " + posX + " " + posY + " -\n");
 		System.out.println("Match!");
 		player.incPoints();
-
 		collectableCounter--;
+		System.out.println(collectableCounter);
 		if (collectableCounter == 0) {
+			player.setLevel(++level);
+			player.resetCounter();
+			collectableCounter = player.getPtCounter();
 			StartGame.nextLevel();
 		}
 	}
@@ -198,7 +232,7 @@ public class GameManager implements KeyListener {
 		}
 
 		GameManager.checkPosition(posX, posY);
-		board.receiveMessage("image " + posX + " " + posY + " ./images/digger_test.jpg \n");
+		board.receiveMessage("image " + posX + " " + posY + " ./images/digger.png \n");
 	}
 
 	@Override

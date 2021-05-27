@@ -13,9 +13,14 @@ import javax.swing.WindowConstants;
 
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Color;
+import javax.swing.border.EtchedBorder;
+import javax.swing.UIManager;
 
 public class MainMenu {
 	final static ImageIcon background = new ImageIcon("./images/background.png");
+	static Font customFontRegular = GameManager.createCustomFont(12);
+	static Font customFontSmall = GameManager.createCustomFont(7);
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -42,7 +47,9 @@ public class MainMenu {
 		mainFrame.getContentPane().add(desktopPane);
 		
 		JButton btnStart = new JButton("New Game");
+		btnStart.setBackground(UIManager.getColor("Button.background"));
 		btnStart.setToolTipText("Start a new Game at Lvl.1");
+		btnStart.setFont(customFontRegular);
 		btnStart.setBounds(new Rectangle(10, 0, 400, 75));
 		btnStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -53,17 +60,19 @@ public class MainMenu {
 		desktopPane.add(btnStart);
 		
 		JButton btnContinueGame = new JButton("Continue");
+		btnContinueGame.setFont(customFontRegular);
 		btnContinueGame.setToolTipText("Load your latest savegame");
 		btnContinueGame.setBounds(50, 146, 400, 35);
 		desktopPane.add(btnContinueGame);
 		
 		JButton btnHighscore = new JButton("Highscore");
+		btnHighscore.setFont(customFontRegular);
 		btnHighscore.setToolTipText("Show Highscore");
 		btnHighscore.setBounds(50, 192, 400, 35);
 		desktopPane.add(btnHighscore);
 		
 		JLabel lblNewLabel = new JLabel("Digger V0.1 - A project by Sebastian Z. & Armin P.");
-		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 9));
+		lblNewLabel.setFont(customFontSmall);
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setBounds(10, 246, 490, 14);
 		desktopPane.add(lblNewLabel);
