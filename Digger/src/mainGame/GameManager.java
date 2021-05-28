@@ -26,33 +26,27 @@ import javax.swing.JButton;
 
 // TODO: Gegner generieren?
 
-public class GameManager implements KeyListener {
+public class GameManager extends StartGame implements KeyListener {
 	// TODO: Player dynamisch generieren lassen wenn "Spiel fortsetzen"!
-	private static int lives = 3;
-	private static int points = 0;
-	private static Player player = new Player(lives, points);
-	private static int level = player.level;
+	// public static int level = player.level;
 	private static boolean move = true;
 	
 	public static JLabel ptDisplay;
 	public JLabel lvlDisplay;
 	public JLabel livesDisplay;
 
-	static int collectableCounter = player.getPtCounter();
-
-	private static Board board;
+	protected static Board board;
 	protected static Graphic graphic;
-	//protected to gain (limited) access to variable
 	private static XSendAdapter xsend;
-	private static Symbol symbol;
+	protected static Symbol symbol;
 
-	private int boardSize = 20;
+	public static final int boardSize = 20;
 	private int posX;
 	private int posY;
 
-	LevelManager levelManager = new LevelManager(boardSize);
-	static int[][] collectableArray;
-	static int[][] solidsArray;
+	public static int collectableCounter = Player.getPtCounter();
+	protected static int[][] collectableArray;
+	protected static int[][] solidsArray;
 
 	// Custom font, public to gain access from everywhere
 	public static Font customFont = createCustomFont(13f);
@@ -118,7 +112,7 @@ public class GameManager implements KeyListener {
 		
 	}
 	
-	public void setUpBoard() {
+	public void setUpBoard(int level) {
 		lvlDisplay.setText("Level "+String.valueOf(level));
 		move = true;
 		posX = boardSize - 1;
@@ -144,7 +138,7 @@ public class GameManager implements KeyListener {
 				}
 			}
 		}
-
+		ItemManager.setUpItems(level);
 		graphic.setVisible(true);
 	}
 	
@@ -192,38 +186,6 @@ public class GameManager implements KeyListener {
 		chooseFrame.setVisible(true);
 	}
 
-	public void setUpItems() {
-		int xCollectable;
-		int yCollectable;
-
-		collectableArray = levelManager.getTomatoPos(level);
-		solidsArray = levelManager.getSolidsPos(level);
-
-		for (int i = 0; i < collectableArray.length; i++) {
-			xCollectable = collectableArray[i][0];
-			yCollectable = collectableArray[i][1];
-			if (i % 2 == 0) {
-				board.receiveMessage("image " + xCollectable + " " + yCollectable + " ./images/earth_tomato.png \n");
-			} else {
-				board.receiveMessage("image " + xCollectable + " " + yCollectable + " ./images/earth_onion.png \n");
-			}
-			symbol = board.getSymbol(xCollectable, yCollectable);
-			symbol.getImageObject().setWorldWidth(0);
-		}
-		for (int i = 0; i < solidsArray.length; i++) {
-			xCollectable = solidsArray[i][0];
-			yCollectable = solidsArray[i][1];
-			if (i % 2 == 0) {
-				board.receiveMessage("image " + xCollectable + " " + yCollectable + " ./images/solid.png \n");
-			} else {
-				board.receiveMessage("image " + xCollectable + " " + yCollectable + " ./images/solid.png \n");
-			}
-			symbol = board.getSymbol(xCollectable, yCollectable);
-			symbol.getImageObject().setWorldWidth(0);
-		}
-
-	}
-
 	public static void checkPosition(int posX, int posY) {
 		int x = 999, y = 999;
 		for (int i = 0; i < collectableArray.length; i++) {
@@ -260,9 +222,9 @@ public class GameManager implements KeyListener {
 		collectableCounter--;
 		// All items collected, disabling movement, resetting counter, increasing level etc.:
 		if (collectableCounter == 0) {
-			player.setLevel(++level);
-			player.resetCounter(level);
-			collectableCounter = player.getPtCounter();
+			player.setLevel(++player.level);
+			player.resetCounter(player.level);
+			collectableCounter = Player.getPtCounter();
 			move = false;
 			cleanBoard();
 		}

@@ -12,20 +12,28 @@ package mainGame;
 
 public class StartGame {
 	static GameManager manager;
+	private static int lives = 3;
+	private static int points = 0;
+	protected static Player player;
 	//Test
 	public static void main(String[] args) {
 		// Start a new game
 		manager = new GameManager();
+		player = new Player(lives, points);
 		manager.createBoard();
-		manager.setUpBoard();
-		manager.setUpItems();
+		manager.setUpBoard(player.level);
 		// TODO: Savegames & Highscore
 	}
 
 	public static void nextLevel() {
 		System.out.println("Gewonnen!");
 		//GameManager.graphic.dispose();
-		manager.setUpBoard();
-		manager.setUpItems();
+		manager.setUpBoard(player.level);
+	}
+	
+	public static void loadSaveGame() {
+		// TODO: Load attributes from File
+		player = new Player(lives, points);
+		//manager.setUpBoard(player.level);
 	}
 }
