@@ -27,7 +27,6 @@ public class Player {
 
 	public void setPoints(int points) {
 		this.points = points;
-		System.out.println(points);
 	}
 
 	public int getPtCounter() {
@@ -43,18 +42,18 @@ public class Player {
 		GameManager.updatePoints(this.points);
 	}
 
-	public void resetCounter() {
-		ptCounter = 5;
-		/* TODO: Level und Counter fest definieren! zb: switch-case?
-		 * Eventuell Level mit als Parameter übergeben?
-		switch (this.level) {
+	public void resetCounter(int level) {
+		switch (level) {
 		case 1:
-			counter = 5;
+			ptCounter = 5;
 			break;
 		case 2:
-			counter = 10;
+			ptCounter = 5;
+			break;
+		default:
+			ptCounter = 5;
 			break;
 		}
-		*/
+		
 	}
 }

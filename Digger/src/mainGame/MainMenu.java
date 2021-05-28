@@ -16,9 +16,10 @@ import java.awt.Graphics;
 import javax.swing.UIManager;
 
 public class MainMenu {
-	final static ImageIcon background = new ImageIcon("./images/background.png");
-	static Font customFontRegular = GameManager.createCustomFont(12);
-	static Font customFontSmall = GameManager.createCustomFont(7);
+	static ImageIcon icon = new ImageIcon("./images/solid.png");
+	static ImageIcon background = new ImageIcon("./images/background.png");
+	static Font customFontRegular = GameManager.createCustomFont(12f);
+	static Font customFontSmall = GameManager.createCustomFont(7f);
 
 	public static void main(String[] args) {
 		setFrame();
@@ -29,6 +30,8 @@ public class MainMenu {
 	 */
 	public static void setFrame() {
 		JFrame mainFrame = new JFrame();
+		mainFrame.setIconImage(icon.getImage());
+		
 		mainFrame.setSize(510, 310);
 		mainFrame.setResizable(false);
 		mainFrame.getContentPane().setLayout(null);

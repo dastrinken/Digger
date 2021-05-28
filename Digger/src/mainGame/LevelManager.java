@@ -15,17 +15,17 @@ public class LevelManager {
 			tomatos[0][0] = 9;
 			tomatos[0][1] = 18;
 
-			tomatos[1][0] = 16;
-			tomatos[1][1] = 8;
-
-			tomatos[2][0] = 8;
-			tomatos[2][1] = 4;
-
-			tomatos[3][0] = 2;
-			tomatos[3][1] = 2;
-
-			tomatos[4][0] = 2;
-			tomatos[4][1] = 1;
+//			tomatos[1][0] = 16;
+//			tomatos[1][1] = 8;
+//
+//			tomatos[2][0] = 8;
+//			tomatos[2][1] = 4;
+//
+//			tomatos[3][0] = 2;
+//			tomatos[3][1] = 2;
+//
+//			tomatos[4][0] = 2;
+//			tomatos[4][1] = 1;
 			break;
 		// TODO: Mehr Level ausdenken und einfügen!
 		default:
