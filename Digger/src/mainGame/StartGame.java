@@ -16,6 +16,7 @@ public class StartGame {
 	public static void main(String[] args) {
 		// Start a new game
 		manager = new GameManager();
+		manager.createBoard();
 		manager.setUpBoard();
 		manager.setUpItems();
 		// TODO: Savegames & Highscore
@@ -23,8 +24,7 @@ public class StartGame {
 
 	public static void nextLevel() {
 		System.out.println("Gewonnen!");
-		//manager.cleanBoard(); -- See GameManager.java
-		GameManager.graphic.dispose();
+		//GameManager.graphic.dispose();
 		manager.setUpBoard();
 		manager.setUpItems();
 	}
