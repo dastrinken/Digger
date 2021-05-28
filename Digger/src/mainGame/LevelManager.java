@@ -1,32 +1,51 @@
 package mainGame;
 
-public class LevelManager {
-	int boardSize;
+abstract class LevelManager {
+	private static int boardSize = GameManager.boardSize;
 
-	public LevelManager(int boardSize) {
+	public LevelManager() {
 		super();
-		this.boardSize = boardSize;
 	}
 
-	public int[][] getTomatoPos(int level) {
-		int[][] tomatos = new int[5][2];
+	public static int[][] getTomatoPos(int level) {
+		int[][] tomatos = new int[level+4][2];
 		switch (level) {
 		case 1:
 			tomatos[0][0] = 9;
 			tomatos[0][1] = 18;
 
-//			tomatos[1][0] = 16;
-//			tomatos[1][1] = 8;
-//
-//			tomatos[2][0] = 8;
-//			tomatos[2][1] = 4;
-//
-//			tomatos[3][0] = 2;
-//			tomatos[3][1] = 2;
-//
-//			tomatos[4][0] = 2;
-//			tomatos[4][1] = 1;
+			tomatos[1][0] = 16;
+			tomatos[1][1] = 8;
+
+			tomatos[2][0] = 8;
+			tomatos[2][1] = 4;
+
+			tomatos[3][0] = 2;
+			tomatos[3][1] = 2;
+
+			tomatos[4][0] = 2;
+			tomatos[4][1] = 1;
 			break;
+		case 2:
+			tomatos[0][0] = 2;
+			tomatos[0][1] = 16;
+
+			tomatos[1][0] = 8;
+			tomatos[1][1] = 15;
+
+			tomatos[2][0] = 8;
+			tomatos[2][1] = 14;
+
+			tomatos[3][0] = 8;
+			tomatos[3][1] = 13;
+
+			tomatos[4][0] = 7;
+			tomatos[4][1] = 10;
+			
+			tomatos[5][0] = 13;
+			tomatos[5][1] = 5;
+			break;
+			
 		// TODO: Mehr Level ausdenken und einfügen!
 		default:
 			int posX, posY;
@@ -39,15 +58,14 @@ public class LevelManager {
 				}
 				tomatos[i][0] = posX;
 				tomatos[i][1] = posY;
-				System.out.print("Tomate auf: (\tx=" + tomatos[i][0] + "\t|\ty=" + tomatos[i][1] + "\t)\n");
 			}
 			break;
 		}
 		return tomatos;
 	}
 	
-	public int[][] getSolidsPos(int level) {
-		int[][] solids = new int[level+6][2];
+	public static int[][] getSolidsPos(int level) {
+		int[][] solids = new int[level+8][2];
 		switch(level) {
 		case 1:
 			solids[0][0] = 1;
@@ -71,6 +89,37 @@ public class LevelManager {
 			solids[6][0] = 3;
 			solids[6][1] = 0;
 			break;
+		case 2:
+			solids[0][0] = 7;
+			solids[0][1] = 17;
+
+			solids[1][0] = 8;
+			solids[1][1] = 17;
+
+			solids[2][0] = 9;
+			solids[2][1] = 17;
+
+			solids[3][0] = 9;
+			solids[3][1] = 16;
+
+			solids[4][0] = 9;
+			solids[4][1] = 15;
+
+			solids[5][0] = 9;
+			solids[5][1] = 14;
+
+			solids[6][0] = 9;
+			solids[6][1] = 13;
+			
+			solids[7][0] = 9;
+			solids[7][1] = 12;
+			
+			solids[8][0] = 8;
+			solids[8][1] = 12;
+			
+			solids[9][0] = 7;
+			solids[9][1] = 12;
+			break;
 		default:
 			int posX, posY;
 			for (int i = 0; i < solids.length; i++) {
@@ -82,7 +131,6 @@ public class LevelManager {
 				}
 				solids[i][0] = posX;
 				solids[i][1] = posY;
-				System.out.print("Solid auf: (\tx=" + solids[i][0] + "\t|\ty=" + solids[i][1] + "\t)\n");
 			}
 			break;
 		}
@@ -90,7 +138,28 @@ public class LevelManager {
 	}
 	
 	public int[][] getOnionPos(int level) {
-		int[][] onions = new int[3][2];
+		int[][] onions = new int[level - 1][2];
+		switch(level) {
+		case 1:
+			break;
+		case 2:
+			onions[0][0] = 8;
+			onions[0][1] = 16;
+			break;
+		default:
+			int posX, posY;
+			for (int i = 0; i < onions.length; i++) {
+				posX = (int) (Math.random() * 20);
+				posY = (int) (Math.random() * 20);
+				// while onions x & y same as player position, reroll position
+				while (posX == boardSize - 1 && posX == posY) {
+					posY = (int) (Math.random() * 20);
+				}
+				onions[i][0] = posX;
+				onions[i][1] = posY;
+			}
+			break;
+		}
 		return onions;
 	}
 }

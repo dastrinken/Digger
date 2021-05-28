@@ -5,7 +5,7 @@ public class Player {
 	int lives;
 	String name;
 	int level = 1;
-	int ptCounter = 5;
+	static int ptCounter = 5;
 
 	public Player(int lives, int points) {
 		super();
@@ -29,12 +29,8 @@ public class Player {
 		this.points = points;
 	}
 
-	public int getPtCounter() {
+	public static int getPtCounter() {
 		return ptCounter;
-	}
-
-	public void setPtCounter(int ptCounter) {
-		this.ptCounter = ptCounter;
 	}
 
 	public void incPoints() {
@@ -48,7 +44,7 @@ public class Player {
 			ptCounter = 5;
 			break;
 		case 2:
-			ptCounter = 5;
+			ptCounter = 6;
 			break;
 		default:
 			ptCounter = 5;
