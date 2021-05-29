@@ -1,6 +1,7 @@
 package mainGame;
 
 abstract class LevelManager {
+	// TODO: Levelkonstruke als Dateien IO? Ermöglicht eventuell Benutzerdefinierte Level.
 	private static int boardSize = GameManager.boardSize;
 
 	public LevelManager() {

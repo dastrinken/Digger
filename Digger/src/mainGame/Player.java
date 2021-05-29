@@ -47,7 +47,7 @@ public class Player {
 			ptCounter = 6;
 			break;
 		default:
-			ptCounter = 5;
+			ptCounter = level+4;
 			break;
 		}
 		

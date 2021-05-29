@@ -11,6 +11,7 @@ import java.io.IOException;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
@@ -21,19 +22,22 @@ import plotter.Graphic;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
+
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 // TODO: Gegner generieren?
 
 public class GameManager extends StartGame implements KeyListener {
 	// TODO: Player dynamisch generieren lassen wenn "Spiel fortsetzen"!
-	// public static int level = player.level;
 	private static boolean move = true;
-	
+
+	public static Font customFont;
 	public static JLabel ptDisplay;
 	public JLabel lvlDisplay;
-	public JLabel livesDisplay;
+	public JPanel livesDisplay;
+	public final ImageIcon heartIcon = new ImageIcon("./images/heart.png");
 
 	protected static Board board;
 	protected static Graphic graphic;
@@ -47,9 +51,6 @@ public class GameManager extends StartGame implements KeyListener {
 	public static int collectableCounter = Player.getPtCounter();
 	protected static int[][] collectableArray;
 	protected static int[][] solidsArray;
-
-	// Custom font, public to gain access from everywhere
-	public static Font customFont = createCustomFont(13f);
 
 	public GameManager() {
 		super();
@@ -74,46 +75,55 @@ public class GameManager extends StartGame implements KeyListener {
 	public static void updatePoints(int points) {
 		ptDisplay.setText(String.valueOf(points) + " Points");
 	}
-	
+
+	/**
+	 * @wbp.parser.entryPoint
+	 */
 	public void createBoard() {
+		JMenuBar menu = new JMenuBar();
+		// TODO: Neues Menü erstellen.
 		board = new Board();
-		board.setSize(770, 800);
-		
+		board.setSize(770, 780);
+
 		graphic = board.getGraphic();
+		graphic.setJMenuBar(menu);
 		graphic.setTitle("Digger V0.1 SoSe2021");
 		graphic.addKeyListener(this);
 		graphic.setResizable(false);
-		
+
 		xsend = new XSendAdapter(board);
-		
+
 		JPanel southPanel = new JPanel();
-		southPanel.setPreferredSize(new Dimension(500, 20));
+		southPanel.setPreferredSize(new Dimension(500, 25));
 		southPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-
-		livesDisplay = new JLabel(player.lives + " Lives");
-		livesDisplay.setFont(customFont);
+		
+		livesDisplay = new JPanel();
+		livesDisplay.setLayout(new BoxLayout(livesDisplay, BoxLayout.X_AXIS));
+		livesDisplay.setMaximumSize(new Dimension(190, 16));
 		livesDisplay.setPreferredSize(new Dimension(190, 16));
-		livesDisplay.setHorizontalAlignment(SwingConstants.LEFT);
+		for (int i = 0; i < player.lives; i++) {
+			livesDisplay.add(new JLabel(heartIcon));
+		}
 		southPanel.add(livesDisplay);
-
+		
 		lvlDisplay = new JLabel("Level " + player.level);
-		lvlDisplay.setFont(customFont);
+		lvlDisplay.setFont(createCustomFont(13f));
 		lvlDisplay.setPreferredSize(new Dimension(99, 18));
 		lvlDisplay.setHorizontalAlignment(SwingConstants.CENTER);
 		southPanel.add(lvlDisplay);
 
 		ptDisplay = new JLabel(player.points + " Points");
-		ptDisplay.setFont(customFont);
+		ptDisplay.setFont(createCustomFont(9f));
 		ptDisplay.setPreferredSize(new Dimension(190, 16));
 		ptDisplay.setHorizontalAlignment(SwingConstants.RIGHT);
 		southPanel.add(ptDisplay);
 
 		graphic.addSouthComponent(southPanel);
-		
+
 	}
-	
+
 	public void setUpBoard(int level) {
-		lvlDisplay.setText("Level "+String.valueOf(level));
+		lvlDisplay.setText("Level " + String.valueOf(level));
 		move = true;
 		posX = boardSize - 1;
 		posY = boardSize - 1;
@@ -141,15 +151,12 @@ public class GameManager extends StartGame implements KeyListener {
 		ItemManager.setUpItems(level);
 		graphic.setVisible(true);
 	}
-	
-	/**
-	 * @wbp.parser.entryPoint
-	 */
+
 	public static void cleanBoard() {
 		board.reset();
 		xsend.formen("none");
 		xsend.groesse(0, 0);
-		
+
 		JFrame chooseFrame = new JFrame();
 		chooseFrame.setUndecorated(true);
 		chooseFrame.setAlwaysOnTop(true);
@@ -157,7 +164,7 @@ public class GameManager extends StartGame implements KeyListener {
 		chooseFrame.setSize(600, 64);
 		chooseFrame.setLocationRelativeTo(null);
 		chooseFrame.getContentPane().setLayout(new BoxLayout(chooseFrame.getContentPane(), BoxLayout.X_AXIS));
-		
+
 		JButton quitSaveBtn = new JButton("Quit & Save");
 		quitSaveBtn.setFont(createCustomFont(18f));
 		quitSaveBtn.setPreferredSize(new Dimension(300, 64));
@@ -170,7 +177,7 @@ public class GameManager extends StartGame implements KeyListener {
 			}
 		});
 		chooseFrame.getContentPane().add(quitSaveBtn);
-		
+
 		JButton nextLevelBtn = new JButton("Next Level");
 		nextLevelBtn.setFont(createCustomFont(18f));
 		nextLevelBtn.setPreferredSize(new Dimension(300, 64));
@@ -182,7 +189,7 @@ public class GameManager extends StartGame implements KeyListener {
 			}
 		});
 		chooseFrame.getContentPane().add(nextLevelBtn);
-		
+
 		chooseFrame.setVisible(true);
 	}
 
@@ -220,7 +227,8 @@ public class GameManager extends StartGame implements KeyListener {
 		board.receiveMessage("image " + posX + " " + posY + " -\n");
 		player.incPoints();
 		collectableCounter--;
-		// All items collected, disabling movement, resetting counter, increasing level etc.:
+		// All items collected, disabling movement, resetting counter, increasing level
+		// etc.:
 		if (collectableCounter == 0) {
 			player.setLevel(++player.level);
 			player.resetCounter(player.level);
@@ -238,7 +246,7 @@ public class GameManager extends StartGame implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if(move) {
+		if (move) {
 			int keyCode = e.getKeyCode();
 			// UP
 			if (keyCode == 87 || keyCode == 38) {
