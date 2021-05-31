@@ -9,7 +9,6 @@ import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
@@ -26,6 +25,7 @@ import java.awt.GraphicsEnvironment;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 
 // TODO: Gegner generieren?
 
@@ -51,6 +51,7 @@ public class GameManager extends StartGame implements KeyListener {
 	public int collectableCounter = player.getPtCounter();
 	protected static int[][] collectableArray;
 	protected static int[][] solidsArray;
+	protected static int[][] onionsArray;
 
 	public GameManager() {
 		super();
@@ -154,15 +155,13 @@ public class GameManager extends StartGame implements KeyListener {
 	}
 
 	public static void cleanBoard() {
-		board.reset();
-		xsend.formen("none");
-		xsend.groesse(0, 0);
+		graphic.setVisible(false);
 
-		JFrame chooseFrame = new JFrame();
-		chooseFrame.setUndecorated(true);
+		JDialog chooseFrame = new JDialog();
+		chooseFrame.setIconImage(MainMenu.icon.getImage());
 		chooseFrame.setAlwaysOnTop(true);
 		chooseFrame.setResizable(false);
-		chooseFrame.setSize(600, 64);
+		chooseFrame.setSize(600, 100);
 		chooseFrame.setLocationRelativeTo(null);
 		chooseFrame.getContentPane().setLayout(new BoxLayout(chooseFrame.getContentPane(), BoxLayout.X_AXIS));
 
@@ -173,7 +172,7 @@ public class GameManager extends StartGame implements KeyListener {
 		quitSaveBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				chooseFrame.dispose();
-				MainMenu.main(null);
+				MainMenu.mainFrame.setVisible(true);
 				graphic.dispose();
 			}
 		});

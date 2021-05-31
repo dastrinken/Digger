@@ -137,8 +137,8 @@ abstract class LevelManager {
 		}
 		return solids;
 	}
-	
-	public int[][] getOnionPos(int level) {
+	// TODO: Make onions count!
+	public static int[][] getOnionsPos(int level) {
 		int[][] onions = new int[level - 1][2];
 		switch(level) {
 		case 1:

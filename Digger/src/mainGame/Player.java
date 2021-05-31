@@ -38,12 +38,12 @@ public class Player {
 	public void incPoints() {
 		++this.points;
 		GameManager.updatePoints(this.points);
-		System.out.println("Counter: "+this.ptCounter+" Pts: "+this.points);
 	}
 
 	public void resetCounter(int level) {
 		switch (level) {
 		case 1:
+			//Counter set to 1 for testing purposes. TODO: Change to correct counter before release (also remove comment block on item-array)!
 			ptCounter = 1;
 			break;
 		case 2:
