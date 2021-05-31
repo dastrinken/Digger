@@ -16,7 +16,9 @@ import java.awt.Graphics;
 import javax.swing.UIManager;
 
 public class MainMenu {
-	static ImageIcon icon = new ImageIcon("./images/solid.png");
+	public static JFrame mainFrame;
+	
+	public static ImageIcon icon = new ImageIcon("./images/solid.png");
 	static ImageIcon background = new ImageIcon("./images/background.png");
 	static Font customFontRegular = GameManager.createCustomFont(12f);
 	static Font customFontSmall = GameManager.createCustomFont(7f);
@@ -29,7 +31,7 @@ public class MainMenu {
 	 * @wbp.parser.entryPoint
 	 */
 	public static void setFrame() {
-		JFrame mainFrame = new JFrame();
+		mainFrame = new JFrame();
 		mainFrame.setIconImage(icon.getImage());
 		
 		mainFrame.setSize(510, 310);
@@ -54,6 +56,7 @@ public class MainMenu {
 		btnStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				StartGame.main(null);
+				mainFrame.setVisible(false);
 			}
 		});
 		btnStart.setBounds(50, 108, 400, 35);

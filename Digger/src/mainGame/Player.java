@@ -5,12 +5,14 @@ public class Player {
 	int lives;
 	String name;
 	int level = 1;
-	static int ptCounter = 5;
+	int ptCounter;
 
-	public Player(int lives, int points) {
+	public Player(int lives, int points, int level) {
 		super();
 		this.lives = lives;
 		this.points = points;
+		this.level = level;
+		resetCounter(this.level);
 	}
 
 	public int getLevel() {
@@ -29,7 +31,7 @@ public class Player {
 		this.points = points;
 	}
 
-	public static int getPtCounter() {
+	public int getPtCounter() {
 		return ptCounter;
 	}
 
@@ -41,13 +43,14 @@ public class Player {
 	public void resetCounter(int level) {
 		switch (level) {
 		case 1:
-			ptCounter = 5;
+			//Counter set to 1 for testing purposes. TODO: Change to correct counter before release (also remove comment block on item-array)!
+			ptCounter = 1;
 			break;
 		case 2:
 			ptCounter = 6;
 			break;
 		default:
-			ptCounter = 5;
+			ptCounter = level+4;
 			break;
 		}
 		
