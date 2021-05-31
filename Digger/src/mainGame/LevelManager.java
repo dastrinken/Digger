@@ -14,7 +14,7 @@ abstract class LevelManager {
 		case 1:
 			tomatos[0][0] = 9;
 			tomatos[0][1] = 18;
-
+/*
 			tomatos[1][0] = 16;
 			tomatos[1][1] = 8;
 
@@ -25,7 +25,7 @@ abstract class LevelManager {
 			tomatos[3][1] = 2;
 
 			tomatos[4][0] = 2;
-			tomatos[4][1] = 1;
+			tomatos[4][1] = 1; */
 			break;
 		case 2:
 			tomatos[0][0] = 2;
@@ -71,7 +71,7 @@ abstract class LevelManager {
 		case 1:
 			solids[0][0] = 1;
 			solids[0][1] = 4;
-
+/*
 			solids[1][0] = 2;
 			solids[1][1] = 4;
 
@@ -88,7 +88,7 @@ abstract class LevelManager {
 			solids[5][1] = 1;
 
 			solids[6][0] = 3;
-			solids[6][1] = 0;
+			solids[6][1] = 0;*/
 			break;
 		case 2:
 			solids[0][0] = 7;

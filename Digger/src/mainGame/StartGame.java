@@ -18,8 +18,8 @@ public class StartGame {
 	//Test
 	public static void main(String[] args) {
 		// Start a new game
+		player = new Player(lives, points, 1);
 		manager = new GameManager();
-		player = new Player(lives, points);
 		manager.createBoard();
 		manager.setUpBoard(player.level);
 		// TODO: Savegames & Highscore
@@ -31,9 +31,9 @@ public class StartGame {
 		manager.setUpBoard(player.level);
 	}
 	
-	public static void loadSaveGame() {
+	public static void loadSaveGame(int level) {
 		// TODO: Load attributes from File
-		player = new Player(lives, points);
+		player = new Player(lives, points, level);
 		//manager.setUpBoard(player.level);
 	}
 }

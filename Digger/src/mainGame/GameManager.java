@@ -48,7 +48,7 @@ public class GameManager extends StartGame implements KeyListener {
 	private int posX;
 	private int posY;
 
-	public static int collectableCounter = Player.getPtCounter();
+	public int collectableCounter = player.getPtCounter();
 	protected static int[][] collectableArray;
 	protected static int[][] solidsArray;
 
@@ -123,6 +123,7 @@ public class GameManager extends StartGame implements KeyListener {
 	}
 
 	public void setUpBoard(int level) {
+		player.resetCounter(level);
 		lvlDisplay.setText("Level " + String.valueOf(level));
 		move = true;
 		posX = boardSize - 1;
@@ -193,7 +194,7 @@ public class GameManager extends StartGame implements KeyListener {
 		chooseFrame.setVisible(true);
 	}
 
-	public static void checkPosition(int posX, int posY) {
+	public void checkPosition(int posX, int posY) {
 		int x = 999, y = 999;
 		for (int i = 0; i < collectableArray.length; i++) {
 			for (int j = 0; j < 2; j++) {
@@ -223,16 +224,17 @@ public class GameManager extends StartGame implements KeyListener {
 		return fieldAvailable;
 	}
 
-	private static void CollectPts(int posX, int posY) {
+	private void CollectPts(int posX, int posY) {
 		board.receiveMessage("image " + posX + " " + posY + " -\n");
 		player.incPoints();
 		collectableCounter--;
+		System.out.println(collectableCounter);
 		// All items collected, disabling movement, resetting counter, increasing level
 		// etc.:
 		if (collectableCounter == 0) {
 			player.setLevel(++player.level);
 			player.resetCounter(player.level);
-			collectableCounter = Player.getPtCounter();
+			collectableCounter = player.getPtCounter();
 			move = false;
 			cleanBoard();
 		}

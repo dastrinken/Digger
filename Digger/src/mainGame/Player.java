@@ -5,12 +5,14 @@ public class Player {
 	int lives;
 	String name;
 	int level = 1;
-	static int ptCounter = 5;
+	int ptCounter;
 
-	public Player(int lives, int points) {
+	public Player(int lives, int points, int level) {
 		super();
 		this.lives = lives;
 		this.points = points;
+		this.level = level;
+		resetCounter(this.level);
 	}
 
 	public int getLevel() {
@@ -29,19 +31,20 @@ public class Player {
 		this.points = points;
 	}
 
-	public static int getPtCounter() {
+	public int getPtCounter() {
 		return ptCounter;
 	}
 
 	public void incPoints() {
 		++this.points;
 		GameManager.updatePoints(this.points);
+		System.out.println("Counter: "+this.ptCounter+" Pts: "+this.points);
 	}
 
 	public void resetCounter(int level) {
 		switch (level) {
 		case 1:
-			ptCounter = 5;
+			ptCounter = 1;
 			break;
 		case 2:
 			ptCounter = 6;
