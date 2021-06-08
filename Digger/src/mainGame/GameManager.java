@@ -26,13 +26,16 @@ import java.awt.GraphicsEnvironment;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JDialog;
 
 // TODO: generate NPCs ?
 
-public class GameManager extends StartGame implements KeyListener {
-	// TODO: load player stats when user selects "continue"
+public class GameManager implements KeyListener {
+	private static GameManager manager = new GameManager();
+	// TODO: load player stats
+	private static int lives = 3;
+	private static int points = 0;
+	private int level;
+	private static Player player;
 	private static boolean move = true;
 
 	public static Font customFont;
@@ -50,15 +53,22 @@ public class GameManager extends StartGame implements KeyListener {
 	private int posX;
 	private int posY;
 
-	public int collectableCounter = player.getPtCounter();
+	public int collectableCounter;
 	protected static int[][] collectableArray;
 	protected static int[][] solidsArray;
 	protected static int[][] onionsArray;
 
-	public GameManager() {
-		super();
+	protected GameManager() {
+		System.out.println("Objekt gebildet.");
 	}
-
+	
+	public static synchronized GameManager getInstance() {
+	    if (GameManager.manager == null) {
+	    	GameManager.manager = new GameManager();
+	    }
+	    return manager;
+     } 
+	
 	public static Font createCustomFont(float size) {
 		try {
 			// create the font to use. Specify the size!
@@ -83,6 +93,8 @@ public class GameManager extends StartGame implements KeyListener {
 	 * @wbp.parser.entryPoint
 	 */
 	public void createBoard() {
+		player = new Player(lives, points, 1);
+		collectableCounter = player.getPtCounter();
 		board = new Board();
 		board.setSize(748, 780);
 
@@ -128,6 +140,13 @@ public class GameManager extends StartGame implements KeyListener {
 		JMenu file = new JMenu("File");
 		JMenuItem load = new JMenuItem("Load");
 		JMenuItem save = new JMenuItem("Save");
+		JMenuItem returnBtn = new JMenuItem("Return to menu");
+		returnBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				graphic.dispose();
+				MainMenu.setFrame();
+			}
+		});
 		JMenuItem close = new JMenuItem("Quit");
 		close.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -136,6 +155,7 @@ public class GameManager extends StartGame implements KeyListener {
 		});
 		file.add(load);
 		file.add(save);
+		file.add(returnBtn);
 		file.add(close);
 		JMenu help = new JMenu("Help");
 		JMenuItem controls = new JMenuItem("Controls");
@@ -147,7 +167,8 @@ public class GameManager extends StartGame implements KeyListener {
 		return menu;
 	}
 
-	public void setUpBoard(int level) {
+	public void setUpBoard() {
+		level = player.level;
 		player.resetCounter(level);
 		lvlDisplay.setText("Level " + String.valueOf(level));
 		move = true;
@@ -178,44 +199,33 @@ public class GameManager extends StartGame implements KeyListener {
 		graphic.setVisible(true);
 	}
 
-	public static void levelCompletedGui() {
-//		graphic.setVisible(false);
-
-		JDialog chooseFrame = new JDialog();
-		chooseFrame.setUndecorated(true);
-		chooseFrame.setAlwaysOnTop(true);
-		chooseFrame.setResizable(false);
-		chooseFrame.setSize(600, 64);
-		chooseFrame.setLocationRelativeTo(null);
-		chooseFrame.getContentPane().setLayout(new BoxLayout(chooseFrame.getContentPane(), BoxLayout.X_AXIS));
-
-		JButton quitSaveBtn = new JButton("Quit & Save");
-		quitSaveBtn.setFont(createCustomFont(18f));
-		quitSaveBtn.setPreferredSize(new Dimension(300, 64));
-		quitSaveBtn.setMaximumSize(new Dimension(300, 64));
-		quitSaveBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				chooseFrame.dispose();
-				MainMenu.mainFrame.setVisible(true);
-				graphic.dispose();
-			}
-		});
-		chooseFrame.getContentPane().add(quitSaveBtn);
-
-		JButton nextLevelBtn = new JButton("Next Level");
-		nextLevelBtn.setFont(createCustomFont(18f));
-		nextLevelBtn.setPreferredSize(new Dimension(300, 64));
-		nextLevelBtn.setMaximumSize(new Dimension(300, 64));
-		nextLevelBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				chooseFrame.dispose();
-				StartGame.nextLevel();
-			}
-		});
-		chooseFrame.getContentPane().add(nextLevelBtn);
-
-		chooseFrame.setVisible(true);
-	}
+	/*
+	 * public static void levelCompletedGui() { // graphic.setVisible(false);
+	 * 
+	 * JDialog chooseFrame = new JDialog(); chooseFrame.setUndecorated(true);
+	 * chooseFrame.setAlwaysOnTop(true); chooseFrame.setResizable(false);
+	 * chooseFrame.setSize(600, 64); chooseFrame.setLocationRelativeTo(null);
+	 * chooseFrame.getContentPane().setLayout(new
+	 * BoxLayout(chooseFrame.getContentPane(), BoxLayout.X_AXIS));
+	 * 
+	 * JButton quitSaveBtn = new JButton("Quit & Save");
+	 * quitSaveBtn.setFont(createCustomFont(18f)); quitSaveBtn.setPreferredSize(new
+	 * Dimension(300, 64)); quitSaveBtn.setMaximumSize(new Dimension(300, 64));
+	 * quitSaveBtn.addActionListener(new ActionListener() { public void
+	 * actionPerformed(ActionEvent e) { chooseFrame.dispose();
+	 * MainMenu.mainFrame.setVisible(true); graphic.dispose(); } });
+	 * chooseFrame.getContentPane().add(quitSaveBtn);
+	 * 
+	 * JButton nextLevelBtn = new JButton("Next Level");
+	 * nextLevelBtn.setFont(createCustomFont(18f));
+	 * nextLevelBtn.setPreferredSize(new Dimension(300, 64));
+	 * nextLevelBtn.setMaximumSize(new Dimension(300, 64));
+	 * nextLevelBtn.addActionListener(new ActionListener() { public void
+	 * actionPerformed(ActionEvent e) { chooseFrame.dispose();
+	 * StartGame.nextLevel(); } }); chooseFrame.getContentPane().add(nextLevelBtn);
+	 * 
+	 * chooseFrame.setVisible(true); }
+	 */
 
 	public void checkPosition(int posX, int posY) {
 		int x = 999, y = 999;
@@ -274,7 +284,7 @@ public class GameManager extends StartGame implements KeyListener {
 			player.resetCounter(player.level);
 			collectableCounter = player.getPtCounter();
 			move = false;
-			levelCompletedGui();
+			setUpBoard();
 		}
 	}
 

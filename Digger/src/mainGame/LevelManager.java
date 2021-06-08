@@ -1,9 +1,7 @@
 package mainGame;
 
 abstract class LevelManager extends GameManager {
-	// TODO: Saving and loading arrays from File (.csv?). Maybe support for custom levels?
 	// TODO: Threads
-	// TODO: new types of blocks (lava, poison etc.)
 
 	public static int[][] getTomatoPos(int level) {
 		int[][] tomatos = new int[level+4][2];
