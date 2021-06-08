@@ -4,9 +4,10 @@ abstract class LevelManager extends GameManager {
 	// TODO: Threads
 
 	public static int[][] getTomatoPos(int level) {
-		int[][] tomatos = new int[level+4][2];
+		int[][] tomatos = null;
 		switch (level) {
 		case 1:
+			tomatos = new int[5][2];
 			tomatos[0][0] = 9;
 			tomatos[0][1] = 18;
 			
@@ -23,6 +24,7 @@ abstract class LevelManager extends GameManager {
 			tomatos[4][1] = 1;
 			break;
 		case 2:
+			tomatos = new int[6][2];
 			tomatos[0][0] = 2;
 			tomatos[0][1] = 16;
 
@@ -44,6 +46,7 @@ abstract class LevelManager extends GameManager {
 			
 		// TODO: Mehr Level ausdenken und einfügen!
 		default:
+			tomatos = new int[5][2];
 			int posX, posY;
 			for (int i = 0; i < tomatos.length; i++) {
 				posX = (int) (Math.random() * 20);
@@ -61,9 +64,10 @@ abstract class LevelManager extends GameManager {
 	}
 	
 	public static int[][] getSolidsPos(int level) {
-		int[][] solids = new int[level+8][2];
+		int[][] solids = null;
 		switch(level) {
 		case 1:
+			solids = new int[7][2];
 			solids[0][0] = 1;
 			solids[0][1] = 4;
 			
@@ -86,6 +90,7 @@ abstract class LevelManager extends GameManager {
 			solids[6][1] = 0;
 			break;
 		case 2:
+			solids = new int[10][2];
 			solids[0][0] = 7;
 			solids[0][1] = 17;
 
@@ -117,6 +122,7 @@ abstract class LevelManager extends GameManager {
 			solids[9][1] = 12;
 			break;
 		default:
+			solids = new int[5][2];
 			int posX, posY;
 			for (int i = 0; i < solids.length; i++) {
 				posX = (int) (Math.random() * 20);
@@ -134,15 +140,18 @@ abstract class LevelManager extends GameManager {
 	}
 	
 	public static int[][] getOnionsPos(int level) {
-		int[][] onions = new int[level - 1][2];
+		int[][] onions = null;
 		switch(level) {
 		case 1:
+			onions = new int[0][2];
 			break;
 		case 2:
+			onions = new int[1][2];
 			onions[0][0] = 8;
 			onions[0][1] = 16;
 			break;
 		default:
+			onions = new int[5][2];
 			int posX, posY;
 			for (int i = 0; i < onions.length; i++) {
 				posX = (int) (Math.random() * 20);

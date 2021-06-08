@@ -10,9 +10,6 @@ public class ItemManager extends GameManager {
 		int xCollectable;
 		int yCollectable;
 
-		collectableArray = LevelManager.getTomatoPos(level);
-		solidsArray = LevelManager.getSolidsPos(level);
-		onionsArray = LevelManager.getOnionsPos(level);
 
 		for (int i = 0; i < collectableArray.length; i++) {
 			xCollectable = collectableArray[i][0];
