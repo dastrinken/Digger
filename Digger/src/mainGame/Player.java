@@ -35,16 +35,15 @@ public class Player {
 		return ptCounter;
 	}
 
-	public void incPoints() {
-		++this.points;
+	public void incPoints(int amount) {
+		this.points += amount;
 		GameManager.updatePoints(this.points);
 	}
 
 	public void resetCounter(int level) {
 		switch (level) {
 		case 1:
-			//Counter set to 1 for testing purposes. TODO: Change to correct counter before release (also remove comment block on item-array)!
-			ptCounter = 1;
+			ptCounter = 5;
 			break;
 		case 2:
 			ptCounter = 6;

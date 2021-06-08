@@ -11,29 +11,16 @@ package mainGame;
  */
 
 public class StartGame {
-	static GameManager manager;
-	private static int lives = 3;
-	private static int points = 0;
-	protected static Player player;
 	//Test
 	public static void main(String[] args) {
 		// Start a new game
-		player = new Player(lives, points, 1);
-		manager = new GameManager();
+		GameManager manager = GameManager.getInstance();
 		manager.createBoard();
-		manager.setUpBoard(player.level);
-		// TODO: Savegames & Highscore
-	}
-
-	public static void nextLevel() {
-		System.out.println("Gewonnen!");
-		//GameManager.graphic.dispose();
-		manager.setUpBoard(player.level);
+		manager.setUpBoard();
 	}
 	
-	public static void loadSaveGame(int level) {
-		// TODO: Load attributes from File
-		player = new Player(lives, points, level);
-		//manager.setUpBoard(player.level);
-	}
+	/* TODO: loadSaveGame & HighScore
+	 * public static void loadSaveGame(int level) { // TODO: Load attributes from
+	 * File manager.setUpBoard(); }
+	 */
 }
