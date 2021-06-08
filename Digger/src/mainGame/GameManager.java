@@ -27,8 +27,6 @@ import java.awt.GraphicsEnvironment;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 
-// TODO: generate NPCs ?
-
 public class GameManager implements KeyListener {
 	private static GameManager manager = new GameManager();
 	// TODO: load player stats
@@ -59,7 +57,7 @@ public class GameManager implements KeyListener {
 	protected static int[][] onionsArray;
 
 	protected GameManager() {
-		System.out.println("Objekt gebildet.");
+		System.out.println("Objektinstanz gebildet.");
 	}
 	
 	public static synchronized GameManager getInstance() {
@@ -169,6 +167,10 @@ public class GameManager implements KeyListener {
 
 	public void setUpBoard() {
 		level = player.level;
+		collectableArray = LevelManager.getTomatoPos(level);
+		solidsArray = LevelManager.getSolidsPos(level);
+		onionsArray = LevelManager.getOnionsPos(level);
+		
 		player.resetCounter(level);
 		lvlDisplay.setText("Level " + String.valueOf(level));
 		move = true;
@@ -303,19 +305,19 @@ public class GameManager implements KeyListener {
 					++posY;
 					board.receiveMessage("image " + posX + " " + (posY - 1) + " -\n");
 				}
-				// LEFT
+			// LEFT
 			} else if (keyCode == 65 || keyCode == 37) {
 				if (posX > 0 && checkSolids(posX - 1, posY)) {
 					--posX;
 					board.receiveMessage("image " + (posX + 1) + " " + posY + " -\n");
 				}
-				// DOWN
+			// DOWN
 			} else if (keyCode == 83 || keyCode == 40) {
 				if (posY > 0 && checkSolids(posX, posY - 1)) {
 					--posY;
 					board.receiveMessage("image " + posX + " " + (posY + 1) + " -\n");
 				}
-				// RIGHT
+			// RIGHT
 			} else if (keyCode == 68 || keyCode == 39) {
 				if (posX < boardSize - 1 && checkSolids(posX + 1, posY)) {
 					++posX;
@@ -324,6 +326,7 @@ public class GameManager implements KeyListener {
 			}
 			checkPosition(posX, posY);
 			board.receiveMessage("image " + posX + " " + posY + " ./images/digger.png \n");
+			
 			symbol = board.getSymbol(posX, posY);
 			symbol.getImageObject().setWorldWidth(0);
 		}
