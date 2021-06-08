@@ -26,6 +26,7 @@ public class ItemManager extends GameManager {
 			xCollectable = solidsArray[i][0];
 			yCollectable = solidsArray[i][1];
 			board.receiveMessage("image " + xCollectable + " " + yCollectable + " ./images/solid.png \n");
+			
 			symbol = board.getSymbol(xCollectable, yCollectable);
 			symbol.getImageObject().setWorldWidth(0);
 		}
@@ -33,6 +34,7 @@ public class ItemManager extends GameManager {
 			xCollectable = onionsArray[i][0];
 			yCollectable = onionsArray[i][1];
 			board.receiveMessage("image " + xCollectable + " " + yCollectable + " ./images/earth_onion.png \n");
+			
 			symbol = board.getSymbol(xCollectable, yCollectable);
 			symbol.getImageObject().setWorldWidth(0);
 		}

@@ -10,7 +10,9 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.swing.JLabel;
+import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
@@ -27,10 +29,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 
-// TODO: Gegner generieren?
+// TODO: generate NPCs ?
 
 public class GameManager extends StartGame implements KeyListener {
-	// TODO: Player dynamisch generieren lassen wenn "Spiel fortsetzen"!
+	// TODO: load player stats when user selects "continue"
 	private static boolean move = true;
 
 	public static Font customFont;
@@ -81,14 +83,12 @@ public class GameManager extends StartGame implements KeyListener {
 	 * @wbp.parser.entryPoint
 	 */
 	public void createBoard() {
-		JMenuBar menu = new JMenuBar();
-		// TODO: Neues Menü erstellen.
 		board = new Board();
-		board.setSize(770, 780);
+		board.setSize(748, 780);
 
 		graphic = board.getGraphic();
-		graphic.setJMenuBar(menu);
-		graphic.setTitle("Digger V0.1 SoSe2021");
+		graphic.setJMenuBar(getGameMenu());
+		graphic.setTitle("Digger 1.0 - SoSe2021 - Powered by BoS");
 		graphic.addKeyListener(this);
 		graphic.setResizable(false);
 
@@ -122,6 +122,30 @@ public class GameManager extends StartGame implements KeyListener {
 		graphic.addSouthComponent(southPanel);
 
 	}
+	
+	public JMenuBar getGameMenu() {
+		JMenuBar menu = new JMenuBar();
+		JMenu file = new JMenu("File");
+		JMenuItem load = new JMenuItem("Load");
+		JMenuItem save = new JMenuItem("Save");
+		JMenuItem close = new JMenuItem("Quit");
+		close.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		file.add(load);
+		file.add(save);
+		file.add(close);
+		JMenu help = new JMenu("Help");
+		JMenuItem controls = new JMenuItem("Controls");
+		JMenuItem blocks = new JMenuItem("Blocks");
+		help.add(controls);
+		help.add(blocks);
+		menu.add(file);
+		menu.add(help);
+		return menu;
+	}
 
 	public void setUpBoard(int level) {
 		player.resetCounter(level);
@@ -154,14 +178,14 @@ public class GameManager extends StartGame implements KeyListener {
 		graphic.setVisible(true);
 	}
 
-	public static void cleanBoard() {
-		graphic.setVisible(false);
+	public static void levelCompletedGui() {
+//		graphic.setVisible(false);
 
 		JDialog chooseFrame = new JDialog();
-		chooseFrame.setIconImage(MainMenu.icon.getImage());
+		chooseFrame.setUndecorated(true);
 		chooseFrame.setAlwaysOnTop(true);
 		chooseFrame.setResizable(false);
-		chooseFrame.setSize(600, 100);
+		chooseFrame.setSize(600, 64);
 		chooseFrame.setLocationRelativeTo(null);
 		chooseFrame.getContentPane().setLayout(new BoxLayout(chooseFrame.getContentPane(), BoxLayout.X_AXIS));
 
@@ -202,7 +226,18 @@ public class GameManager extends StartGame implements KeyListener {
 				if (x == posX && y == posY) {
 					collectableArray[i][0] = 999;
 					collectableArray[i][1] = 999;
-					CollectPts(posX, posY);
+					CollectPts(posX, posY, "tomato");
+				}
+			}
+		}
+		for (int i = 0; i < onionsArray.length; i++) {
+			for (int j = 0; j < 2; j++) {
+				x = onionsArray[i][0];
+				y = onionsArray[i][1];
+				if (x == posX && y == posY) {
+					onionsArray[i][0] = 999;
+					onionsArray[i][1] = 999;
+					CollectPts(posX, posY, "onion");
 				}
 			}
 		}
@@ -223,26 +258,29 @@ public class GameManager extends StartGame implements KeyListener {
 		return fieldAvailable;
 	}
 
-	private void CollectPts(int posX, int posY) {
+	private void CollectPts(int posX, int posY, String type) {
 		board.receiveMessage("image " + posX + " " + posY + " -\n");
-		player.incPoints();
-		collectableCounter--;
-		System.out.println(collectableCounter);
-		// All items collected, disabling movement, resetting counter, increasing level
-		// etc.:
+		switch(type) {
+		case "tomato":
+			collectableCounter--;
+			player.incPoints(1);
+			break;
+		case "onion":
+			player.incPoints(5);
+			break;
+		}
 		if (collectableCounter == 0) {
 			player.setLevel(++player.level);
 			player.resetCounter(player.level);
 			collectableCounter = player.getPtCounter();
 			move = false;
-			cleanBoard();
+			levelCompletedGui();
 		}
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -274,7 +312,6 @@ public class GameManager extends StartGame implements KeyListener {
 					board.receiveMessage("image " + (posX - 1) + " " + posY + " -\n");
 				}
 			}
-
 			checkPosition(posX, posY);
 			board.receiveMessage("image " + posX + " " + posY + " ./images/digger.png \n");
 			symbol = board.getSymbol(posX, posY);

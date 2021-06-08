@@ -27,13 +27,12 @@ public class StartGame {
 
 	public static void nextLevel() {
 		System.out.println("Gewonnen!");
-		//GameManager.graphic.dispose();
 		manager.setUpBoard(player.level);
 	}
 	
 	public static void loadSaveGame(int level) {
 		// TODO: Load attributes from File
 		player = new Player(lives, points, level);
-		//manager.setUpBoard(player.level);
+		manager.setUpBoard(player.level);
 	}
 }
