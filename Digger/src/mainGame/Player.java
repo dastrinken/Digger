@@ -1,11 +1,14 @@
 package mainGame;
 
-public class Player {
-	int points;
-	int lives;
-	String name;
-	int level = 1;
-	int ptCounter;
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public class Player implements Serializable {
+	private int points;
+	private int lives;
+	private String name;
+	private int level = 1;
+	private int ptCounter;
 
 	public Player(int lives, int points, int level) {
 		super();
@@ -29,6 +32,22 @@ public class Player {
 
 	public void setPoints(int points) {
 		this.points = points;
+	}
+
+	public int getLives() {
+		return lives;
+	}
+
+	public void setLives(int lives) {
+		this.lives = lives;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public int getPtCounter() {

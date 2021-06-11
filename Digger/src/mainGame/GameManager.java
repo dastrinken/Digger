@@ -7,7 +7,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -27,13 +29,9 @@ import java.awt.GraphicsEnvironment;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 
-public class GameManager implements KeyListener {
+public class GameManager extends StartGame implements KeyListener {
 	private static GameManager manager = new GameManager();
 	// TODO: load player stats
-	private static int lives = 3;
-	private static int points = 0;
-	private int level;
-	private static Player player;
 	private static boolean move = true;
 
 	public static Font customFont;
@@ -59,14 +57,14 @@ public class GameManager implements KeyListener {
 	protected GameManager() {
 		System.out.println("Objektinstanz gebildet.");
 	}
-	
+
 	public static synchronized GameManager getInstance() {
-	    if (GameManager.manager == null) {
-	    	GameManager.manager = new GameManager();
-	    }
-	    return manager;
-     } 
-	
+		if (GameManager.manager == null) {
+			GameManager.manager = new GameManager();
+		}
+		return manager;
+	}
+
 	public static Font createCustomFont(float size) {
 		try {
 			// create the font to use. Specify the size!
@@ -90,8 +88,7 @@ public class GameManager implements KeyListener {
 	/**
 	 * @wbp.parser.entryPoint
 	 */
-	public void createBoard() {
-		player = new Player(lives, points, 1);
+	public void createBoard(Player player) {
 		collectableCounter = player.getPtCounter();
 		board = new Board();
 		board.setSize(748, 780);
@@ -107,23 +104,23 @@ public class GameManager implements KeyListener {
 		JPanel southPanel = new JPanel();
 		southPanel.setPreferredSize(new Dimension(500, 25));
 		southPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-		
+
 		livesDisplay = new JPanel();
 		livesDisplay.setLayout(new BoxLayout(livesDisplay, BoxLayout.X_AXIS));
 		livesDisplay.setMaximumSize(new Dimension(190, 16));
 		livesDisplay.setPreferredSize(new Dimension(190, 16));
-		for (int i = 0; i < player.lives; i++) {
+		for (int i = 0; i < player.getLives(); i++) {
 			livesDisplay.add(new JLabel(heartIcon));
 		}
 		southPanel.add(livesDisplay);
-		
-		lvlDisplay = new JLabel("Level " + player.level);
+
+		lvlDisplay = new JLabel("Level " + player.getLevel());
 		lvlDisplay.setFont(createCustomFont(13f));
 		lvlDisplay.setPreferredSize(new Dimension(99, 18));
 		lvlDisplay.setHorizontalAlignment(SwingConstants.CENTER);
 		southPanel.add(lvlDisplay);
 
-		ptDisplay = new JLabel(player.points + " Points");
+		ptDisplay = new JLabel(player.getPoints() + " Points");
 		ptDisplay.setFont(createCustomFont(9f));
 		ptDisplay.setPreferredSize(new Dimension(190, 16));
 		ptDisplay.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -132,12 +129,23 @@ public class GameManager implements KeyListener {
 		graphic.addSouthComponent(southPanel);
 
 	}
-	
+
 	public JMenuBar getGameMenu() {
 		JMenuBar menu = new JMenuBar();
 		JMenu file = new JMenu("File");
 		JMenuItem load = new JMenuItem("Load");
+		load.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				graphic.dispose();
+				StartGame.loadSaveGame();
+			}
+		});
 		JMenuItem save = new JMenuItem("Save");
+		save.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				save(player);
+			}
+		});
 		JMenuItem returnBtn = new JMenuItem("Return to menu");
 		returnBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -166,11 +174,11 @@ public class GameManager implements KeyListener {
 	}
 
 	public void setUpBoard() {
-		level = player.level;
+		level = player.getLevel();
 		collectableArray = LevelManager.getTomatoPos(level);
 		solidsArray = LevelManager.getSolidsPos(level);
 		onionsArray = LevelManager.getOnionsPos(level);
-		
+
 		player.resetCounter(level);
 		lvlDisplay.setText("Level " + String.valueOf(level));
 		move = true;
@@ -271,8 +279,9 @@ public class GameManager implements KeyListener {
 	}
 
 	private void CollectPts(int posX, int posY, String type) {
+		level = player.getLevel();
 		board.receiveMessage("image " + posX + " " + posY + " -\n");
-		switch(type) {
+		switch (type) {
 		case "tomato":
 			collectableCounter--;
 			player.incPoints(1);
@@ -282,8 +291,8 @@ public class GameManager implements KeyListener {
 			break;
 		}
 		if (collectableCounter == 0) {
-			player.setLevel(++player.level);
-			player.resetCounter(player.level);
+			player.setLevel(++level);
+			player.resetCounter(player.getLevel());
 			collectableCounter = player.getPtCounter();
 			move = false;
 			setUpBoard();
@@ -305,19 +314,19 @@ public class GameManager implements KeyListener {
 					++posY;
 					board.receiveMessage("image " + posX + " " + (posY - 1) + " -\n");
 				}
-			// LEFT
+				// LEFT
 			} else if (keyCode == 65 || keyCode == 37) {
 				if (posX > 0 && checkSolids(posX - 1, posY)) {
 					--posX;
 					board.receiveMessage("image " + (posX + 1) + " " + posY + " -\n");
 				}
-			// DOWN
+				// DOWN
 			} else if (keyCode == 83 || keyCode == 40) {
 				if (posY > 0 && checkSolids(posX, posY - 1)) {
 					--posY;
 					board.receiveMessage("image " + posX + " " + (posY + 1) + " -\n");
 				}
-			// RIGHT
+				// RIGHT
 			} else if (keyCode == 68 || keyCode == 39) {
 				if (posX < boardSize - 1 && checkSolids(posX + 1, posY)) {
 					++posX;
@@ -326,7 +335,7 @@ public class GameManager implements KeyListener {
 			}
 			checkPosition(posX, posY);
 			board.receiveMessage("image " + posX + " " + posY + " ./images/digger.png \n");
-			
+
 			symbol = board.getSymbol(posX, posY);
 			symbol.getImageObject().setWorldWidth(0);
 		}
@@ -336,5 +345,16 @@ public class GameManager implements KeyListener {
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
 
+	}
+
+	public static void save(Player player) {
+		try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("savegame.bin"))) {
+			out.writeObject(player);
+			System.out.println("Successfully saved game");
+			System.out.println();
+		} catch (Exception e) {
+			System.out.println("Failed to save game");
+			System.out.println();
+		}
 	}
 }
