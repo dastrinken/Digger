@@ -29,14 +29,13 @@ public class StartGame {
 	}
 
 	public static void loadSaveGame() {
-		player = load();
+		load();
 		manager = GameManager.getInstance();
 		manager.createBoard(player);
 		manager.setUpBoard();
 	}
 	
-	public static Player load() {
-		player = null;
+	public static void load() {
 		try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("savegame.bin"))) {
 			player = (Player) in.readObject();
 			System.out.println("Successfully loaded game");
@@ -46,6 +45,5 @@ public class StartGame {
 			System.out.println("Failed loading game");
 			System.out.println();
 		}
-		return player;
 	}
 }

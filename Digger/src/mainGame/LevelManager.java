@@ -46,7 +46,7 @@ abstract class LevelManager extends GameManager {
 			
 		// TODO: Mehr Level ausdenken und einfügen!
 		default:
-			tomatos = new int[5][2];
+			tomatos = new int[level+4][2];
 			int posX, posY;
 			for (int i = 0; i < tomatos.length; i++) {
 				posX = (int) (Math.random() * 20);
