@@ -15,7 +15,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.SwingConstants;
 
-public abstract class MenuManager extends GameManager {
+public class MenuManager extends GameManager {
 	private static File saveFile = new File("savegame.bin");
 
 	public static JMenuBar getGameMenu() {
