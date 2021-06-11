@@ -2,8 +2,6 @@ package mainGame;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
@@ -12,9 +10,6 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 
 import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
@@ -31,7 +26,6 @@ import javax.swing.ImageIcon;
 
 public class GameManager extends StartGame implements KeyListener {
 	private static GameManager manager = new GameManager();
-	// TODO: load player stats
 	private static boolean move = true;
 
 	public static Font customFont;
@@ -94,7 +88,7 @@ public class GameManager extends StartGame implements KeyListener {
 		board.setSize(748, 780);
 
 		graphic = board.getGraphic();
-		graphic.setJMenuBar(getGameMenu());
+		graphic.setJMenuBar(MenuManager.getGameMenu());
 		graphic.setTitle("Digger 1.0 - SoSe2021 - Powered by BoS");
 		graphic.addKeyListener(this);
 		graphic.setResizable(false);
@@ -128,49 +122,6 @@ public class GameManager extends StartGame implements KeyListener {
 
 		graphic.addSouthComponent(southPanel);
 
-	}
-
-	public JMenuBar getGameMenu() {
-		JMenuBar menu = new JMenuBar();
-		JMenu file = new JMenu("File");
-		JMenuItem load = new JMenuItem("Load");
-		load.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				graphic.dispose();
-				StartGame.loadSaveGame();
-			}
-		});
-		JMenuItem save = new JMenuItem("Save");
-		save.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				save(player);
-			}
-		});
-		JMenuItem returnBtn = new JMenuItem("Return to menu");
-		returnBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				graphic.dispose();
-				MainMenu.setFrame();
-			}
-		});
-		JMenuItem close = new JMenuItem("Quit");
-		close.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-			}
-		});
-		file.add(load);
-		file.add(save);
-		file.add(returnBtn);
-		file.add(close);
-		JMenu help = new JMenu("Help");
-		JMenuItem controls = new JMenuItem("Controls");
-		JMenuItem blocks = new JMenuItem("Blocks");
-		help.add(controls);
-		help.add(blocks);
-		menu.add(file);
-		menu.add(help);
-		return menu;
 	}
 
 	public void setUpBoard() {
@@ -208,34 +159,6 @@ public class GameManager extends StartGame implements KeyListener {
 		ItemManager.setUpItems(level);
 		graphic.setVisible(true);
 	}
-
-	/*
-	 * public static void levelCompletedGui() { // graphic.setVisible(false);
-	 * 
-	 * JDialog chooseFrame = new JDialog(); chooseFrame.setUndecorated(true);
-	 * chooseFrame.setAlwaysOnTop(true); chooseFrame.setResizable(false);
-	 * chooseFrame.setSize(600, 64); chooseFrame.setLocationRelativeTo(null);
-	 * chooseFrame.getContentPane().setLayout(new
-	 * BoxLayout(chooseFrame.getContentPane(), BoxLayout.X_AXIS));
-	 * 
-	 * JButton quitSaveBtn = new JButton("Quit & Save");
-	 * quitSaveBtn.setFont(createCustomFont(18f)); quitSaveBtn.setPreferredSize(new
-	 * Dimension(300, 64)); quitSaveBtn.setMaximumSize(new Dimension(300, 64));
-	 * quitSaveBtn.addActionListener(new ActionListener() { public void
-	 * actionPerformed(ActionEvent e) { chooseFrame.dispose();
-	 * MainMenu.mainFrame.setVisible(true); graphic.dispose(); } });
-	 * chooseFrame.getContentPane().add(quitSaveBtn);
-	 * 
-	 * JButton nextLevelBtn = new JButton("Next Level");
-	 * nextLevelBtn.setFont(createCustomFont(18f));
-	 * nextLevelBtn.setPreferredSize(new Dimension(300, 64));
-	 * nextLevelBtn.setMaximumSize(new Dimension(300, 64));
-	 * nextLevelBtn.addActionListener(new ActionListener() { public void
-	 * actionPerformed(ActionEvent e) { chooseFrame.dispose();
-	 * StartGame.nextLevel(); } }); chooseFrame.getContentPane().add(nextLevelBtn);
-	 * 
-	 * chooseFrame.setVisible(true); }
-	 */
 
 	public void checkPosition(int posX, int posY) {
 		int x = 999, y = 999;
@@ -346,15 +269,19 @@ public class GameManager extends StartGame implements KeyListener {
 		// TODO Auto-generated method stub
 
 	}
-
-	public static void save(Player player) {
+	
+	public static boolean save(Player player) {
+		boolean saved;
 		try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("savegame.bin"))) {
 			out.writeObject(player);
+			saved = true;
 			System.out.println("Successfully saved game");
 			System.out.println();
 		} catch (Exception e) {
+			saved = false;
 			System.out.println("Failed to save game");
 			System.out.println();
 		}
+		return saved;
 	}
 }
