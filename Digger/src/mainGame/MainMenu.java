@@ -66,6 +66,12 @@ public class MainMenu {
 		btnContinueGame.setFont(customFontRegular);
 		btnContinueGame.setToolTipText("Load your latest savegame");
 		btnContinueGame.setBounds(50, 154, 400, 35);
+		btnContinueGame.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mainFrame.setVisible(false);
+				StartGame.loadSaveGame();
+			}
+		});
 		desktopPane.add(btnContinueGame);
 		
 		JButton btnHighscore = new JButton("Highscore");
