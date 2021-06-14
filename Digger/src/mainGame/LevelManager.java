@@ -43,8 +43,9 @@ abstract class LevelManager extends GameManager {
 			tomatos[5][0] = 13;
 			tomatos[5][1] = 5;
 			break;
+		// Hier neue Level einfügen (tomato array)
 			
-		// TODO: Mehr Level ausdenken und einfügen!
+		//default case
 		default:
 			tomatos = new int[level+4][2];
 			int posX, posY;
@@ -121,6 +122,9 @@ abstract class LevelManager extends GameManager {
 			solids[9][0] = 7;
 			solids[9][1] = 12;
 			break;
+		// Hier neue Level einfügen (solid array)
+		
+		//default case
 		default:
 			solids = new int[5][2];
 			int posX, posY;
@@ -150,6 +154,9 @@ abstract class LevelManager extends GameManager {
 			onions[0][0] = 8;
 			onions[0][1] = 16;
 			break;
+		// Hier neue Level einfügen (onion array)
+			
+		//default case
 		default:
 			onions = new int[5][2];
 			int posX, posY;

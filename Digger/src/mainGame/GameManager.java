@@ -8,11 +8,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.net.URL;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-
 import jserver.Board;
 import jserver.Symbol;
 import jserver.XSendAdapter;
@@ -21,12 +21,16 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 
 public class GameManager extends StartGame implements KeyListener {
 	private static GameManager manager = new GameManager();
 	private static boolean move = true;
+	private static boolean moveLeft = true;
 
 	public static Font customFont;
 	public static JLabel ptDisplay;
@@ -121,7 +125,8 @@ public class GameManager extends StartGame implements KeyListener {
 		southPanel.add(ptDisplay);
 
 		graphic.addSouthComponent(southPanel);
-
+		
+		playMusic();
 	}
 
 	public void setUpBoard() {
@@ -140,17 +145,17 @@ public class GameManager extends StartGame implements KeyListener {
 		graphic.setVisible(false);
 
 		xsend.groesse(boardSize, boardSize);
-		xsend.flaeche(0x9E5C2D);
+		xsend.flaeche(0x95612D);
 		xsend.formen("none");
 		xsend.rahmen(XSendAdapter.BLACK);
-		board.receiveMessage("image " + posX + " " + posY + " ./images/digger.png \n");
+		board.receiveMessage("image " + posX + " " + posY + " ./images/chef.png \n");
 		symbol = board.getSymbol(posX, posY);
 		symbol.getImageObject().setWorldWidth(0);
 
 		for (int i = 0; i < boardSize; i++) {
 			for (int j = 0; j < boardSize; j++) {
 				if (i != posX || j != posY) {
-					board.receiveMessage("image " + i + " " + j + " ./images/earth.png \n");
+					board.receiveMessage("image " + i + " " + j + " ./images/earth_4.png \n");
 					symbol = board.getSymbol(i, j);
 					symbol.getImageObject().setWorldWidth(0);
 				}
@@ -239,6 +244,7 @@ public class GameManager extends StartGame implements KeyListener {
 				}
 				// LEFT
 			} else if (keyCode == 65 || keyCode == 37) {
+				moveLeft = true;
 				if (posX > 0 && checkSolids(posX - 1, posY)) {
 					--posX;
 					board.receiveMessage("image " + (posX + 1) + " " + posY + " -\n");
@@ -251,13 +257,19 @@ public class GameManager extends StartGame implements KeyListener {
 				}
 				// RIGHT
 			} else if (keyCode == 68 || keyCode == 39) {
+				moveLeft = false;
 				if (posX < boardSize - 1 && checkSolids(posX + 1, posY)) {
 					++posX;
 					board.receiveMessage("image " + (posX - 1) + " " + posY + " -\n");
 				}
 			}
 			checkPosition(posX, posY);
-			board.receiveMessage("image " + posX + " " + posY + " ./images/digger.png \n");
+			if(moveLeft == true) {
+				board.receiveMessage("image " + posX + " " + posY + " ./images/chef.png \n");
+			}
+			else {
+				board.receiveMessage("image " + posX + " " + posY + " ./images/chef_r.png \n");
+			}
 
 			symbol = board.getSymbol(posX, posY);
 			symbol.getImageObject().setWorldWidth(0);
@@ -283,5 +295,20 @@ public class GameManager extends StartGame implements KeyListener {
 			System.out.println();
 		}
 		return saved;
+	}
+	
+	public static void playMusic() {
+		URL url;
+		try {
+			url = new File("sounds/tomatensalat.wav").toURI().toURL();
+	        Clip clip = AudioSystem.getClip();
+	        // getAudioInputStream() also accepts a File or InputStream
+	        AudioInputStream ais = AudioSystem.getAudioInputStream(url);
+	        clip.open(ais);
+	        clip.loop(Clip.LOOP_CONTINUOUSLY);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

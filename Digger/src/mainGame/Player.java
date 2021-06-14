@@ -67,6 +67,9 @@ public class Player implements Serializable {
 		case 2:
 			ptCounter = 6;
 			break;
+		//Hier neue Level einfügen
+			
+		//default case
 		default:
 			ptCounter = level+4;
 			break;
