@@ -8,8 +8,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.net.URL;
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
@@ -21,23 +19,24 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 
 public class GameManager extends StartGame implements KeyListener {
+	//General variables
 	private static GameManager manager = new GameManager();
 	private static boolean move = true;
 	private static boolean moveLeft = true;
-
+	
+	//Menu and display variables
 	public static Font customFont;
 	public static JLabel ptDisplay;
 	public JLabel lvlDisplay;
 	public JPanel livesDisplay;
 	public final ImageIcon heartIcon = new ImageIcon("./images/heart.png");
 
+	//Board & position variables
 	protected static Board board;
 	protected static Graphic graphic;
 	private static XSendAdapter xsend;
@@ -46,12 +45,22 @@ public class GameManager extends StartGame implements KeyListener {
 	public static final int boardSize = 20;
 	private int posX;
 	private int posY;
-
+	
+	//In-game Item variables
 	public int collectableCounter;
 	protected static int[][] collectableArray;
 	protected static int[][] solidsArray;
 	protected static int[][] onionsArray;
 
+	//Music variables
+	protected static Clip bgMusic;
+	protected static Clip soundEffect;
+	protected static boolean musicOn = true;
+	protected static boolean soundsOn = true;
+	protected static int musicSliderValue = 100;
+	protected static int soundsSliderValue = 100;
+	protected static float soundsVolume = .1f;
+	
 	protected GameManager() {
 		System.out.println("Objektinstanz gebildet.");
 	}
@@ -125,8 +134,7 @@ public class GameManager extends StartGame implements KeyListener {
 		southPanel.add(ptDisplay);
 
 		graphic.addSouthComponent(southPanel);
-		
-		playMusic();
+
 	}
 
 	public void setUpBoard() {
@@ -200,6 +208,7 @@ public class GameManager extends StartGame implements KeyListener {
 				y = solidsArray[i][1];
 				if (x == posX && y == posY) {
 					fieldAvailable = false;
+					SoundManager.stoneHit();
 				}
 			}
 		}
@@ -213,9 +222,11 @@ public class GameManager extends StartGame implements KeyListener {
 		case "tomato":
 			collectableCounter--;
 			player.incPoints(1);
+			SoundManager.crunchyBite();
 			break;
 		case "onion":
 			player.incPoints(5);
+			SoundManager.sparkleCollect();
 			break;
 		}
 		if (collectableCounter == 0) {
@@ -224,6 +235,7 @@ public class GameManager extends StartGame implements KeyListener {
 			collectableCounter = player.getPtCounter();
 			move = false;
 			setUpBoard();
+			SoundManager.lvlUp();
 		}
 	}
 
@@ -295,20 +307,5 @@ public class GameManager extends StartGame implements KeyListener {
 			System.out.println();
 		}
 		return saved;
-	}
-	
-	public static void playMusic() {
-		URL url;
-		try {
-			url = new File("sounds/tomatensalat.wav").toURI().toURL();
-	        Clip clip = AudioSystem.getClip();
-	        // getAudioInputStream() also accepts a File or InputStream
-	        AudioInputStream ais = AudioSystem.getAudioInputStream(url);
-	        clip.open(ais);
-	        clip.loop(Clip.LOOP_CONTINUOUSLY);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 }
