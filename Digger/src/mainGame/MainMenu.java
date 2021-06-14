@@ -4,6 +4,8 @@ import javax.swing.JFrame;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import java.awt.Rectangle;
 import javax.swing.JDesktopPane;
@@ -24,6 +26,7 @@ public class MainMenu {
 	static Font customFontSmall = GameManager.createCustomFont(7f);
 
 	public static void main(String[] args) {
+		SoundManager.playMusic();
 		setFrame();
 	}
 	
@@ -34,7 +37,7 @@ public class MainMenu {
 		mainFrame = new JFrame();
 		mainFrame.setIconImage(icon.getImage());
 		
-		mainFrame.setSize(510, 310);
+		mainFrame.setSize(510, 302);
 		mainFrame.setResizable(false);
 		mainFrame.getContentPane().setLayout(null);
 
@@ -45,7 +48,7 @@ public class MainMenu {
 				g.drawImage(background.getImage(), 0, 0, this);
 			}
 		};
-		desktopPane.setBounds(0, 0, 504, 281);
+		desktopPane.setBounds(0, 0, 504, 273);
 		mainFrame.getContentPane().add(desktopPane);
 		
 		JButton btnStart = new JButton("New Game");
@@ -57,6 +60,11 @@ public class MainMenu {
 			public void actionPerformed(ActionEvent e) {
 				StartGame.main(null);
 				mainFrame.setVisible(false);
+			}
+		});
+		btnStart.addMouseListener(new MouseAdapter() {
+			public void mouseEntered(MouseEvent e) {
+				SoundManager.menuBtnSound();
 			}
 		});
 		btnStart.setBounds(50, 108, 400, 35);
@@ -72,18 +80,43 @@ public class MainMenu {
 				StartGame.loadSaveGame();
 			}
 		});
+		btnContinueGame.addMouseListener(new MouseAdapter() {
+			public void mouseEntered(MouseEvent e) {
+				SoundManager.menuBtnSound();
+			}
+		});
 		desktopPane.add(btnContinueGame);
 		
 		JButton btnHighscore = new JButton("Highscore");
 		btnHighscore.setFont(customFontRegular);
 		btnHighscore.setToolTipText("Show Highscore");
-		btnHighscore.setBounds(50, 200, 400, 35);
+		btnHighscore.setBounds(50, 200, 194, 35);
+		btnHighscore.addMouseListener(new MouseAdapter() {
+			public void mouseEntered(MouseEvent e) {
+				SoundManager.menuBtnSound();
+			}
+		});
 		desktopPane.add(btnHighscore);
+
+		JButton optionsBtn = new JButton("Settings");
+		optionsBtn.setBounds(256, 200, 194, 35);
+		optionsBtn.setFont(customFontRegular);
+		optionsBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				MenuManager.showOptionsMenu();
+			}
+		});
+		optionsBtn.addMouseListener(new MouseAdapter() {
+			public void mouseEntered(MouseEvent e) {
+				SoundManager.menuBtnSound();
+			}
+		});
+		desktopPane.add(optionsBtn);
 		
-		JLabel lblNewLabel = new JLabel("Digger V0.1 - A project by Sebastian Z. & Armin P.");
+		JLabel lblNewLabel = new JLabel("Digger V1.0 - A project by Sebastian Z. & Armin P.");
 		lblNewLabel.setFont(customFontSmall);
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setBounds(10, 246, 490, 14);
+		lblNewLabel.setBounds(10, 248, 490, 14);
 		desktopPane.add(lblNewLabel);
 		
 		mainFrame.setVisible(true);
