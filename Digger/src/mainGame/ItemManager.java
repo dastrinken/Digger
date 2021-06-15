@@ -35,6 +35,22 @@ public class ItemManager extends GameManager {
 			symbol = board.getSymbol(xCollectable, yCollectable);
 			symbol.getImageObject().setWorldWidth(0);
 		}
-
+		for (int i = 0; i < lavaArray.length; i++) {
+			xCollectable = lavaArray[i][0];
+			yCollectable = lavaArray[i][1];
+			board.receiveMessage("image " + xCollectable + " " + yCollectable + " ./images/lava.png \n");
+			board.receiveMessage("image " + (xCollectable+1) + " " + (yCollectable+1) + " ./images/earth_lava.png \n");
+			board.receiveMessage("image " + (xCollectable) + " " + (yCollectable+1) + " ./images/earth_lava.png \n");
+			board.receiveMessage("image " + (xCollectable+1) + " " + (yCollectable) + " ./images/earth_lava.png \n");
+			board.receiveMessage("image " + (xCollectable-1) + " " + (yCollectable-1) + " ./images/earth_lava.png \n");
+			board.receiveMessage("image " + (xCollectable) + " " + (yCollectable-1) + " ./images/earth_lava.png \n");
+			board.receiveMessage("image " + (xCollectable-1) + " " + (yCollectable) + " ./images/earth_lava.png \n");
+			board.receiveMessage("image " + (xCollectable+1) + " " + (yCollectable-1) + " ./images/earth_lava.png \n");
+			board.receiveMessage("image " + (xCollectable-1) + " " + (yCollectable+1) + " ./images/earth_lava.png \n");
+			
+			symbol = board.getSymbol(xCollectable, yCollectable);
+			symbol.getImageObject().setWorldWidth(0);
+		}
+		
 	}
 }

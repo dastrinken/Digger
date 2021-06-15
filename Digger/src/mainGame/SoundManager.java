@@ -53,6 +53,7 @@ public class SoundManager extends GameManager {
 			e.printStackTrace();
 		}
 	}
+
 	public static void sparkleCollect() {
 		URL url;
 		try {
@@ -67,6 +68,7 @@ public class SoundManager extends GameManager {
 			e.printStackTrace();
 		}
 	}
+
 	public static void stoneHit() {
 		URL url;
 		try {
@@ -81,11 +83,41 @@ public class SoundManager extends GameManager {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void lvlUp() {
 		URL url;
 		try {
 			url = new File("sounds/lvl_up.wav").toURI().toURL();
+			soundEffect = AudioSystem.getClip();
+			// getAudioInputStream() also accepts a File or InputStream
+			AudioInputStream ais = AudioSystem.getAudioInputStream(url);
+			soundEffect.open(ais);
+			soundEffect.loop(0);
+			setSoundsVolume(soundsVolume);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void dmg() {
+		URL url;
+		try {
+			url = new File("sounds/dmg.wav").toURI().toURL();
+			soundEffect = AudioSystem.getClip();
+			// getAudioInputStream() also accepts a File or InputStream
+			AudioInputStream ais = AudioSystem.getAudioInputStream(url);
+			soundEffect.open(ais);
+			soundEffect.loop(0);
+			setSoundsVolume(soundsVolume);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void gameOver() {
+		URL url;
+		try {
+			url = new File("sounds/gameOver.wav").toURI().toURL();
 			soundEffect = AudioSystem.getClip();
 			// getAudioInputStream() also accepts a File or InputStream
 			AudioInputStream ais = AudioSystem.getAudioInputStream(url);
