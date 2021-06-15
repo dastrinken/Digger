@@ -244,4 +244,42 @@ public class MenuManager extends GameManager {
 		optionFrame.setLocationRelativeTo(null);
 		optionFrame.setVisible(true);
 	}
+
+	public static void getGameOverMenu(int level) {
+		String hintString;
+		JDialog gameOver = new JDialog();
+		JLabel gameOverLbl = new JLabel("Game Over :(");
+		gameOverLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		gameOverLbl.setBounds(114, 11, 282, 23);
+		JButton gameOverBtn = new JButton("Highscore & Quit");
+		gameOverBtn.setBounds(163, 159, 181, 30);
+		gameOverLbl.setFont(createCustomFont(13f));
+		gameOver.setSize(500, 200);
+		gameOver.getContentPane().setLayout(null);
+		gameOver.getContentPane().add(gameOverLbl);
+		gameOver.getContentPane().add(gameOverBtn);
+		
+		switch(level) {
+		case 1:
+			hintString = "How is it possible to lose in Lvl 1?";
+			break;
+		case 3:
+			hintString = "Hint: The floor is lava!";
+			break;
+		default:
+			hintString = "<html><body style=\"text-align:center; margin: auto;\"><p><u>Hint:</u><br/><br/>Some blocks afflict damage.<br/>Try to avoid those, okay?</p></body></html>";
+			break;
+		}
+		JLabel hintLbl = new JLabel(hintString);
+		hintLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		hintLbl.setBounds(10, 36, 480, 96);
+		hintLbl.setFont(createCustomFont(9f));
+		gameOver.getContentPane().add(hintLbl);
+		
+		gameOver.setUndecorated(true);
+		gameOver.setResizable(false);
+		gameOver.setAlwaysOnTop(true);
+		gameOver.setLocationRelativeTo(null);
+		gameOver.setVisible(true);
+	}
 }

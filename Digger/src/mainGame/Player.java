@@ -9,6 +9,7 @@ public class Player implements Serializable {
 	private String name;
 	private int level = 1;
 	private int ptCounter;
+	private int dmgCounter;
 
 	public Player(int lives, int points, int level) {
 		super();
@@ -54,6 +55,10 @@ public class Player implements Serializable {
 		return ptCounter;
 	}
 
+	public int getDmgCounter() {
+		return dmgCounter;
+	}
+	
 	public void incPoints(int amount) {
 		this.points += amount;
 		GameManager.updatePoints(this.points);
@@ -67,11 +72,16 @@ public class Player implements Serializable {
 		case 2:
 			ptCounter = 6;
 			break;
+		case 3: 
+			ptCounter = 6;
+			dmgCounter = 3;
+			break;
 		//Hier neue Level einfügen
 			
 		//default case
 		default:
 			ptCounter = level+4;
+			dmgCounter = 3;
 			break;
 		}
 		

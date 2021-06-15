@@ -46,4 +46,11 @@ public class StartGame {
 			System.out.println();
 		}
 	}
+	
+	public static void cheat() {
+		player = new Player(1, 0, 1000);
+		manager = GameManager.getInstance();
+		manager.createBoard(player);
+		manager.setUpBoard();
+	}
 }

@@ -24,19 +24,19 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 
 public class GameManager extends StartGame implements KeyListener {
-	//General variables
+	// General variables
 	private static GameManager manager = new GameManager();
 	private static boolean move = true;
 	private static boolean moveLeft = true;
-	
-	//Menu and display variables
+
+	// Menu and display variables
 	public static Font customFont;
 	public static JLabel ptDisplay;
 	public JLabel lvlDisplay;
 	public JPanel livesDisplay;
 	public final ImageIcon heartIcon = new ImageIcon("./images/heart.png");
 
-	//Board & position variables
+	// Board & position variables
 	protected static Board board;
 	protected static Graphic graphic;
 	private static XSendAdapter xsend;
@@ -45,14 +45,16 @@ public class GameManager extends StartGame implements KeyListener {
 	public static final int boardSize = 20;
 	private int posX;
 	private int posY;
-	
-	//In-game Item variables
+
+	// In-game Item variables
 	public int collectableCounter;
+	public int dmgCounter;
 	protected static int[][] collectableArray;
 	protected static int[][] solidsArray;
 	protected static int[][] onionsArray;
+	protected static int[][] lavaArray;
 
-	//Music variables
+	// Music variables
 	protected static Clip bgMusic;
 	protected static Clip soundEffect;
 	protected static boolean musicOn = true;
@@ -60,7 +62,7 @@ public class GameManager extends StartGame implements KeyListener {
 	protected static int musicSliderValue = 100;
 	protected static int soundsSliderValue = 100;
 	protected static float soundsVolume = .1f;
-	
+
 	protected GameManager() {
 		System.out.println("Objektinstanz gebildet.");
 	}
@@ -96,7 +98,6 @@ public class GameManager extends StartGame implements KeyListener {
 	 * @wbp.parser.entryPoint
 	 */
 	public void createBoard(Player player) {
-		collectableCounter = player.getPtCounter();
 		board = new Board();
 		board.setSize(748, 780);
 
@@ -115,7 +116,7 @@ public class GameManager extends StartGame implements KeyListener {
 		livesDisplay = new JPanel();
 		livesDisplay.setLayout(new BoxLayout(livesDisplay, BoxLayout.X_AXIS));
 		livesDisplay.setMaximumSize(new Dimension(190, 16));
-		livesDisplay.setPreferredSize(new Dimension(190, 16));
+		livesDisplay.setPreferredSize(new Dimension(180, 16));
 		for (int i = 0; i < player.getLives(); i++) {
 			livesDisplay.add(new JLabel(heartIcon));
 		}
@@ -123,13 +124,13 @@ public class GameManager extends StartGame implements KeyListener {
 
 		lvlDisplay = new JLabel("Level " + player.getLevel());
 		lvlDisplay.setFont(createCustomFont(13f));
-		lvlDisplay.setPreferredSize(new Dimension(99, 18));
+		lvlDisplay.setPreferredSize(new Dimension(119, 18));
 		lvlDisplay.setHorizontalAlignment(SwingConstants.CENTER);
 		southPanel.add(lvlDisplay);
 
 		ptDisplay = new JLabel(player.getPoints() + " Points");
 		ptDisplay.setFont(createCustomFont(9f));
-		ptDisplay.setPreferredSize(new Dimension(190, 16));
+		ptDisplay.setPreferredSize(new Dimension(180, 16));
 		ptDisplay.setHorizontalAlignment(SwingConstants.RIGHT);
 		southPanel.add(ptDisplay);
 
@@ -139,9 +140,13 @@ public class GameManager extends StartGame implements KeyListener {
 
 	public void setUpBoard() {
 		level = player.getLevel();
+		collectableCounter = player.getPtCounter();
+		dmgCounter = player.getDmgCounter();
+		
 		collectableArray = LevelManager.getTomatoPos(level);
 		solidsArray = LevelManager.getSolidsPos(level);
 		onionsArray = LevelManager.getOnionsPos(level);
+		lavaArray = LevelManager.getLavaPos(level);
 
 		player.resetCounter(level);
 		lvlDisplay.setText("Level " + String.valueOf(level));
@@ -215,6 +220,59 @@ public class GameManager extends StartGame implements KeyListener {
 		return fieldAvailable;
 	}
 
+	public void checkLava(int posX, int posY) {
+		int x, y;
+		boolean loseLife = false;
+		for (int i = 0; i < lavaArray.length; i++) {
+			for (int j = 0; j < 2; j++) {
+				x = lavaArray[i][0];
+				y = lavaArray[i][1];
+				if(loseLife == false) {
+					if (x == posX && y == posY) {
+						loseLife = true;
+						loseLife();
+						System.out.println("Game Over!");
+						// Game Over!
+					} else {
+						for (int k = x - 1; k <= x + 1; k++) {
+							for (int l = y - 1; l <= y + 1; l++) {
+								if (k == posX && l == posY) {
+									loseLife = true;
+									afflictDmg();
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	private void loseLife() {
+		int lives = player.getLives();
+		if(lives > 0) {
+			player.setLives(--lives);
+			//Repaint display
+			livesDisplay.removeAll();
+			for (int i = 0; i < player.getLives(); i++) {
+				livesDisplay.add(new JLabel(heartIcon));
+			}
+			setUpBoard();
+		} else {
+			move = false;
+			SoundManager.gameOver();
+			MenuManager.getGameOverMenu(level);
+		}
+	}
+	
+	private void afflictDmg() {
+		--dmgCounter;
+		SoundManager.dmg();
+		if(dmgCounter == 0) {
+			loseLife();
+		}
+	}
+
 	private void CollectPts(int posX, int posY, String type) {
 		level = player.getLevel();
 		board.receiveMessage("image " + posX + " " + posY + " -\n");
@@ -276,10 +334,10 @@ public class GameManager extends StartGame implements KeyListener {
 				}
 			}
 			checkPosition(posX, posY);
-			if(moveLeft == true) {
+			checkLava(posX, posY);
+			if (moveLeft == true) {
 				board.receiveMessage("image " + posX + " " + posY + " ./images/chef.png \n");
-			}
-			else {
+			} else {
 				board.receiveMessage("image " + posX + " " + posY + " ./images/chef_r.png \n");
 			}
 
@@ -293,7 +351,7 @@ public class GameManager extends StartGame implements KeyListener {
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	public static boolean save(Player player) {
 		boolean saved;
 		try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("savegame.bin"))) {

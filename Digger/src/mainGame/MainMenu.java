@@ -130,6 +130,15 @@ public class MainMenu {
 		projectLabel.setBounds(10, 238, 490, 48);
 		desktopPane.add(projectLabel);
 		
+		JButton cheatBtn = new JButton("?");
+		cheatBtn.setBounds(463, 251, 37, 23);
+		cheatBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				StartGame.cheat();
+			}
+		});
+		desktopPane.add(cheatBtn);
+		
 		mainFrame.setVisible(true);
 		mainFrame.setLocationRelativeTo(null);
 		mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
