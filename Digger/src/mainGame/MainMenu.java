@@ -16,6 +16,7 @@ import javax.swing.WindowConstants;
 import java.awt.Font;
 import java.awt.Graphics;
 import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 
 public class MainMenu {
 	public static JFrame mainFrame;
@@ -23,7 +24,7 @@ public class MainMenu {
 	public static ImageIcon icon = new ImageIcon("./images/solid.png");
 	static ImageIcon background = new ImageIcon("./images/background.png");
 	static Font customFontRegular = GameManager.createCustomFont(12f);
-	static Font customFontSmall = GameManager.createCustomFont(7f);
+	static Font customFontSmall = GameManager.createCustomFont(7.5f);
 
 	public static void main(String[] args) {
 		SoundManager.playMusic();
@@ -34,10 +35,20 @@ public class MainMenu {
 	 * @wbp.parser.entryPoint
 	 */
 	public static void setFrame() {
+		try {
+		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+		        if ("Nimbus".equals(info.getName())) {
+		            UIManager.setLookAndFeel(info.getClassName());
+		            break;
+		        }
+		    }
+		} catch (Exception e) {
+		    
+		}
 		mainFrame = new JFrame();
 		mainFrame.setIconImage(icon.getImage());
 		
-		mainFrame.setSize(510, 302);
+		mainFrame.setSize(510, 312);
 		mainFrame.setResizable(false);
 		mainFrame.getContentPane().setLayout(null);
 
@@ -48,7 +59,7 @@ public class MainMenu {
 				g.drawImage(background.getImage(), 0, 0, this);
 			}
 		};
-		desktopPane.setBounds(0, 0, 504, 273);
+		desktopPane.setBounds(0, 0, 510, 312);
 		mainFrame.getContentPane().add(desktopPane);
 		
 		JButton btnStart = new JButton("New Game");
@@ -67,13 +78,13 @@ public class MainMenu {
 				SoundManager.menuBtnSound();
 			}
 		});
-		btnStart.setBounds(50, 108, 400, 35);
+		btnStart.setBounds(50, 103, 400, 35);
 		desktopPane.add(btnStart);
 		
 		JButton btnContinueGame = new JButton("Continue");
 		btnContinueGame.setFont(customFontRegular);
 		btnContinueGame.setToolTipText("Load your latest savegame");
-		btnContinueGame.setBounds(50, 154, 400, 35);
+		btnContinueGame.setBounds(50, 149, 400, 35);
 		btnContinueGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				mainFrame.setVisible(false);
@@ -90,7 +101,7 @@ public class MainMenu {
 		JButton btnHighscore = new JButton("Highscore");
 		btnHighscore.setFont(customFontRegular);
 		btnHighscore.setToolTipText("Show Highscore");
-		btnHighscore.setBounds(50, 200, 194, 35);
+		btnHighscore.setBounds(50, 195, 194, 35);
 		btnHighscore.addMouseListener(new MouseAdapter() {
 			public void mouseEntered(MouseEvent e) {
 				SoundManager.menuBtnSound();
@@ -99,7 +110,7 @@ public class MainMenu {
 		desktopPane.add(btnHighscore);
 
 		JButton optionsBtn = new JButton("Settings");
-		optionsBtn.setBounds(256, 200, 194, 35);
+		optionsBtn.setBounds(256, 195, 194, 35);
 		optionsBtn.setFont(customFontRegular);
 		optionsBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -113,11 +124,11 @@ public class MainMenu {
 		});
 		desktopPane.add(optionsBtn);
 		
-		JLabel lblNewLabel = new JLabel("Digger V1.0 - A project by Sebastian Z. & Armin P.");
-		lblNewLabel.setFont(customFontSmall);
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setBounds(10, 248, 490, 14);
-		desktopPane.add(lblNewLabel);
+		JLabel projectLabel = new JLabel("Digger V1.0 - A project by Sebastian Z. & Armin P.");
+		projectLabel.setFont(customFontSmall);
+		projectLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		projectLabel.setBounds(10, 238, 490, 48);
+		desktopPane.add(projectLabel);
 		
 		mainFrame.setVisible(true);
 		mainFrame.setLocationRelativeTo(null);
