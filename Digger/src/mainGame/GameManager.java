@@ -163,7 +163,7 @@ public class GameManager extends StartGame implements KeyListener {
 		for (int i = 0; i < boardSize; i++) {
 			for (int j = 0; j < boardSize; j++) {
 				if (i != posX || j != posY) {
-					board.receiveMessage("image " + i + " " + j + " ./images/earth_4.png \n");
+					board.receiveMessage("image " + i + " " + j + " ./images/earth.png \n");
 					symbol = board.getSymbol(i, j);
 					symbol.getImageObject().setWorldWidth(0);
 				}
