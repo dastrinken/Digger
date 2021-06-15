@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -17,14 +18,17 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JSlider;
 import javax.swing.SwingConstants;
+import javax.swing.JTextField;
 
 public class MenuManager extends GameManager {
 	public static ImageIcon icon = new ImageIcon("./images/solid.png");
 	private static File saveFile = new File("savegame.bin");
+	private static File highScore = new File("highScore.txt");
 	private static JCheckBox musicCheckbox;
 	private static JSlider musicVolumeSlider;
 	private static JSlider soundsVolumeSlider;
 	private static JCheckBox soundsCheckbox;
+	private static JTextField nameField;
 
 	public static JMenuBar getGameMenu() {
 		JMenuBar menu = new JMenuBar();
@@ -43,7 +47,7 @@ public class MenuManager extends GameManager {
 					System.out.println(saveFile + " exists");
 					confirmSave();
 				} else {
-					if (save(player)) {
+					if (save()) {
 						System.out.println("Successfully saved game");
 					} else {
 						JDialog errorDialog = new JDialog();
@@ -136,7 +140,7 @@ public class MenuManager extends GameManager {
 		yesBtn.setPreferredSize(new Dimension(100, 50));
 		yesBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (save(player)) {
+				if (save()) {
 					saveConfirmFrame.dispose();
 				} else {
 					JDialog errorDialog = new JDialog();
@@ -212,17 +216,17 @@ public class MenuManager extends GameManager {
 		soundsVolumeSlider = new JSlider(0, 100, soundsSliderValue);
 		soundsVolumeSlider.setBounds(224, 44, 200, 26);
 		optionFrame.getContentPane().add(soundsVolumeSlider);
-		
+
 		JButton saveBtn = new JButton("Apply");
 		saveBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//saving variables for better usability
+				// saving variables for better usability
 				musicOn = musicCheckbox.isSelected();
 				soundsOn = soundsCheckbox.isSelected();
 				musicSliderValue = musicVolumeSlider.getValue();
 				soundsSliderValue = soundsVolumeSlider.getValue();
-				
-				//applying user settings
+
+				// applying user settings
 				if (musicCheckbox.isSelected()) {
 					float volume = (float) musicVolumeSlider.getValue();
 					SoundManager.setMusicVolume(volume / 1000);
@@ -239,27 +243,50 @@ public class MenuManager extends GameManager {
 		});
 		saveBtn.setBounds(10, 216, 414, 34);
 		optionFrame.getContentPane().add(saveBtn);
-		
+
 		optionFrame.setAlwaysOnTop(true);
 		optionFrame.setLocationRelativeTo(null);
 		optionFrame.setVisible(true);
 	}
 
+	/**
+	 * @wbp.parser.entryPoint
+	 */
 	public static void getGameOverMenu(int level) {
 		String hintString;
-		JDialog gameOver = new JDialog();
+		gameOver.setSize(500, 200);
+		gameOver.getContentPane().setLayout(null);
+
 		JLabel gameOverLbl = new JLabel("Game Over :(");
 		gameOverLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		gameOverLbl.setBounds(114, 11, 282, 23);
-		JButton gameOverBtn = new JButton("Highscore & Quit");
-		gameOverBtn.setBounds(163, 159, 181, 30);
 		gameOverLbl.setFont(createCustomFont(13f));
-		gameOver.setSize(500, 200);
-		gameOver.getContentPane().setLayout(null);
+
+		JButton gameOverBtn = new JButton("Save Highscore");
+		gameOverBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				player.setName(nameField.getText());
+				if (highScore.exists() && !highScore.isDirectory()) {
+					saveHighScore();
+				} else {
+					File highScore = new File("highScore.txt");
+					try {
+						if (highScore.createNewFile()) {
+							saveHighScore();
+						}
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			}
+		});
+		gameOverBtn.setBounds(114, 159, 181, 30);
+
 		gameOver.getContentPane().add(gameOverLbl);
 		gameOver.getContentPane().add(gameOverBtn);
-		
-		switch(level) {
+
+		switch (level) {
 		case 1:
 			hintString = "How is it possible to lose in Lvl 1?";
 			break;
@@ -270,12 +297,31 @@ public class MenuManager extends GameManager {
 			hintString = "<html><body style=\"text-align:center; margin: auto;\"><p><u>Hint:</u><br/><br/>Some blocks afflict damage.<br/>Try to avoid those, okay?</p></body></html>";
 			break;
 		}
+
 		JLabel hintLbl = new JLabel(hintString);
 		hintLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		hintLbl.setBounds(10, 36, 480, 96);
 		hintLbl.setFont(createCustomFont(9f));
 		gameOver.getContentPane().add(hintLbl);
-		
+
+		nameField = new JTextField();
+		nameField.setHorizontalAlignment(SwingConstants.CENTER);
+		nameField.setText("Enter your name");
+		nameField.setBounds(114, 135, 282, 25);
+		gameOver.getContentPane().add(nameField);
+		nameField.setColumns(10);
+
+		JButton quitBtn = new JButton("Quit");
+		quitBtn.setBounds(305, 159, 89, 30);
+		quitBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				graphic.dispose();
+				gameOver.dispose();
+				MainMenu.setFrame();
+			}
+		});
+		gameOver.getContentPane().add(quitBtn);
+
 		gameOver.setUndecorated(true);
 		gameOver.setResizable(false);
 		gameOver.setAlwaysOnTop(true);

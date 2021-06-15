@@ -4,8 +4,10 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import javax.swing.JLabel;
@@ -22,6 +24,7 @@ import java.awt.GraphicsEnvironment;
 import javax.sound.sampled.Clip;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 
 public class GameManager extends StartGame implements KeyListener {
 	// General variables
@@ -34,7 +37,8 @@ public class GameManager extends StartGame implements KeyListener {
 	public static JLabel ptDisplay;
 	public JLabel lvlDisplay;
 	public JPanel livesDisplay;
-	public final ImageIcon heartIcon = new ImageIcon("./images/heart.png");
+	public final ImageIcon heartIcon = new ImageIcon("images/heart.png");
+	public static JDialog gameOver = new JDialog();
 
 	// Board & position variables
 	protected static Board board;
@@ -77,7 +81,7 @@ public class GameManager extends StartGame implements KeyListener {
 	public static Font createCustomFont(float size) {
 		try {
 			// create the font to use. Specify the size!
-			customFont = Font.createFont(Font.TRUETYPE_FONT, new File("./other/PressStart2P-Regular.ttf"))
+			customFont = Font.createFont(Font.TRUETYPE_FONT, new File("other/PressStart2P-Regular.ttf"))
 					.deriveFont(size);
 			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 			// register the font
@@ -142,7 +146,7 @@ public class GameManager extends StartGame implements KeyListener {
 		level = player.getLevel();
 		collectableCounter = player.getPtCounter();
 		dmgCounter = player.getDmgCounter();
-		
+
 		collectableArray = LevelManager.getTomatoPos(level);
 		solidsArray = LevelManager.getSolidsPos(level);
 		onionsArray = LevelManager.getOnionsPos(level);
@@ -161,14 +165,14 @@ public class GameManager extends StartGame implements KeyListener {
 		xsend.flaeche(0x95612D);
 		xsend.formen("none");
 		xsend.rahmen(XSendAdapter.BLACK);
-		board.receiveMessage("image " + posX + " " + posY + " ./images/chef.png \n");
+		board.receiveMessage("image " + posX + " " + posY + " images/chef.png \n");
 		symbol = board.getSymbol(posX, posY);
 		symbol.getImageObject().setWorldWidth(0);
 
 		for (int i = 0; i < boardSize; i++) {
 			for (int j = 0; j < boardSize; j++) {
 				if (i != posX || j != posY) {
-					board.receiveMessage("image " + i + " " + j + " ./images/earth.png \n");
+					board.receiveMessage("image " + i + " " + j + " images/earth.png \n");
 					symbol = board.getSymbol(i, j);
 					symbol.getImageObject().setWorldWidth(0);
 				}
@@ -227,7 +231,7 @@ public class GameManager extends StartGame implements KeyListener {
 			for (int j = 0; j < 2; j++) {
 				x = lavaArray[i][0];
 				y = lavaArray[i][1];
-				if(loseLife == false) {
+				if (loseLife == false) {
 					if (x == posX && y == posY) {
 						loseLife = true;
 						loseLife();
@@ -247,12 +251,20 @@ public class GameManager extends StartGame implements KeyListener {
 			}
 		}
 	}
-	
+
+	private void afflictDmg() {
+		--dmgCounter;
+		SoundManager.dmg();
+		if (dmgCounter == 0) {
+			loseLife();
+		}
+	}
+
 	private void loseLife() {
 		int lives = player.getLives();
-		if(lives > 0) {
+		if (lives > 0) {
 			player.setLives(--lives);
-			//Repaint display
+			// Repaint display
 			livesDisplay.removeAll();
 			for (int i = 0; i < player.getLives(); i++) {
 				livesDisplay.add(new JLabel(heartIcon));
@@ -262,14 +274,6 @@ public class GameManager extends StartGame implements KeyListener {
 			move = false;
 			SoundManager.gameOver();
 			MenuManager.getGameOverMenu(level);
-		}
-	}
-	
-	private void afflictDmg() {
-		--dmgCounter;
-		SoundManager.dmg();
-		if(dmgCounter == 0) {
-			loseLife();
 		}
 	}
 
@@ -336,9 +340,9 @@ public class GameManager extends StartGame implements KeyListener {
 			checkPosition(posX, posY);
 			checkLava(posX, posY);
 			if (moveLeft == true) {
-				board.receiveMessage("image " + posX + " " + posY + " ./images/chef.png \n");
+				board.receiveMessage("image " + posX + " " + posY + " images/chef.png \n");
 			} else {
-				board.receiveMessage("image " + posX + " " + posY + " ./images/chef_r.png \n");
+				board.receiveMessage("image " + posX + " " + posY + " images/chef_r.png \n");
 			}
 
 			symbol = board.getSymbol(posX, posY);
@@ -352,7 +356,7 @@ public class GameManager extends StartGame implements KeyListener {
 
 	}
 
-	public static boolean save(Player player) {
+	public static boolean save() {
 		boolean saved;
 		try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("savegame.bin"))) {
 			out.writeObject(player);
@@ -365,5 +369,35 @@ public class GameManager extends StartGame implements KeyListener {
 			System.out.println();
 		}
 		return saved;
+	}
+
+	public static void saveHighScore() {
+		String name = player.getName();
+		String score = String.valueOf(player.getPoints());
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter("highScore.txt", true));
+			if (name.length() > 0 && !name.equals("Enter your name")) {
+				writer.write("Name: " + name + " Score: " + score);
+				writer.newLine();
+				writer.close();
+				graphic.dispose();
+				gameOver.dispose();
+				MainMenu.setFrame();
+			} else {
+				JDialog emptyName = new JDialog();
+				emptyName.setSize(300, 100);
+				JLabel errorMsg = new JLabel("Please enter your name.");
+				errorMsg.setFont(createCustomFont(9f));
+				errorMsg.setHorizontalAlignment(SwingConstants.CENTER);
+				emptyName.add(errorMsg);
+
+				emptyName.setAlwaysOnTop(true);
+				emptyName.setLocationRelativeTo(null);
+				emptyName.setVisible(true);
+			}
+		} catch (IOException ioe) {
+			System.err.println(ioe);
+		}
+
 	}
 }

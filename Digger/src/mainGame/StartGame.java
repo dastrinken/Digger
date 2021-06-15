@@ -29,13 +29,6 @@ public class StartGame {
 	}
 
 	public static void loadSaveGame() {
-		load();
-		manager = GameManager.getInstance();
-		manager.createBoard(player);
-		manager.setUpBoard();
-	}
-	
-	public static void load() {
 		try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("savegame.bin"))) {
 			player = (Player) in.readObject();
 			System.out.println("Successfully loaded game");
@@ -45,6 +38,9 @@ public class StartGame {
 			System.out.println("Failed loading game");
 			System.out.println();
 		}
+		manager = GameManager.getInstance();
+		manager.createBoard(player);
+		manager.setUpBoard();
 	}
 	
 	public static void cheat() {
