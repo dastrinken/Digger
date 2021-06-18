@@ -18,14 +18,14 @@ public class StartGame {
 	public static Player player;
 	public static int lives = 3;
 	public static int points = 0;
-	public int level;
+	public static int level;
 
 	public static void main(String[] args) {
 		// Start a new game
 		player = new Player(lives, points, 1);
 		manager = GameManager.getInstance();
 		manager.createBoard(player);
-		manager.setUpBoard();
+		GameManager.setUpBoard();
 	}
 
 	public static void loadSaveGame() {
@@ -40,13 +40,13 @@ public class StartGame {
 		}
 		manager = GameManager.getInstance();
 		manager.createBoard(player);
-		manager.setUpBoard();
+		GameManager.setUpBoard();
 	}
 	
 	public static void cheat() {
 		player = new Player(1, 0, 1000);
 		manager = GameManager.getInstance();
 		manager.createBoard(player);
-		manager.setUpBoard();
+		GameManager.setUpBoard();
 	}
 }

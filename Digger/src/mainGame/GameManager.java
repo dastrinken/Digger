@@ -35,7 +35,7 @@ public class GameManager extends StartGame implements KeyListener {
 	// Menu and display variables
 	public static Font customFont;
 	public static JLabel ptDisplay;
-	public JLabel lvlDisplay;
+	public static JLabel lvlDisplay;
 	public JPanel livesDisplay;
 	public final ImageIcon heartIcon = new ImageIcon("images/heart.png");
 	public static JDialog gameOver = new JDialog();
@@ -47,16 +47,19 @@ public class GameManager extends StartGame implements KeyListener {
 	protected static Symbol symbol;
 
 	public static final int boardSize = 20;
-	private int posX;
-	private int posY;
+	private static int posX;
+	private static int posY;
 
 	// In-game Item variables
-	public int collectableCounter;
-	public int dmgCounter;
+	public static int collectableCounter;
+	public static int dmgCounter;
+	public int frostedCounter;
 	protected static int[][] collectableArray;
 	protected static int[][] solidsArray;
 	protected static int[][] onionsArray;
 	protected static int[][] lavaArray;
+	protected static int[][] healthArray;
+	protected static int[][] frostArray;
 
 	// Music variables
 	protected static Clip bgMusic;
@@ -142,7 +145,7 @@ public class GameManager extends StartGame implements KeyListener {
 
 	}
 
-	public void setUpBoard() {
+	public static void setUpBoard() {
 		level = player.getLevel();
 		collectableCounter = player.getPtCounter();
 		dmgCounter = player.getDmgCounter();
@@ -151,6 +154,8 @@ public class GameManager extends StartGame implements KeyListener {
 		solidsArray = LevelManager.getSolidsPos(level);
 		onionsArray = LevelManager.getOnionsPos(level);
 		lavaArray = LevelManager.getLavaPos(level);
+		healthArray = LevelManager.getHealthPos(level);
+		frostArray = LevelManager.getFrostPos(level);
 
 		player.resetCounter(level);
 		lvlDisplay.setText("Level " + String.valueOf(level));
@@ -178,12 +183,13 @@ public class GameManager extends StartGame implements KeyListener {
 				}
 			}
 		}
-		ItemManager.setUpItems(level);
+		ItemPainter.setUpItems(level);
 		graphic.setVisible(true);
 	}
 
 	public void checkPosition(int posX, int posY) {
 		int x = 999, y = 999;
+		// Check for Tomatoes
 		for (int i = 0; i < collectableArray.length; i++) {
 			for (int j = 0; j < 2; j++) {
 				x = collectableArray[i][0];
@@ -195,6 +201,7 @@ public class GameManager extends StartGame implements KeyListener {
 				}
 			}
 		}
+		// Check for Onions
 		for (int i = 0; i < onionsArray.length; i++) {
 			for (int j = 0; j < 2; j++) {
 				x = onionsArray[i][0];
@@ -203,6 +210,39 @@ public class GameManager extends StartGame implements KeyListener {
 					onionsArray[i][0] = 999;
 					onionsArray[i][1] = 999;
 					CollectPts(posX, posY, "onion");
+				}
+			}
+		}
+		// Check for Health plus
+		for (int i = 0; i < healthArray.length; i++) {
+			int lives = player.getLives();
+			for (int j = 0; j < 2; j++) {
+				x = healthArray[i][0];
+				y = healthArray[i][1];
+				if (x == posX && y == posY) {
+					healthArray[i][0] = 999;
+					healthArray[i][1] = 999;
+					player.setLives(++lives);
+					// Repaint display
+					livesDisplay.removeAll();
+					for (int k = 0; k < player.getLives(); k++) {
+						livesDisplay.add(new JLabel(heartIcon));
+					}
+				}
+			}
+		}
+		// Check for Frost protection
+		for (int i = 0; i < frostArray.length; i++) {
+			for (int j = 0; j < 2; j++) {
+				x = frostArray[i][0];
+				y = frostArray[i][1];
+				if (x == posX && y == posY) {
+					frostArray[i][0] = 999;
+					frostArray[i][1] = 999;
+					frostedCounter += 9;
+					System.out.println("Frost protection achieved! Available for " + frostedCounter + " fields");
+
+					// TODO: Show lava protection on screen (example: Blue hearts)
 				}
 			}
 		}
@@ -241,8 +281,10 @@ public class GameManager extends StartGame implements KeyListener {
 						for (int k = x - 1; k <= x + 1; k++) {
 							for (int l = y - 1; l <= y + 1; l++) {
 								if (k == posX && l == posY) {
-									loseLife = true;
-									afflictDmg();
+									if (frostedCounter == 0) {
+										loseLife = true;
+										afflictDmg();
+									}
 								}
 							}
 						}
@@ -255,6 +297,7 @@ public class GameManager extends StartGame implements KeyListener {
 	private void afflictDmg() {
 		--dmgCounter;
 		SoundManager.dmg();
+		System.out.println("Lava hits the player! dmgCounter: " + dmgCounter);
 		if (dmgCounter == 0) {
 			loseLife();
 		}
@@ -311,26 +354,26 @@ public class GameManager extends StartGame implements KeyListener {
 		if (move) {
 			int keyCode = e.getKeyCode();
 			// UP
-			if (keyCode == 87 || keyCode == 38) {
+			if (keyCode == KeyEvent.VK_W || keyCode == KeyEvent.VK_UP) {
 				if (posY < boardSize - 1 && checkSolids(posX, posY + 1)) {
 					++posY;
 					board.receiveMessage("image " + posX + " " + (posY - 1) + " -\n");
 				}
 				// LEFT
-			} else if (keyCode == 65 || keyCode == 37) {
+			} else if (keyCode == KeyEvent.VK_A || keyCode == KeyEvent.VK_LEFT) {
 				moveLeft = true;
 				if (posX > 0 && checkSolids(posX - 1, posY)) {
 					--posX;
 					board.receiveMessage("image " + (posX + 1) + " " + posY + " -\n");
 				}
 				// DOWN
-			} else if (keyCode == 83 || keyCode == 40) {
+			} else if (keyCode == KeyEvent.VK_S || keyCode == KeyEvent.VK_DOWN) {
 				if (posY > 0 && checkSolids(posX, posY - 1)) {
 					--posY;
 					board.receiveMessage("image " + posX + " " + (posY + 1) + " -\n");
 				}
 				// RIGHT
-			} else if (keyCode == 68 || keyCode == 39) {
+			} else if (keyCode == KeyEvent.VK_D || keyCode == KeyEvent.VK_RIGHT) {
 				moveLeft = false;
 				if (posX < boardSize - 1 && checkSolids(posX + 1, posY)) {
 					++posX;
@@ -345,6 +388,10 @@ public class GameManager extends StartGame implements KeyListener {
 				board.receiveMessage("image " + posX + " " + posY + " images/chef_r.png \n");
 			}
 
+			if (frostedCounter > 0) {
+				--frostedCounter;
+				System.out.println("Frostprotection reduced! Available for: " + frostedCounter + " fields");
+			}
 			symbol = board.getSymbol(posX, posY);
 			symbol.getImageObject().setWorldWidth(0);
 		}
