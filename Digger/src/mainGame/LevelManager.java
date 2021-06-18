@@ -64,6 +64,23 @@ abstract class LevelManager extends GameManager {
 			break;
 		case 4:
 			tomatos = new int[5][2];
+			tomatos[0][0] = 17;
+			tomatos[0][1] = 2;
+
+			tomatos[1][0] = 18;
+			tomatos[1][1] = 11;
+
+			tomatos[2][0] = 18;
+			tomatos[2][1] = 18;
+
+			tomatos[3][0] = 18;
+			tomatos[3][1] = 19;
+
+			tomatos[4][0] = 19;
+			tomatos[4][1] = 18;
+			break;
+		case 5:
+			tomatos = new int[5][2];
 			tomatos[0][0] = 0;
 			tomatos[0][1] = 15;
 
@@ -79,6 +96,60 @@ abstract class LevelManager extends GameManager {
 			tomatos[4][0] = 18;
 			tomatos[4][1] = 3;
 			break;
+		case 6:
+			tomatos = new int [17][2];
+			tomatos[0][0] = 0;
+			tomatos[0][1] = 1;
+
+			tomatos[1][0] = 0;
+			tomatos[1][1] = 2;
+
+			tomatos[2][0] = 1;
+			tomatos[2][1] = 0;
+
+			tomatos[3][0] = 1;
+			tomatos[3][1] = 2;
+
+			tomatos[4][0] = 2;
+			tomatos[4][1] = 0;
+
+			tomatos[5][0] = 2;
+			tomatos[5][1] = 1;
+
+			tomatos[6][0] = 2;
+			tomatos[6][1] = 2;
+
+			tomatos[7][0] = 2;
+			tomatos[7][1] = 3;
+
+			tomatos[8][0] = 2;
+			tomatos[8][1] = 5;
+
+			tomatos[9][0] = 3;
+			tomatos[9][1] = 2;
+
+			tomatos[10][0] = 3;
+			tomatos[10][1] = 5;
+
+			tomatos[11][0] = 4;
+			tomatos[11][1] = 5;
+
+			tomatos[12][0] = 5;
+			tomatos[12][1] = 2;
+
+			tomatos[13][0] = 5;
+			tomatos[13][1] = 3;
+
+			tomatos[14][0] = 5;
+			tomatos[14][1] = 4;
+
+			tomatos[15][0] = 13;
+			tomatos[15][1] = 18;
+
+			tomatos[16][0] = 14;
+			tomatos[16][1] = 1;
+			break;
+
 		// Hier neue Level einfügen (tomato array)
 
 		// default case
@@ -233,6 +304,77 @@ abstract class LevelManager extends GameManager {
 			solids[23][1] = 12;
 			break;
 		case 4:
+			solids = new int [95][2];
+			for (int i = 0; i <= 1 ; i++) {
+				solids [i][0] = i;
+				solids [i][1] = 14;			
+			}
+			for (int i = 0; i <= 16; i++) {
+				solids [i + 2][0] = i + 3;
+				solids [i + 2][1] = 14;
+			}
+			for (int i = 0; i <= 10 ; i++) {
+				solids [i + 19][0] = i;
+				solids [i + 19][1] = 12;		
+			}
+			for (int i = 0; i <= 8; i++) {
+				solids [i + 30][0] = i + 12;
+				solids [i + 30][1] = 12;
+			}
+			for (int i = 0; i <= 4 ; i++) {
+				solids [i + 38][0] = i;
+				solids [i + 38][1] = 10	;		
+			}
+			for (int i = 0; i <= 9; i++) {
+				solids [i + 43][0] = i + 6;
+				solids [i + 43][1] = 10;
+			}
+			for (int i = 0; i <= 2; i++) {
+				solids [i + 53][0] = i + 17;
+				solids [i + 53][1] = 10;
+			}
+			for (int i = 0; i <= 7; i++) {
+				solids [i + 56][0] = i;
+				solids [i + 56][1] = 8;
+			}
+			for (int i = 0; i <= 10; i++) {
+				solids [i + 64][0] = i + 9;
+				solids [i + 64][1] = 8;
+			}
+			for (int i = 0; i <= 5; i++) {
+				solids [i + 75][0] = 14;
+				solids [i + 75][1] = i;
+			}
+			for (int i = 0; i <= 3; i++) {
+				solids [i + 81][0] = i + 15;
+				solids [i + 81][1] = 5;
+			}
+			for (int i = 0; i <= 3; i++) {
+				solids [i + 85][0] = 18;
+				solids [i + 85][1] = i + 1;
+			}
+
+			solids[89][0] = 17;
+			solids[89][1] = 1;
+
+			solids[90][0] = 16;
+			solids[90][1] = 1;
+
+			solids[91][0] = 16;
+			solids[91][1] = 2;
+
+			solids[92][0] = 16;
+			solids[92][1] = 3;
+
+			solids[93][0] = 17;
+			solids[93][1] = 16;
+
+			solids[94][0] = 19;
+			solids[94][1] = 16;
+
+			break;
+
+		case 5:
 			solids = new int[85][2];
 			for (int i = 0; i <= 17; i++) {
 				solids[i][0] = 13;
@@ -305,6 +447,48 @@ abstract class LevelManager extends GameManager {
 
 			solids[84][0] = 8;
 			solids[84][1] = 11;
+			
+			break;
+
+		case 6:
+			solids = new int[23][2];
+			for (int i = 0; i <= 2; i++) {
+				solids[i][0] = i + 2;
+				solids[i][1] = 6;
+			}			
+			for (int i = 0; i <= 2; i++) {
+				solids[i + 2][0] = 6;
+				solids[i + 2][1] = i + 2;
+			}
+			for (int i = 0; i <= 4; i++) {
+				solids[i + 6][0] = i + 5;
+				solids[i + 6][1] = 9;
+			}
+			for (int i = 0; i <= 3; i++) {
+				solids[i + 11][0] = 9;
+				solids[i + 11][1] = i + 5;
+			}
+
+			solids[16][0] = 2;
+			solids[16][1] = 4;
+
+			solids[17][0] = 3;
+			solids[17][1] = 3;
+
+			solids[18][0] = 4;
+			solids[18][1] = 2;
+
+			solids[19][0] = 4;
+			solids[19][1] = 4;
+
+			solids[20][0] = 5;
+			solids[20][1] = 5;
+
+			solids[21][0] = 13;
+			solids[21][1] = 19;
+
+			solids[22][0] = 14;
+			solids[22][1] = 0;
 
 			/*
 			 * checking array (already formatted for better view) for(int i = 0;
@@ -313,6 +497,8 @@ abstract class LevelManager extends GameManager {
 			 */
 			break;
 		// Hier neue Level einfügen (solid array)
+
+
 
 		// default case
 		default:
@@ -353,6 +539,11 @@ abstract class LevelManager extends GameManager {
 			onions[1][1] = 19;
 			break;
 		case 4:
+			onions = new int [1][2];
+			onions[0][0] = 1;		
+			onions[0][1] = 9;
+			break;
+		case 5:
 			onions = new int[3][2];
 			onions[0][0] = 4;
 			onions[0][1] = 0;
@@ -362,7 +553,14 @@ abstract class LevelManager extends GameManager {
 
 			onions[2][0] = 5;
 			onions[2][1] = 5;
+			break;
+		case 6:
+			onions = new int[2][2];
+			onions[0][0] = 3;
+			onions[0][1] = 4;
 
+			onions[1][0] = 4;
+			onions[1][1] = 3;			
 			break;
 		// Hier neue Level einfügen (onion array)
 
@@ -441,6 +639,41 @@ abstract class LevelManager extends GameManager {
 			break;
 		case 4:
 			lava = new int[11][2];
+			lava[0][0] = 0;
+			lava[0][1] = 9;
+				
+			lava[1][0] = 0;
+			lava[1][1] = 11;
+				
+			lava[2][0] = 0;
+			lava[2][1] = 13;
+				
+			lava[3][0] = 9;
+			lava[3][1] = 6;
+				
+			lava[4][0] = 13;
+			lava[4][1] = 5;
+				
+			lava[5][0] = 17;
+			lava[5][1] = 17;
+				
+			lava[6][0] = 17;
+			lava[6][1] = 18;
+				
+			lava[7][0] = 17;
+			lava[7][1] = 19;
+				
+			lava[8][0] = 19;
+			lava[8][1] = 9;
+				
+			lava[9][0] = 19;
+			lava[9][1] = 11;
+				
+			lava[10][0] = 19;
+			lava[10][1] = 13;
+			break;
+		case 5:
+			lava = new int[11][2];
 
 			lava[0][0] = 7;
 			lava[0][1] = 18;
@@ -475,6 +708,52 @@ abstract class LevelManager extends GameManager {
 			lava[10][0] = 18;
 			lava[10][1] = 0;
 			break;
+		case 6:
+			lava = new int[14][2];
+
+			lava[0][0] = 1;
+			lava[0][1] = 1;
+
+			lava[1][0] = 6;
+			lava[1][1] = 6;
+
+			lava[2][0] = 12;
+			lava[2][1] = 1;
+
+			lava[3][0] = 12;
+			lava[3][1] = 4;
+
+			lava[4][0] = 12;
+			lava[4][1] = 7;
+
+			lava[5][0] = 12;
+			lava[5][1] = 10;
+
+			lava[6][0] = 12;
+			lava[6][1] = 13;
+
+			lava[7][0] = 12;
+			lava[7][1] = 16;
+
+			lava[8][0] = 15;
+			lava[8][1] = 3;
+
+			lava[9][0] = 15;
+			lava[9][1] = 6;
+
+			lava[10][0] = 15;
+			lava[10][1] = 9;
+
+			lava[11][0] = 15;
+			lava[11][1] = 12;
+
+			lava[12][0] = 15;
+			lava[12][1] = 15;
+
+			lava[13][0] = 15;
+			lava[13][1] = 18;
+			break;
+
 
 		// Hier neue Level einfügen (lava array)
 
@@ -511,11 +790,17 @@ abstract class LevelManager extends GameManager {
 			break;
 		case 4:
 			health = new int[1][2];
-			
+
+			health[0][0] = 1;
+			health[0][1] = 13;
+			break;
+		case 5:
+			health = new int[1][2];
+
 			health[0][0] = 7;
 			health[0][1] = 17;
-			
 			break;
+
 		default:
 			health = new int[1][2];
 			int posX, posY;
@@ -547,8 +832,17 @@ abstract class LevelManager extends GameManager {
 			frosties = new int[0][2];
 			break;
 		case 4:
+			frosties = new int[2][2];
+
+			frosties[0][0] = 19;
+			frosties[0][1] = 17;
+
+			frosties[1][0] = 10;
+			frosties[1][1] = 11;
+			break;
+		case 5:
 			frosties = new int[4][2];
-			
+
 			frosties[0][0] = 9;
 			frosties[0][1] = 19;
 			
@@ -561,6 +855,16 @@ abstract class LevelManager extends GameManager {
 			frosties[3][0] = 7;
 			frosties[3][1] = 7;
 			break;
+		case 6:
+			frosties = new int[2][2];
+
+			frosties[0][0] = 0;
+			frosties[0][1] = 0;
+
+			frosties[1][0] = 17;
+			frosties[1][1] = 15;
+			break;
+
 		default:
 			frosties = new int[1][2];
 			int posX, posY;

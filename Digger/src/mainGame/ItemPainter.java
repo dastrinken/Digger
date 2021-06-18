@@ -29,7 +29,7 @@ public class ItemPainter extends GameManager {
 		}
 		// Using switch-case for lava tomatoes for better performance
 		switch (level) {
-		case 4:
+		case 5:
 			board.receiveMessage("image " + 0 + " " + 15 + " images/lava_tomato.png \n");
 			break;
 		default:
@@ -59,7 +59,7 @@ public class ItemPainter extends GameManager {
 		}
 		// Using switch-case for lava health for better performance
 		switch (level) {
-		case 4:
+		case 5:
 			board.receiveMessage("image " + 7 + " " + 17 + " images/lava_life.png \n");
 			break;
 		default:
