@@ -33,6 +33,15 @@ public class MenuManager extends GameManager {
 	public static JMenuBar getGameMenu() {
 		JMenuBar menu = new JMenuBar();
 		JMenu file = new JMenu("File");
+		
+
+		JMenuItem restart = new JMenuItem("Restart Level");
+		restart.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setUpBoard();
+			}
+		});
+		
 		JMenuItem load = new JMenuItem("Load");
 		load.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -96,6 +105,7 @@ public class MenuManager extends GameManager {
 				System.exit(0);
 			}
 		});
+		file.add(restart);
 		file.add(load);
 		file.add(save);
 		file.add(optionsBtn);
