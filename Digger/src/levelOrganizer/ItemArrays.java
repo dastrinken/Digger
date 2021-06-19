@@ -1,6 +1,8 @@
-package mainGame;
+package levelOrganizer;
 
-abstract class LevelManager extends GameManager {
+import mainGame.GameManager;
+
+public abstract class ItemArrays extends GameManager {
 
 	public static int[][] getTomatoPos(int level) {
 		int[][] tomatos = null;
@@ -451,14 +453,14 @@ abstract class LevelManager extends GameManager {
 			break;
 
 		case 6:
-			solids = new int[23][2];
+			solids = new int[22][2];
 			for (int i = 0; i <= 2; i++) {
 				solids[i][0] = i + 2;
 				solids[i][1] = 6;
 			}			
 			for (int i = 0; i <= 2; i++) {
-				solids[i + 2][0] = 6;
-				solids[i + 2][1] = i + 2;
+				solids[i + 3][0] = 6;
+				solids[i + 3][1] = i + 2;
 			}
 			for (int i = 0; i <= 4; i++) {
 				solids[i + 6][0] = i + 5;
@@ -469,30 +471,30 @@ abstract class LevelManager extends GameManager {
 				solids[i + 11][1] = i + 5;
 			}
 
-			solids[16][0] = 2;
-			solids[16][1] = 4;
+			solids[15][0] = 2;
+			solids[15][1] = 4;
 
-			solids[17][0] = 3;
-			solids[17][1] = 3;
+			solids[16][0] = 3;
+			solids[16][1] = 3;
+
+			solids[17][0] = 4;
+			solids[17][1] = 2;
 
 			solids[18][0] = 4;
-			solids[18][1] = 2;
+			solids[18][1] = 4;
 
-			solids[19][0] = 4;
-			solids[19][1] = 4;
+			solids[19][0] = 5;
+			solids[19][1] = 5;
 
-			solids[20][0] = 5;
-			solids[20][1] = 5;
+			solids[20][0] = 13;
+			solids[20][1] = 19;
 
-			solids[21][0] = 13;
-			solids[21][1] = 19;
+			solids[21][0] = 14;
+			solids[21][1] = 0;
 
-			solids[22][0] = 14;
-			solids[22][1] = 0;
-
+			
 			/*
-			 * checking array (already formatted for better view) for(int i = 0;
-			 * i<solids.length; i++) {
+			 * for(int i = 0; i<solids.length; i++) {
 			 * System.out.println("Stelle "+i+"\t X:"+solids[i][0]+"||Y:"+solids[i][1]); }
 			 */
 			break;

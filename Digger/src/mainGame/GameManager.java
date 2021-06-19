@@ -16,6 +16,7 @@ import javax.swing.SwingConstants;
 import jserver.Board;
 import jserver.Symbol;
 import jserver.XSendAdapter;
+import levelOrganizer.ItemArrays;
 import plotter.Graphic;
 import java.awt.Font;
 import java.awt.FontFormatException;
@@ -142,7 +143,6 @@ public class GameManager extends StartGame implements KeyListener {
 		southPanel.add(ptDisplay);
 
 		graphic.addSouthComponent(southPanel);
-
 	}
 
 	public static void setUpBoard() {
@@ -150,12 +150,12 @@ public class GameManager extends StartGame implements KeyListener {
 		collectableCounter = player.getPtCounter();
 		dmgCounter = player.getDmgCounter();
 
-		collectableArray = LevelManager.getTomatoPos(level);
-		solidsArray = LevelManager.getSolidsPos(level);
-		onionsArray = LevelManager.getOnionsPos(level);
-		lavaArray = LevelManager.getLavaPos(level);
-		healthArray = LevelManager.getHealthPos(level);
-		frostArray = LevelManager.getFrostPos(level);
+		collectableArray = ItemArrays.getTomatoPos(level);
+		solidsArray = ItemArrays.getSolidsPos(level);
+		onionsArray = ItemArrays.getOnionsPos(level);
+		lavaArray = ItemArrays.getLavaPos(level);
+		healthArray = ItemArrays.getHealthPos(level);
+		frostArray = ItemArrays.getFrostPos(level);
 
 		player.resetCounter(level);
 		lvlDisplay.setText("Level " + String.valueOf(level));
@@ -424,7 +424,7 @@ public class GameManager extends StartGame implements KeyListener {
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter("highScore.txt", true));
 			if (name.length() > 0 && !name.equals("Enter your name")) {
-				writer.write("Name: " + name + " Score: " + score);
+				writer.write(name + ";" + score);
 				writer.newLine();
 				writer.close();
 				graphic.dispose();

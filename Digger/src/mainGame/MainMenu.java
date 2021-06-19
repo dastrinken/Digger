@@ -47,6 +47,7 @@ public class MainMenu {
 		}
 		mainFrame = new JFrame();
 		mainFrame.setIconImage(icon.getImage());
+		mainFrame.setTitle("Digger - Tomatensalat");
 		
 		mainFrame.setSize(510, 312);
 		mainFrame.setResizable(false);
@@ -102,6 +103,11 @@ public class MainMenu {
 		btnHighscore.setFont(customFontRegular);
 		btnHighscore.setToolTipText("Show Highscore");
 		btnHighscore.setBounds(50, 195, 194, 35);
+		btnHighscore.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				HighScore.showHighScore();
+			}
+		});
 		btnHighscore.addMouseListener(new MouseAdapter() {
 			public void mouseEntered(MouseEvent e) {
 				SoundManager.menuBtnSound();

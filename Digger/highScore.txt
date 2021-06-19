@@ -1,2 +1,15 @@
-Name: Armin Score: 16
-Name: Test Score: 495
+Test-x-6
+Test2-x-5
+Test3-x-10
+Zeile4-x-500
+Zeile5-x-5000
+Zeile6-x-22
+Zeile7-x-12
+Zeile8-x-33
+Zeile9-x-34
+Zeile10-x-45
+Zeile11-x-23
+Zeile12-x-14
+45Zeile1-x-15
+333-x-25
+55-x-55
