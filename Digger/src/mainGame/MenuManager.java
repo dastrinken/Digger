@@ -34,14 +34,6 @@ public class MenuManager extends GameManager {
 		JMenuBar menu = new JMenuBar();
 		JMenu file = new JMenu("File");
 		
-
-		JMenuItem restart = new JMenuItem("Restart Level");
-		restart.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				setUpBoard();
-			}
-		});
-		
 		JMenuItem load = new JMenuItem("Load");
 		load.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -105,7 +97,6 @@ public class MenuManager extends GameManager {
 				System.exit(0);
 			}
 		});
-		file.add(restart);
 		file.add(load);
 		file.add(save);
 		file.add(optionsBtn);
@@ -113,6 +104,14 @@ public class MenuManager extends GameManager {
 		file.add(close);
 
 		JMenu help = new JMenu("Help");
+		
+		JMenuItem restart = new JMenuItem("Restart Level");
+		restart.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setUpBoard();
+			}
+		});
+		
 		JMenuItem controls = new JMenuItem("Controls");
 		controls.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -126,8 +125,18 @@ public class MenuManager extends GameManager {
 			}
 		});
 		JMenuItem blocks = new JMenuItem("Blocks");
+		
+		JMenuItem highScoreBtn = new JMenuItem("Show Highscore");
+		highScoreBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				HighScore.showHighScore();
+			}
+		});
+		
+		help.add(restart);
 		help.add(controls);
 		help.add(blocks);
+		help.add(highScoreBtn);
 
 		menu.add(file);
 		menu.add(help);
