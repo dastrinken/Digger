@@ -423,7 +423,7 @@ public class GameManager extends StartGame implements KeyListener {
 		String score = String.valueOf(player.getPoints());
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter("highScore.txt", true));
-			if (name.length() > 0 && !name.equals("Enter your name")) {
+			if (name.length() > 0) {
 				writer.write(name + ";" + score);
 				writer.newLine();
 				writer.close();

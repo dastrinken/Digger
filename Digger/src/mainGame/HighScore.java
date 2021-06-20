@@ -18,24 +18,20 @@ public class HighScore {
 	private static JTable scoreTable;
 	private static String[] readInData;
 	private static String[][] displayDataArray;
-	private static ArrayList<String> dataList = new ArrayList<String>();
-	private static boolean sorted = false;
 
 	public HighScore() {
 	}
 
 	@SuppressWarnings("serial")
 	public static void showHighScore() {
-		if (sorted == false) {
-			getHighScoreData();
-			String[] sortedData = bSortData();
-			displayDataArray = new String[sortedData.length][2];
-			for (int i = 0; i < sortedData.length; i++) {
-				String[] splitLine = sortedData[i].split(";");
-				displayDataArray[i][0] = splitLine[0];
-				displayDataArray[i][1] = splitLine[1];
-			}
-			sorted = true;
+		getHighScoreData();
+		String[] sortedData = bSortData();
+		
+		displayDataArray = new String[sortedData.length][2];
+		for (int i = 0; i < sortedData.length; i++) {
+			String[] splitLine = sortedData[i].split(";");
+			displayDataArray[i][0] = splitLine[0];
+			displayDataArray[i][1] = splitLine[1];
 		}
 
 		String[] title = new String[] { "Name", "Punkte" };
@@ -66,10 +62,11 @@ public class HighScore {
 
 	// read-in file
 	public static void getHighScoreData() {
+		ArrayList<String> dataList = new ArrayList<String>();
 		if (!highScoreFile.canRead() || !highScoreFile.isFile()) {
 			JDialog errorHscore = new JDialog();
 			errorHscore.setIconImage(MainMenu.icon.getImage());
-			JLabel errorHscLbl = new JLabel("There is no Highscore yet!", SwingConstants.CENTER); 
+			JLabel errorHscLbl = new JLabel("There is no Highscore yet!", SwingConstants.CENTER);
 			errorHscLbl.setFont(MainMenu.customFontSmall);
 			errorHscore.add(errorHscLbl);
 			errorHscore.setSize(300, 100);
@@ -104,7 +101,8 @@ public class HighScore {
 	public static String[] bSortData() {
 		String k;
 		for (int i = 0; i < readInData.length - 1; i++) {
-			if (splitInt(readInData[i]) > splitInt(readInData[i + 1])) {
+			if (splitInt(readInData[i]) > splitInt(readInData[i + 1])
+					|| splitInt(readInData[i]) == splitInt(readInData[i + 1])) {
 				continue;
 			}
 			k = readInData[i];
