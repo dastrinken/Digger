@@ -802,7 +802,10 @@ public abstract class ItemArrays extends GameManager {
 			health[0][0] = 7;
 			health[0][1] = 17;
 			break;
-
+		case 6:
+			health = new int[0][2];
+			
+			break;
 		default:
 			health = new int[1][2];
 			int posX, posY;
