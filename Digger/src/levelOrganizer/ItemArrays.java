@@ -87,7 +87,7 @@ public abstract class ItemArrays extends GameManager {
 			tomatos[0][1] = 15;
 
 			tomatos[1][0] = 0;
-			tomatos[1][1] = 5;
+			tomatos[1][1] = 6;
 
 			tomatos[2][0] = 7;
 			tomatos[2][1] = 13;
@@ -848,7 +848,7 @@ public abstract class ItemArrays extends GameManager {
 			frosties[0][1] = 19;
 			
 			frosties[1][0] = 0;
-			frosties[1][1] = 6;
+			frosties[1][1] = 7;
 			
 			frosties[2][0] = 4;
 			frosties[2][1] = 5;

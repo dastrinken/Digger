@@ -68,7 +68,7 @@ public class GameManager extends StartGame implements KeyListener {
 	protected static Clip soundEffect;
 	protected static boolean musicOn = true;
 	protected static boolean soundsOn = true;
-	protected static int musicSliderValue = 100;
+	protected static int musicSliderValue = 50;
 	protected static int soundsSliderValue = 100;
 	protected static float soundsVolume = .1f;
 
