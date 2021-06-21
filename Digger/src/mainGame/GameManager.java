@@ -52,6 +52,7 @@ public class GameManager extends StartGame implements KeyListener {
 	private static int posY;
 
 	// In-game Item variables
+	public static int collectedPoints;
 	public static int collectableCounter;
 	public static int dmgCounter;
 	public int frostedCounter;
@@ -98,8 +99,8 @@ public class GameManager extends StartGame implements KeyListener {
 		return customFont;
 	}
 
-	public static void updatePoints(int points) {
-		ptDisplay.setText(String.valueOf(points) + " Points");
+	public static void updatePoints() {
+		ptDisplay.setText(String.valueOf(collectedPoints) + " Points");
 	}
 
 	/**
@@ -147,6 +148,7 @@ public class GameManager extends StartGame implements KeyListener {
 
 	public static void setUpBoard() {
 		level = player.getLevel();
+		collectedPoints = player.getPoints();
 		collectableCounter = player.getPtCounter();
 		dmgCounter = player.getDmgCounter();
 
@@ -184,6 +186,7 @@ public class GameManager extends StartGame implements KeyListener {
 			}
 		}
 		ItemPainter.setUpItems(level);
+		updatePoints();
 		graphic.setVisible(true);
 	}
 
@@ -322,25 +325,27 @@ public class GameManager extends StartGame implements KeyListener {
 
 	private void CollectPts(int posX, int posY, String type) {
 		level = player.getLevel();
-		board.receiveMessage("image " + posX + " " + posY + " -\n");
 		switch (type) {
 		case "tomato":
 			collectableCounter--;
-			player.incPoints(1);
+			++collectedPoints;
 			SoundManager.crunchyBite();
 			break;
 		case "onion":
-			player.incPoints(5);
+			collectedPoints += 5;
 			SoundManager.sparkleCollect();
 			break;
 		}
 		if (collectableCounter == 0) {
 			player.setLevel(++level);
+			player.setPoints(collectedPoints);
 			player.resetCounter(player.getLevel());
 			collectableCounter = player.getPtCounter();
 			move = false;
 			setUpBoard();
 			SoundManager.lvlUp();
+		} else {
+			updatePoints();
 		}
 	}
 
@@ -351,6 +356,7 @@ public class GameManager extends StartGame implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		boolean fieldAvailable = true;
 		if (move) {
 			int keyCode = e.getKeyCode();
 			// UP
@@ -358,6 +364,8 @@ public class GameManager extends StartGame implements KeyListener {
 				if (posY < boardSize - 1 && checkSolids(posX, posY + 1)) {
 					++posY;
 					board.receiveMessage("image " + posX + " " + (posY - 1) + " -\n");
+				} else {
+					fieldAvailable = false;
 				}
 				// LEFT
 			} else if (keyCode == KeyEvent.VK_A || keyCode == KeyEvent.VK_LEFT) {
@@ -365,12 +373,16 @@ public class GameManager extends StartGame implements KeyListener {
 				if (posX > 0 && checkSolids(posX - 1, posY)) {
 					--posX;
 					board.receiveMessage("image " + (posX + 1) + " " + posY + " -\n");
+				} else {
+					fieldAvailable = false;
 				}
 				// DOWN
 			} else if (keyCode == KeyEvent.VK_S || keyCode == KeyEvent.VK_DOWN) {
 				if (posY > 0 && checkSolids(posX, posY - 1)) {
 					--posY;
 					board.receiveMessage("image " + posX + " " + (posY + 1) + " -\n");
+				} else {
+					fieldAvailable = false;
 				}
 				// RIGHT
 			} else if (keyCode == KeyEvent.VK_D || keyCode == KeyEvent.VK_RIGHT) {
@@ -378,20 +390,23 @@ public class GameManager extends StartGame implements KeyListener {
 				if (posX < boardSize - 1 && checkSolids(posX + 1, posY)) {
 					++posX;
 					board.receiveMessage("image " + (posX - 1) + " " + posY + " -\n");
+				} else {
+					fieldAvailable = false;
 				}
 			}
-			checkPosition(posX, posY);
-			checkLava(posX, posY);
 			if (moveLeft == true) {
 				board.receiveMessage("image " + posX + " " + posY + " images/chef.png \n");
 			} else {
 				board.receiveMessage("image " + posX + " " + posY + " images/chef_r.png \n");
 			}
 
-			if (frostedCounter > 0) {
+			if (frostedCounter > 0 && fieldAvailable) {
 				--frostedCounter;
 				System.out.println("Frostprotection reduced! Available for: " + frostedCounter + " fields");
 			}
+
+			checkPosition(posX, posY);
+			checkLava(posX, posY);
 			symbol = board.getSymbol(posX, posY);
 			symbol.getImageObject().setWorldWidth(0);
 		}

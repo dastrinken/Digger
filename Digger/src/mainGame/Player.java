@@ -58,11 +58,6 @@ public class Player implements Serializable {
 	public int getDmgCounter() {
 		return dmgCounter;
 	}
-	
-	public void incPoints(int amount) {
-		this.points += amount;
-		GameManager.updatePoints(this.points);
-	}
 
 	public void resetCounter(int level) {
 		switch (level) {

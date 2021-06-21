@@ -16,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
@@ -32,8 +33,18 @@ public class MenuManager extends GameManager {
 
 	public static JMenuBar getGameMenu() {
 		JMenuBar menu = new JMenuBar();
+
+		JMenu file = getFileMenu();
+		JMenu help = getHelpMenu();
+
+		menu.add(file);
+		menu.add(help);
+		return menu;
+	}
+
+	public static JMenu getFileMenu() {
 		JMenu file = new JMenu("File");
-		
+
 		JMenuItem load = new JMenuItem("Load");
 		load.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -102,16 +113,20 @@ public class MenuManager extends GameManager {
 		file.add(optionsBtn);
 		file.add(returnBtn);
 		file.add(close);
-
-		JMenu help = new JMenu("Help");
 		
+		return file;
+	}
+
+	public static JMenu getHelpMenu() {
+		JMenu help = new JMenu("Help");
+
 		JMenuItem restart = new JMenuItem("Restart Level");
 		restart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setUpBoard();
 			}
 		});
-		
+
 		JMenuItem controls = new JMenuItem("Controls");
 		controls.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -124,25 +139,37 @@ public class MenuManager extends GameManager {
 				helpControls.setVisible(true);
 			}
 		});
-		JMenuItem blocks = new JMenuItem("Blocks");
 		
+		JMenuItem blocks = new JMenuItem("Blocks");
+		blocks.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFrame helpBlockFrame = new JFrame();
+				JLabel blockInfo = new JLabel(new ImageIcon("./images/helpBlocks.jpg"));
+				JScrollPane scrollPane = new JScrollPane(blockInfo);
+				helpBlockFrame.getContentPane().add(scrollPane);
+				helpBlockFrame.setIconImage(icon.getImage());
+				helpBlockFrame.setSize(537, 543);
+				helpBlockFrame.setResizable(false);
+				helpBlockFrame.setLocationRelativeTo(null);
+				helpBlockFrame.setVisible(true);
+			}
+		});
+
 		JMenuItem highScoreBtn = new JMenuItem("Show Highscore");
 		highScoreBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				HighScore.showHighScore();
 			}
 		});
-		
+
 		help.add(restart);
 		help.add(controls);
 		help.add(blocks);
 		help.add(highScoreBtn);
-
-		menu.add(file);
-		menu.add(help);
-		return menu;
+		
+		return help;
 	}
-
+	
 	public static void confirmSave() {
 		JFrame saveConfirmFrame = new JFrame();
 		saveConfirmFrame.setSize(375, 60);
@@ -239,7 +266,7 @@ public class MenuManager extends GameManager {
 		JButton saveBtn = new JButton("Apply");
 		saveBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// saving variables for better usability
+				// saving variables
 				musicOn = musicCheckbox.isSelected();
 				soundsOn = soundsCheckbox.isSelected();
 				musicSliderValue = musicVolumeSlider.getValue();
@@ -294,7 +321,6 @@ public class MenuManager extends GameManager {
 							saveHighScore();
 						}
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}
