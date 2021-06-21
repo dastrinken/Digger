@@ -60,7 +60,7 @@ public class HighScore {
 
 	}
 
-	// read-in file
+	// read-in file & data
 	public static void getHighScoreData() {
 		ArrayList<String> dataList = new ArrayList<String>();
 		if (!highScoreFile.canRead() || !highScoreFile.isFile()) {

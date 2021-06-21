@@ -492,15 +492,11 @@ public abstract class ItemArrays extends GameManager {
 			solids[21][0] = 14;
 			solids[21][1] = 0;
 
-			
-			/*
-			 * for(int i = 0; i<solids.length; i++) {
-			 * System.out.println("Stelle "+i+"\t X:"+solids[i][0]+"||Y:"+solids[i][1]); }
-			 */
+//			System.out.println("Solid array:");
+//			 for(int i = 0; i<solids.length; i++) {
+//			 System.out.println("Stelle "+i+"\t X:"+solids[i][0]+"||Y:"+solids[i][1]); }
 			break;
 		// Hier neue Level einfügen (solid array)
-
-
 
 		// default case
 		default:

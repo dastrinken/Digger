@@ -3,16 +3,6 @@ package mainGame;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 
-/**
- * This program is a Remake of the original game "Digger" released in 1983 as
- * part of a study project by Armin Prinz & Sebastian Ziegler
- * 
- * @author Armin Prinz
- * @author Sebastian Ziegler
- * @version 1.0
- * 
- */
-
 public class StartGame {
 	static GameManager manager;
 	public static Player player;
@@ -43,6 +33,7 @@ public class StartGame {
 		GameManager.setUpBoard();
 	}
 	
+	//for testing purposes, delete before release
 	public static void cheat() {
 		player = new Player(1, 5, 6);
 		manager = GameManager.getInstance();

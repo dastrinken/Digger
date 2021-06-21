@@ -18,6 +18,16 @@ import java.awt.Graphics;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
+/**
+ * This program is a Remake of the original game "Digger" released in 1983 as
+ * part of a study project by Armin Prinz & Sebastian Ziegler
+ * 
+ * @author Armin Prinz
+ * @author Sebastian Ziegler
+ * @version 1.0
+ * 
+ */
+
 public class MainMenu {
 	public static JFrame mainFrame;
 	
@@ -43,8 +53,9 @@ public class MainMenu {
 		        }
 		    }
 		} catch (Exception e) {
-		    
+		    e.printStackTrace();
 		}
+		
 		mainFrame = new JFrame();
 		mainFrame.setIconImage(icon.getImage());
 		mainFrame.setTitle("Digger - Tomatensalat");

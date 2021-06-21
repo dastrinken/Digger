@@ -33,6 +33,7 @@ public class SoundManager extends GameManager {
 			AudioInputStream ais = AudioSystem.getAudioInputStream(url);
 			bgMusic.open(ais);
 			bgMusic.loop(Clip.LOOP_CONTINUOUSLY);
+			// TODO: save/load settings to/from .ini file?
 			setMusicVolume(.1f);
 		} catch (Exception e) {
 			e.printStackTrace();
