@@ -86,7 +86,7 @@ public class GameManager extends StartGame implements KeyListener {
 	public static Font createCustomFont(float size) {
 		try {
 			// create the font to use. Specify the size!
-			customFont = Font.createFont(Font.TRUETYPE_FONT, new File("other/PressStart2P-Regular.ttf"))
+			customFont = Font.createFont(Font.TRUETYPE_FONT, new File("./other/PressStart2P-Regular.ttf"))
 					.deriveFont(size);
 			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 			// register the font
@@ -231,6 +231,7 @@ public class GameManager extends StartGame implements KeyListener {
 					for (int k = 0; k < player.getLives(); k++) {
 						livesDisplay.add(new JLabel(heartIcon));
 					}
+					SoundManager.playSound("life");
 				}
 			}
 		}
@@ -244,8 +245,7 @@ public class GameManager extends StartGame implements KeyListener {
 					frostArray[i][1] = 999;
 					frostedCounter += 9;
 					System.out.println("Frost protection achieved! Available for " + frostedCounter + " fields");
-
-					// TODO: Show lava protection on screen (example: Blue hearts)
+					SoundManager.playSound("frost");
 				}
 			}
 		}
@@ -260,7 +260,7 @@ public class GameManager extends StartGame implements KeyListener {
 				y = solidsArray[i][1];
 				if (x == posX && y == posY) {
 					fieldAvailable = false;
-					SoundManager.stoneHit();
+					SoundManager.playSound("stone");
 				}
 			}
 		}
@@ -268,15 +268,15 @@ public class GameManager extends StartGame implements KeyListener {
 	}
 
 	public void checkLava(int posX, int posY) {
+		boolean lavaField = false;
 		int x, y;
-		boolean loseLife = false;
 		for (int i = 0; i < lavaArray.length; i++) {
 			for (int j = 0; j < 2; j++) {
 				x = lavaArray[i][0];
 				y = lavaArray[i][1];
-				if (loseLife == false) {
+				if (lavaField == false) {
 					if (x == posX && y == posY) {
-						loseLife = true;
+						lavaField = true;
 						loseLife();
 						System.out.println("Game Over!");
 						// Game Over!
@@ -285,7 +285,7 @@ public class GameManager extends StartGame implements KeyListener {
 							for (int l = y - 1; l <= y + 1; l++) {
 								if (k == posX && l == posY) {
 									if (frostedCounter == 0) {
-										loseLife = true;
+										lavaField = true;
 										afflictDmg();
 									}
 								}
@@ -296,10 +296,29 @@ public class GameManager extends StartGame implements KeyListener {
 			}
 		}
 	}
+	//method lavaPainter, used for repainting lava on floor after player digged through
+	public boolean lavaPainter(int posX, int posY) {
+		boolean repaint = false;
+		int x, y;
+		for (int i = 0; i < lavaArray.length; i++) {
+			for (int j = 0; j < 2; j++) {
+				x = lavaArray[i][0];
+				y = lavaArray[i][1];
+				for (int k = x - 1; k <= x + 1; k++) {
+					for (int l = y - 1; l <= y + 1; l++) {
+						if (k == posX && l == posY) {
+							repaint = true;
+						}
+					}
+				}
+			}
+		}
+		return repaint;
+	}
 
 	private void afflictDmg() {
 		--dmgCounter;
-		SoundManager.dmg();
+		SoundManager.playSound("dmg");
 		System.out.println("Lava hits the player! dmgCounter: " + dmgCounter);
 		if (dmgCounter == 0) {
 			loseLife();
@@ -318,7 +337,7 @@ public class GameManager extends StartGame implements KeyListener {
 			setUpBoard();
 		} else {
 			move = false;
-			SoundManager.gameOver();
+			SoundManager.playSound("gameOver");
 			MenuManager.getGameOverMenu(level);
 		}
 	}
@@ -329,11 +348,11 @@ public class GameManager extends StartGame implements KeyListener {
 		case "tomato":
 			collectableCounter--;
 			++collectedPoints;
-			SoundManager.crunchyBite();
+			SoundManager.playSound("tomato");
 			break;
 		case "onion":
 			collectedPoints += 5;
-			SoundManager.sparkleCollect();
+			SoundManager.playSound("onion");
 			break;
 		}
 		if (collectableCounter == 0) {
@@ -343,7 +362,7 @@ public class GameManager extends StartGame implements KeyListener {
 			collectableCounter = player.getPtCounter();
 			move = false;
 			setUpBoard();
-			SoundManager.lvlUp();
+			SoundManager.playSound("lvlUp");
 		} else {
 			updatePoints();
 		}
@@ -363,7 +382,12 @@ public class GameManager extends StartGame implements KeyListener {
 			if (keyCode == KeyEvent.VK_W || keyCode == KeyEvent.VK_UP) {
 				if (posY < boardSize - 1 && checkSolids(posX, posY + 1)) {
 					++posY;
-					board.receiveMessage("image " + posX + " " + (posY - 1) + " -\n");
+
+					if (lavaPainter(posX, posY - 1)) {
+						board.receiveMessage("image " + posX + " " + (posY - 1) + " ./images/earth_lava.png \n");
+					} else {
+						board.receiveMessage("image " + posX + " " + (posY - 1) + " -\n");
+					}
 				} else {
 					fieldAvailable = false;
 				}
@@ -372,7 +396,12 @@ public class GameManager extends StartGame implements KeyListener {
 				moveLeft = true;
 				if (posX > 0 && checkSolids(posX - 1, posY)) {
 					--posX;
-					board.receiveMessage("image " + (posX + 1) + " " + posY + " -\n");
+
+					if (lavaPainter(posX + 1, posY)) {
+						board.receiveMessage("image " + (posX + 1) + " " + posY + " ./images/earth_lava.png \n");
+					} else {
+						board.receiveMessage("image " + (posX + 1) + " " + posY + " -\n");
+					}
 				} else {
 					fieldAvailable = false;
 				}
@@ -380,7 +409,12 @@ public class GameManager extends StartGame implements KeyListener {
 			} else if (keyCode == KeyEvent.VK_S || keyCode == KeyEvent.VK_DOWN) {
 				if (posY > 0 && checkSolids(posX, posY - 1)) {
 					--posY;
-					board.receiveMessage("image " + posX + " " + (posY + 1) + " -\n");
+
+					if (lavaPainter(posX, posY + 1)) {
+						board.receiveMessage("image " + posX + " " + (posY + 1) + " ./images/earth_lava.png \n");
+					} else {
+						board.receiveMessage("image " + posX + " " + (posY + 1) + " -\n");
+					}
 				} else {
 					fieldAvailable = false;
 				}
@@ -389,7 +423,12 @@ public class GameManager extends StartGame implements KeyListener {
 				moveLeft = false;
 				if (posX < boardSize - 1 && checkSolids(posX + 1, posY)) {
 					++posX;
-					board.receiveMessage("image " + (posX - 1) + " " + posY + " -\n");
+
+					if (lavaPainter(posX - 1, posY)) {
+						board.receiveMessage("image " + (posX - 1) + " " + posY + " ./images/earth_lava.png \n");
+					} else {
+						board.receiveMessage("image " + (posX - 1) + " " + posY + " -\n");
+					}
 				} else {
 					fieldAvailable = false;
 				}
