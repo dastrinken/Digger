@@ -376,6 +376,7 @@ public class GameManager extends StartGame implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		boolean fieldAvailable = true;
+		//variable "move" to disable player movement in some situations (transition, game over, etc.)
 		if (move) {
 			int keyCode = e.getKeyCode();
 			// UP
@@ -384,7 +385,7 @@ public class GameManager extends StartGame implements KeyListener {
 					++posY;
 
 					if (lavaPainter(posX, posY - 1)) {
-						board.receiveMessage("image " + posX + " " + (posY - 1) + " ./images/earth_lava.png \n");
+						board.receiveMessage("image " + posX + " " + (posY - 1) + " ./images/earth_fire.jpg \n");
 					} else {
 						board.receiveMessage("image " + posX + " " + (posY - 1) + " -\n");
 					}
@@ -398,7 +399,7 @@ public class GameManager extends StartGame implements KeyListener {
 					--posX;
 
 					if (lavaPainter(posX + 1, posY)) {
-						board.receiveMessage("image " + (posX + 1) + " " + posY + " ./images/earth_lava.png \n");
+						board.receiveMessage("image " + (posX + 1) + " " + posY + " ./images/earth_fire.jpg \n");
 					} else {
 						board.receiveMessage("image " + (posX + 1) + " " + posY + " -\n");
 					}
@@ -411,7 +412,7 @@ public class GameManager extends StartGame implements KeyListener {
 					--posY;
 
 					if (lavaPainter(posX, posY + 1)) {
-						board.receiveMessage("image " + posX + " " + (posY + 1) + " ./images/earth_lava.png \n");
+						board.receiveMessage("image " + posX + " " + (posY + 1) + " ./images/earth_fire.jpg \n");
 					} else {
 						board.receiveMessage("image " + posX + " " + (posY + 1) + " -\n");
 					}
@@ -425,7 +426,7 @@ public class GameManager extends StartGame implements KeyListener {
 					++posX;
 
 					if (lavaPainter(posX - 1, posY)) {
-						board.receiveMessage("image " + (posX - 1) + " " + posY + " ./images/earth_lava.png \n");
+						board.receiveMessage("image " + (posX - 1) + " " + posY + " ./images/earth_fire.jpg \n");
 					} else {
 						board.receiveMessage("image " + (posX - 1) + " " + posY + " -\n");
 					}
@@ -433,19 +434,22 @@ public class GameManager extends StartGame implements KeyListener {
 					fieldAvailable = false;
 				}
 			}
+			//rotating player character left/right
 			if (moveLeft == true) {
 				board.receiveMessage("image " + posX + " " + posY + " images/chef.png \n");
 			} else {
 				board.receiveMessage("image " + posX + " " + posY + " images/chef_r.png \n");
 			}
-
+			//checking for frost protection
 			if (frostedCounter > 0 && fieldAvailable) {
 				--frostedCounter;
 				System.out.println("Frostprotection reduced! Available for: " + frostedCounter + " fields");
 			}
-
+			
 			checkPosition(posX, posY);
 			checkLava(posX, posY);
+			
+			//resizing image
 			symbol = board.getSymbol(posX, posY);
 			symbol.getImageObject().setWorldWidth(0);
 		}

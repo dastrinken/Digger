@@ -88,7 +88,7 @@ public class ItemPainter extends GameManager {
 				for (int l = yCollectable - 1; l <= yCollectable + 1; l++) {
 					for (int j = 0; j < lavaArray.length; j++) {
 						if (k < boardSize && k >= 0 && l < boardSize && l >= 0) {
-							board.receiveMessage("image " + k + " " + l + " images/earth_lava.png \n");
+							board.receiveMessage("image " + k + " " + l + " images/earth_fire.jpg \n");
 						}
 					}
 				}
@@ -101,7 +101,7 @@ public class ItemPainter extends GameManager {
 		for (int i = 0; i < lavaArray.length; i++) {
 			xCollectable = lavaArray[i][0];
 			yCollectable = lavaArray[i][1];
-			board.receiveMessage("image " + xCollectable + " " + yCollectable + " images/lava.png \n");
+			board.receiveMessage("image " + xCollectable + " " + yCollectable + " images/cauldron.jpg \n");
 		}
 	}
 
@@ -109,7 +109,7 @@ public class ItemPainter extends GameManager {
 		for (int i = 0; i < solidsArray.length; i++) {
 			xCollectable = solidsArray[i][0];
 			yCollectable = solidsArray[i][1];
-			board.receiveMessage("image " + xCollectable + " " + yCollectable + " images/solid.png \n");
+			board.receiveMessage("image " + xCollectable + " " + yCollectable + " images/solid.jpg \n");
 
 			symbol = board.getSymbol(xCollectable, yCollectable);
 			symbol.getImageObject().setWorldWidth(0);
