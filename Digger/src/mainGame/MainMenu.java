@@ -32,7 +32,7 @@ public class MainMenu {
 	public static JFrame mainFrame;
 	
 	public static ImageIcon icon = new ImageIcon("./images/solid.png");
-	static ImageIcon background = new ImageIcon("./images/background.png");
+	static ImageIcon background = new ImageIcon("./images/background.jpg");
 	static Font customFontRegular = GameManager.createCustomFont(12f);
 	static Font customFontSmall = GameManager.createCustomFont(7.5f);
 
