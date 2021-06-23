@@ -22,7 +22,7 @@ public class ItemPainter extends GameManager {
 		for (int i = 0; i < collectableArray.length; i++) {
 			xCollectable = collectableArray[i][0];
 			yCollectable = collectableArray[i][1];
-			board.receiveMessage("image " + xCollectable + " " + yCollectable + " images/earth_tomato.png \n");
+			board.receiveMessage("image " + xCollectable + " " + yCollectable + " images/earth_tomato.jpg \n");
 
 			symbol = board.getSymbol(xCollectable, yCollectable);
 			symbol.getImageObject().setWorldWidth(0);
@@ -30,7 +30,7 @@ public class ItemPainter extends GameManager {
 		// Using switch-case for lava tomatoes for better performance
 		switch (level) {
 		case 5:
-			board.receiveMessage("image " + 0 + " " + 15 + " images/lava_tomato.png \n");
+			board.receiveMessage("image " + 0 + " " + 15 + " images/fire_tomato.jpg \n");
 			break;
 		default:
 			break;
@@ -41,7 +41,7 @@ public class ItemPainter extends GameManager {
 		for (int i = 0; i < onionsArray.length; i++) {
 			xCollectable = onionsArray[i][0];
 			yCollectable = onionsArray[i][1];
-			board.receiveMessage("image " + xCollectable + " " + yCollectable + " images/earth_onion.png \n");
+			board.receiveMessage("image " + xCollectable + " " + yCollectable + " images/earth_onion.jpg \n");
 
 			symbol = board.getSymbol(xCollectable, yCollectable);
 			symbol.getImageObject().setWorldWidth(0);
@@ -52,7 +52,7 @@ public class ItemPainter extends GameManager {
 		for (int i = 0; i < healthArray.length; i++) {
 			xCollectable = healthArray[i][0];
 			yCollectable = healthArray[i][1];
-			board.receiveMessage("image " + xCollectable + " " + yCollectable + " images/earth_life.png \n");
+			board.receiveMessage("image " + xCollectable + " " + yCollectable + " images/earth_life.jpg \n");
 
 			symbol = board.getSymbol(xCollectable, yCollectable);
 			symbol.getImageObject().setWorldWidth(0);
@@ -60,7 +60,7 @@ public class ItemPainter extends GameManager {
 		// Using switch-case for lava health for better performance
 		switch (level) {
 		case 5:
-			board.receiveMessage("image " + 7 + " " + 17 + " images/lava_life.png \n");
+			board.receiveMessage("image " + 7 + " " + 17 + " images/fire_life.jpg \n");
 			break;
 		default:
 			break;
@@ -72,7 +72,7 @@ public class ItemPainter extends GameManager {
 		for (int i = 0; i < frostArray.length; i++) {
 			xCollectable = frostArray[i][0];
 			yCollectable = frostArray[i][1];
-			board.receiveMessage("image " + xCollectable + " " + yCollectable + " images/earth_frost.png \n");
+			board.receiveMessage("image " + xCollectable + " " + yCollectable + " images/earth_frost.jpg \n");
 
 			symbol = board.getSymbol(xCollectable, yCollectable);
 			symbol.getImageObject().setWorldWidth(0);
