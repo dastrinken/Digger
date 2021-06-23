@@ -23,7 +23,22 @@ public class SoundManager extends GameManager {
 		FloatControl gainControl = (FloatControl) soundEffect.getControl(FloatControl.Type.MASTER_GAIN);
 		gainControl.setValue(10f * (float) Math.log10(volume));
 	}
-
+	
+	public static void menuBtnSound() {
+		URL url;
+		try {
+			url = new File("sounds/menuBtn.wav").toURI().toURL();
+			soundEffect = AudioSystem.getClip();
+			// getAudioInputStream() also accepts a File or InputStream
+			AudioInputStream ais = AudioSystem.getAudioInputStream(url);
+			soundEffect.open(ais);
+			soundEffect.loop(0);
+			setSoundsVolume(soundsVolume);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static void playMusic() {
 		URL url;
 		try {
@@ -40,10 +55,37 @@ public class SoundManager extends GameManager {
 		}
 	}
 
-	public static void crunchyBite() {
+	public static void playSound(String soundSource) {
 		URL url;
+		String location = null;
+		switch(soundSource) {
+		case "tomato":
+			location = "./sounds/crunchy_bite.wav";
+			break;
+		case "onion":
+			location = "./sounds/sparkle.wav";
+			break;
+		case "frost":
+			location = "./sounds/water_splash.wav";
+			break;
+		case "stone":
+			location = "./sounds/stone_hit.wav";
+			break;
+		case "dmg":
+			location = "./sounds/dmg.wav";
+			break;
+		case "life":
+			location = "./sounds/extra_life.wav";
+			break;
+		case "lvlUp":
+			location = "./sounds/lvl_up.wav";
+			break;
+		case "gameOver":
+			location = "./sounds/gameOver.wav";
+			break;
+		}
 		try {
-			url = new File("sounds/crunchy_bite.wav").toURI().toURL();
+			url = new File(location).toURI().toURL();
 			soundEffect = AudioSystem.getClip();
 			// getAudioInputStream() also accepts a File or InputStream
 			AudioInputStream ais = AudioSystem.getAudioInputStream(url);
@@ -53,95 +95,6 @@ public class SoundManager extends GameManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	public static void sparkleCollect() {
-		URL url;
-		try {
-			url = new File("sounds/sparkle.wav").toURI().toURL();
-			soundEffect = AudioSystem.getClip();
-			// getAudioInputStream() also accepts a File or InputStream
-			AudioInputStream ais = AudioSystem.getAudioInputStream(url);
-			soundEffect.open(ais);
-			soundEffect.loop(0);
-			setSoundsVolume(soundsVolume);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static void stoneHit() {
-		URL url;
-		try {
-			url = new File("sounds/stone_hit.wav").toURI().toURL();
-			soundEffect = AudioSystem.getClip();
-			// getAudioInputStream() also accepts a File or InputStream
-			AudioInputStream ais = AudioSystem.getAudioInputStream(url);
-			soundEffect.open(ais);
-			soundEffect.loop(0);
-			setSoundsVolume(soundsVolume);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static void lvlUp() {
-		URL url;
-		try {
-			url = new File("sounds/lvl_up.wav").toURI().toURL();
-			soundEffect = AudioSystem.getClip();
-			// getAudioInputStream() also accepts a File or InputStream
-			AudioInputStream ais = AudioSystem.getAudioInputStream(url);
-			soundEffect.open(ais);
-			soundEffect.loop(0);
-			setSoundsVolume(soundsVolume);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static void dmg() {
-		URL url;
-		try {
-			url = new File("sounds/dmg.wav").toURI().toURL();
-			soundEffect = AudioSystem.getClip();
-			// getAudioInputStream() also accepts a File or InputStream
-			AudioInputStream ais = AudioSystem.getAudioInputStream(url);
-			soundEffect.open(ais);
-			soundEffect.loop(0);
-			setSoundsVolume(soundsVolume);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static void gameOver() {
-		URL url;
-		try {
-			url = new File("sounds/gameOver.wav").toURI().toURL();
-			soundEffect = AudioSystem.getClip();
-			// getAudioInputStream() also accepts a File or InputStream
-			AudioInputStream ais = AudioSystem.getAudioInputStream(url);
-			soundEffect.open(ais);
-			soundEffect.loop(0);
-			setSoundsVolume(soundsVolume);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static void menuBtnSound() {
-		URL url;
-		try {
-			url = new File("sounds/menuBtn.wav").toURI().toURL();
-			soundEffect = AudioSystem.getClip();
-			// getAudioInputStream() also accepts a File or InputStream
-			AudioInputStream ais = AudioSystem.getAudioInputStream(url);
-			soundEffect.open(ais);
-			soundEffect.loop(0);
-			setSoundsVolume(soundsVolume);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		
 	}
 }
