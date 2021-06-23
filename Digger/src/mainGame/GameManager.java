@@ -246,6 +246,13 @@ public class GameManager extends StartGame implements KeyListener {
 					frostedCounter += 9;
 					System.out.println("Frost protection achieved! Available for " + frostedCounter + " fields");
 					SoundManager.playSound("frost");
+
+					if (moveLeft == true) {
+						board.receiveMessage("image " + posX + " " + posY + " images/frosted_chef.png \n");
+					}
+					else {
+						board.receiveMessage("image " + posX + " " + posY + " images/frosted_chef_r.png \n");
+					}
 				}
 			}
 		}
@@ -436,9 +443,17 @@ public class GameManager extends StartGame implements KeyListener {
 			}
 			//rotating player character left/right
 			if (moveLeft == true) {
-				board.receiveMessage("image " + posX + " " + posY + " images/chef.png \n");
+				if(frostedCounter > 0) {
+					board.receiveMessage("image " + posX + " " + posY + " images/frosted_chef.png \n");
+				} else {
+					board.receiveMessage("image " + posX + " " + posY + " images/chef.png \n");
+				}
 			} else {
-				board.receiveMessage("image " + posX + " " + posY + " images/chef_r.png \n");
+				if(frostedCounter > 0) {
+					board.receiveMessage("image " + posX + " " + posY + " images/frosted_chef_r.png \n");
+				} else {
+					board.receiveMessage("image " + posX + " " + posY + " images/chef_r.png \n");
+				}
 			}
 			//checking for frost protection
 			if (frostedCounter > 0 && fieldAvailable) {
