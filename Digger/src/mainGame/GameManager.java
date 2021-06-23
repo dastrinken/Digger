@@ -443,13 +443,13 @@ public class GameManager extends StartGame implements KeyListener {
 			}
 			//rotating player character left/right
 			if (moveLeft == true) {
-				if(frostedCounter > 0) {
+				if(frostedCounter > 1) {
 					board.receiveMessage("image " + posX + " " + posY + " images/frosted_chef.png \n");
 				} else {
 					board.receiveMessage("image " + posX + " " + posY + " images/chef.png \n");
 				}
 			} else {
-				if(frostedCounter > 0) {
+				if(frostedCounter > 1) {
 					board.receiveMessage("image " + posX + " " + posY + " images/frosted_chef_r.png \n");
 				} else {
 					board.receiveMessage("image " + posX + " " + posY + " images/chef_r.png \n");
