@@ -9,15 +9,46 @@ public class ItemPainter extends GameManager {
 	}
 
 	public static void setUpItems(int level) {
+		setUpEarth();
 		setUpLava();
 		setUpOnions(level);
 		setUpTomatoes(level);
 		setUpHealth(level);
 		setUpFrosties(level);
 		setUpSolids();
-		
+		setUpEnemyPath(level);
 	}
 
+	private static void setUpEarth() {
+			for (int i = 0; i < boardSize; i++) {
+				for (int j = 0; j < boardSize; j++) {
+					if (i != posX || j != posY) {
+						xsend.farbe2(i, j, 0x000);
+						board.receiveMessage("image " + i + " " + j + " images/earth.png \n");
+						symbol = board.getSymbol(i, j);
+						symbol.getImageObject().setWorldWidth(0);
+					}
+				}
+			}
+	}
+	
+	private static void setUpEnemyPath(int level) {
+		switch(level) {
+		case 10:
+			for(int i = 19; i>16; i--) {
+				xsend.farbe2(0, i, 0x95612D);
+				board.receiveMessage("image " + 0 + " " + i + " - \n");
+			}
+			for(int i = 0; i < 13; i++) {
+				xsend.farbe2(i, 17, 0x95612D);
+				board.receiveMessage("image " + i + " " + 17 + " - \n");
+			}
+			break;
+		default:
+			break;
+		}
+	}
+	
 	private static void setUpTomatoes(int level) {
 		for (int i = 0; i < collectableArray.length; i++) {
 			xCollectable = collectableArray[i][0];
@@ -47,7 +78,7 @@ public class ItemPainter extends GameManager {
 			symbol.getImageObject().setWorldWidth(0);
 		}
 	}
-	
+
 	private static void setUpHealth(int level) {
 		for (int i = 0; i < healthArray.length; i++) {
 			xCollectable = healthArray[i][0];
@@ -65,9 +96,9 @@ public class ItemPainter extends GameManager {
 		default:
 			break;
 		}
-		
+
 	}
-	
+
 	private static void setUpFrosties(int level) {
 		for (int i = 0; i < frostArray.length; i++) {
 			xCollectable = frostArray[i][0];
@@ -78,7 +109,7 @@ public class ItemPainter extends GameManager {
 			symbol.getImageObject().setWorldWidth(0);
 		}
 	}
-	
+
 	private static void setUpLava() {
 		for (int i = 0; i < lavaArray.length; i++) {
 			xCollectable = lavaArray[i][0];
