@@ -152,8 +152,14 @@ public abstract class ItemArrays extends GameManager {
 			tomatos[16][1] = 1;
 			break;
 
+		case 10:
+			tomatos = new int[1][2];
+			
+			tomatos[0][0] = 0;
+			tomatos[0][1] = 0;
+			break;
 		// Hier neue Level einfügen (tomato array)
-
+			
 		// default case
 		default:
 			tomatos = new int[level + 4][2];
@@ -497,7 +503,9 @@ public abstract class ItemArrays extends GameManager {
 //			 System.out.println("Stelle "+i+"\t X:"+solids[i][0]+"||Y:"+solids[i][1]); }
 			break;
 		// Hier neue Level einfügen (solid array)
-
+		case 10:
+			solids = new int[0][0];
+			break;
 		// default case
 		default:
 			solids = new int[5][2];
@@ -559,6 +567,9 @@ public abstract class ItemArrays extends GameManager {
 
 			onions[1][0] = 4;
 			onions[1][1] = 3;			
+			break;
+		case 10:
+			onions = new int[0][0];
 			break;
 		// Hier neue Level einfügen (onion array)
 
@@ -753,6 +764,9 @@ public abstract class ItemArrays extends GameManager {
 			break;
 
 
+		case 10:
+			lava = new int[0][0];
+			break;
 		// Hier neue Level einfügen (lava array)
 
 		// default case
@@ -802,6 +816,11 @@ public abstract class ItemArrays extends GameManager {
 			health = new int[0][2];
 			
 			break;
+		case 10:
+			health = new int[0][0];
+			break;
+			
+			
 		default:
 			health = new int[1][2];
 			int posX, posY;
@@ -864,6 +883,9 @@ public abstract class ItemArrays extends GameManager {
 
 			frosties[1][0] = 17;
 			frosties[1][1] = 15;
+			break;
+		case 10:
+			frosties = new int[0][0];
 			break;
 
 		default:

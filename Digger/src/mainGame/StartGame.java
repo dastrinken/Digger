@@ -11,7 +11,7 @@ public class StartGame {
 	public static int level;
 
 	public static void main(String[] args) {
-		// Start a new game
+		// Start a new game (& only a new game, use MainMenu.java to start the whole program)
 		player = new Player(lives, points, 1);
 		manager = GameManager.getInstance();
 		manager.createBoard(player);
@@ -35,7 +35,7 @@ public class StartGame {
 	
 	//for testing purposes, delete before release
 	public static void cheat() {
-		player = new Player(1, 5, 8);
+		player = new Player(1, 5, 10);
 		manager = GameManager.getInstance();
 		manager.createBoard(player);
 		GameManager.setUpBoard();

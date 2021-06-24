@@ -30,27 +30,32 @@ import javax.swing.JDialog;
 public class GameManager extends StartGame implements KeyListener {
 	// General variables
 	private static GameManager manager = new GameManager();
-	private static boolean move = true;
+	protected static boolean move = true;
 	private static boolean moveLeft = true;
 
 	// Menu and display variables
 	public static Font customFont;
 	public static JLabel ptDisplay;
 	public static JLabel lvlDisplay;
-	public JPanel livesDisplay;
-	public final ImageIcon heartIcon = new ImageIcon("images/heart.png");
+	public static JPanel livesDisplay;
+	public final static ImageIcon heartIcon = new ImageIcon("images/heart.png");
 	public static JDialog gameOver = new JDialog();
 
 	// Board & position variables
-	protected static Board board;
+	public static Board board;
 	protected static Graphic graphic;
-	private static XSendAdapter xsend;
+	protected static XSendAdapter xsend;
 	protected static Symbol symbol;
 
 	public static final int boardSize = 20;
-	private static int posX;
-	private static int posY;
-
+	protected static int posX;
+	protected static int posY;
+	
+	boolean fieldAvailable;
+	//NPC-Variables (enemies)
+	static public int enPosX;
+	static public int enPosY;
+	
 	// In-game Item variables
 	public static int collectedPoints;
 	public static int collectableCounter;
@@ -147,6 +152,8 @@ public class GameManager extends StartGame implements KeyListener {
 	}
 
 	public static void setUpBoard() {
+		NpcManager.stopPepper();
+		
 		level = player.getLevel();
 		collectedPoints = player.getPoints();
 		collectableCounter = player.getPtCounter();
@@ -176,21 +183,30 @@ public class GameManager extends StartGame implements KeyListener {
 		symbol = board.getSymbol(posX, posY);
 		symbol.getImageObject().setWorldWidth(0);
 
-		for (int i = 0; i < boardSize; i++) {
-			for (int j = 0; j < boardSize; j++) {
-				if (i != posX || j != posY) {
-					board.receiveMessage("image " + i + " " + j + " images/earth.png \n");
-					symbol = board.getSymbol(i, j);
-					symbol.getImageObject().setWorldWidth(0);
-				}
-			}
-		}
 		ItemPainter.setUpItems(level);
+		setUpEnemies(level);
 		updatePoints();
 		graphic.setVisible(true);
 	}
-
+	
+	public static void setUpEnemies(int level) {
+		//loading enemy behaviour
+		NpcManager.pepperBehaviour();
+		//deciding if enemies are present via level switch-case
+		switch(level) {
+		case 10:
+			NpcManager.pepperStartPos(level);
+			NpcManager.startPepper();
+			break;
+		default:
+			break;
+		}
+	}
+	
 	public void checkPosition(int posX, int posY) {
+		if(posX == enPosX && posY == enPosY) {
+			loseLife();
+		}
 		int x = 999, y = 999;
 		// Check for Tomatoes
 		for (int i = 0; i < collectableArray.length; i++) {
@@ -332,7 +348,7 @@ public class GameManager extends StartGame implements KeyListener {
 		}
 	}
 
-	private void loseLife() {
+	protected static void loseLife() {
 		int lives = player.getLives();
 		if (lives > 0) {
 			player.setLives(--lives);
@@ -382,84 +398,21 @@ public class GameManager extends StartGame implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		boolean fieldAvailable = true;
 		//variable "move" to disable player movement in some situations (transition, game over, etc.)
 		if (move) {
 			int keyCode = e.getKeyCode();
 			// UP
 			if (keyCode == KeyEvent.VK_W || keyCode == KeyEvent.VK_UP) {
-				if (posY < boardSize - 1 && checkSolids(posX, posY + 1)) {
-					++posY;
-
-					if (lavaPainter(posX, posY - 1)) {
-						board.receiveMessage("image " + posX + " " + (posY - 1) + " ./images/earth_fire.jpg \n");
-					} else {
-						board.receiveMessage("image " + posX + " " + (posY - 1) + " -\n");
-					}
-				} else {
-					fieldAvailable = false;
-				}
-				// LEFT
+				moveUp();
 			} else if (keyCode == KeyEvent.VK_A || keyCode == KeyEvent.VK_LEFT) {
-				moveLeft = true;
-				if (posX > 0 && checkSolids(posX - 1, posY)) {
-					--posX;
-
-					if (lavaPainter(posX + 1, posY)) {
-						board.receiveMessage("image " + (posX + 1) + " " + posY + " ./images/earth_fire.jpg \n");
-					} else {
-						board.receiveMessage("image " + (posX + 1) + " " + posY + " -\n");
-					}
-				} else {
-					fieldAvailable = false;
-				}
-				// DOWN
+				moveLeft();
 			} else if (keyCode == KeyEvent.VK_S || keyCode == KeyEvent.VK_DOWN) {
-				if (posY > 0 && checkSolids(posX, posY - 1)) {
-					--posY;
-
-					if (lavaPainter(posX, posY + 1)) {
-						board.receiveMessage("image " + posX + " " + (posY + 1) + " ./images/earth_fire.jpg \n");
-					} else {
-						board.receiveMessage("image " + posX + " " + (posY + 1) + " -\n");
-					}
-				} else {
-					fieldAvailable = false;
-				}
-				// RIGHT
+				moveDown();
 			} else if (keyCode == KeyEvent.VK_D || keyCode == KeyEvent.VK_RIGHT) {
-				moveLeft = false;
-				if (posX < boardSize - 1 && checkSolids(posX + 1, posY)) {
-					++posX;
-
-					if (lavaPainter(posX - 1, posY)) {
-						board.receiveMessage("image " + (posX - 1) + " " + posY + " ./images/earth_fire.jpg \n");
-					} else {
-						board.receiveMessage("image " + (posX - 1) + " " + posY + " -\n");
-					}
-				} else {
-					fieldAvailable = false;
-				}
+				moveRight();
 			}
-			//rotating player character left/right
-			if (moveLeft == true) {
-				if(frostedCounter > 1) {
-					board.receiveMessage("image " + posX + " " + posY + " images/frosted_chef.png \n");
-				} else {
-					board.receiveMessage("image " + posX + " " + posY + " images/chef.png \n");
-				}
-			} else {
-				if(frostedCounter > 1) {
-					board.receiveMessage("image " + posX + " " + posY + " images/frosted_chef_r.png \n");
-				} else {
-					board.receiveMessage("image " + posX + " " + posY + " images/chef_r.png \n");
-				}
-			}
-			//checking for frost protection
-			if (frostedCounter > 0 && fieldAvailable) {
-				--frostedCounter;
-				System.out.println("Frostprotection reduced! Available for: " + frostedCounter + " fields");
-			}
+			
+			paintPlayer();
 			
 			checkPosition(posX, posY);
 			checkLava(posX, posY);
@@ -475,7 +428,99 @@ public class GameManager extends StartGame implements KeyListener {
 		// TODO Auto-generated method stub
 
 	}
+	public void moveUp() {
+		if (posY < boardSize - 1 && checkSolids(posX, posY + 1)) {
+			fieldAvailable = true;
+			++posY;
 
+			if (lavaPainter(posX, posY - 1)) {
+				board.receiveMessage("image " + posX + " " + (posY - 1) + " ./images/earth_fire.jpg \n");
+			} else {
+				board.receiveMessage("image " + posX + " " + (posY - 1) + " -\n");
+				xsend.farbe2(posX, posY - 1, 0x95612D);
+			}
+		} else {
+			fieldAvailable = false;
+		}
+		checkFrostCounter();
+	}
+	
+	public void moveDown() {
+		if (posY > 0 && checkSolids(posX, posY - 1)) {
+			fieldAvailable = true;
+			--posY;
+
+			if (lavaPainter(posX, posY + 1)) {
+				board.receiveMessage("image " + posX + " " + (posY + 1) + " ./images/earth_fire.jpg \n");
+			} else {
+				board.receiveMessage("image " + posX + " " + (posY + 1) + " -\n");
+				xsend.farbe2(posX, posY + 1, 0x95612D);
+			}
+		} else {
+			fieldAvailable = false;
+		}
+		checkFrostCounter();
+	}
+	
+	public void moveLeft() {
+		moveLeft = true;
+		if (posX > 0 && checkSolids(posX - 1, posY)) {
+			fieldAvailable = true;
+			--posX;
+
+			if (lavaPainter(posX + 1, posY)) {
+				board.receiveMessage("image " + (posX + 1) + " " + posY + " ./images/earth_fire.jpg \n");
+			} else {
+				board.receiveMessage("image " + (posX + 1) + " " + posY + " -\n");
+				xsend.farbe2(posX + 1, posY, 0x95612D);
+			}
+		} else {
+			fieldAvailable = false;
+		}
+		checkFrostCounter();
+	}
+	
+	public void moveRight() {
+		moveLeft = false;
+		if (posX < boardSize - 1 && checkSolids(posX + 1, posY)) {
+			fieldAvailable = true;
+			++posX;
+
+			if (lavaPainter(posX - 1, posY)) {
+				board.receiveMessage("image " + (posX - 1) + " " + posY + " ./images/earth_fire.jpg \n");
+			} else {
+				board.receiveMessage("image " + (posX - 1) + " " + posY + " -\n");
+				xsend.farbe2(posX - 1, posY, 0x95612D);
+			}
+		} else {
+			fieldAvailable = false;
+		}
+		checkFrostCounter();
+	}
+
+	public void paintPlayer() {
+		xsend.farbe2(posX, posY, 0x95612D);
+		if (moveLeft == true) {
+			if(frostedCounter > 1) {
+				board.receiveMessage("image " + posX + " " + posY + " images/frosted_chef.png \n");
+			} else {
+				board.receiveMessage("image " + posX + " " + posY + " images/chef.png \n");
+			}
+		} else {
+			if(frostedCounter > 1) {
+				board.receiveMessage("image " + posX + " " + posY + " images/frosted_chef_r.png \n");
+			} else {
+				board.receiveMessage("image " + posX + " " + posY + " images/chef_r.png \n");
+			}
+		}
+	}
+	
+	public void checkFrostCounter() {
+		if (frostedCounter > 0 && fieldAvailable) {
+			--frostedCounter;
+			System.out.println("Frostprotection reduced! Available for: " + frostedCounter + " fields");
+		}
+	}
 	public static boolean save() {
 		boolean saved;
 		try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("savegame.bin"))) {

@@ -45,6 +45,7 @@ public class MainMenu {
 	 * @wbp.parser.entryPoint
 	 */
 	public static void setFrame() {
+		NpcManager.stopPepper();
 		try {
 		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
 		        if ("Nimbus".equals(info.getName())) {
