@@ -34,6 +34,32 @@ public class ItemPainter extends GameManager {
 	
 	private static void setUpEnemyPath(int level) {
 		switch(level) {
+		case 1:
+			for(int i = 0; i <= 4; i++) {
+				xsend.farbe2(i, 5, 0x95612D);
+				board.receiveMessage("image " + i + " " + 5 + " - \n");
+			}
+			for(int i = 0; i <= 5; i++) {
+				xsend.farbe2(4, i, 0x95612D);
+				board.receiveMessage("image " + 4 + " " + i + " - \n");
+			}
+			break;
+		case 2:
+			for(int i = 6; i <= 10; i++) {
+				xsend.farbe2(i, 18, 0x95612D);
+				board.receiveMessage("image " + i + " " + 18 + " - \n");
+
+				xsend.farbe2(i, 11, 0x95612D);
+				board.receiveMessage("image " + i + " " + 11 + " - \n");
+			}
+			for(int i = 11; i <= 18; i++) {
+				xsend.farbe2(10, i, 0x95612D);
+				board.receiveMessage("image " + 10 + " " + i + " - \n");
+
+				xsend.farbe2(6, i, 0x95612D);
+				board.receiveMessage("image " + 6 + " " + i + " - \n");
+			}
+			break;
 		case 10:
 			for(int i = 19; i>16; i--) {
 				xsend.farbe2(0, i, 0x95612D);

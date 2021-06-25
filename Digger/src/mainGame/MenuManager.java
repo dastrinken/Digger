@@ -299,9 +299,11 @@ public class MenuManager extends GameManager {
 	 * @wbp.parser.entryPoint
 	 */
 	public static void getGameOverMenu(int level) {
+		NpcManager.stopPepper();
 		String hintString;
 		gameOver.setSize(500, 200);
 		gameOver.getContentPane().setLayout(null);
+		gameOver.setUndecorated(true);
 
 		JLabel gameOverLbl = new JLabel("Game Over :(");
 		gameOverLbl.setHorizontalAlignment(SwingConstants.CENTER);
@@ -367,7 +369,6 @@ public class MenuManager extends GameManager {
 		});
 		gameOver.getContentPane().add(quitBtn);
 
-		gameOver.setUndecorated(true);
 		gameOver.setResizable(false);
 		gameOver.setAlwaysOnTop(true);
 		gameOver.setLocationRelativeTo(null);
