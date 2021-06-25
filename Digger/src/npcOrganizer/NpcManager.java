@@ -1,10 +1,12 @@
-package mainGame;
+package npcOrganizer;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Random;
 
 import javax.swing.Timer;
+
+import mainGame.GameManager;
 
 public class NpcManager extends GameManager {
 	private static int lastMove;
@@ -18,7 +20,6 @@ public class NpcManager extends GameManager {
 	
 	public static void setUpEnemies(int level) {
 		NpcManager pepper = new NpcManager();
-		NpcManager pepper2 = new NpcManager();
 		//loading enemy behaviour
 		pepper.pepperBehaviour();
 		//deciding if enemies are present via level switch-case
@@ -30,9 +31,6 @@ public class NpcManager extends GameManager {
 		case 2:
 			pepper.pepperStartPos(level);
 			pepper.startPepper();
-
-			pepper2.pepperStartPos(level);
-			pepper2.startPepper();
 			break;
 		case 10:
 			pepper.pepperStartPos(level);
@@ -245,7 +243,7 @@ public class NpcManager extends GameManager {
 		}
 	}
 
-	static void checkPlayerCollision() {
+	public static void checkPlayerCollision() {
 		if (posX == enPosX && posY == enPosY) {
 			loseLife();
 		}
