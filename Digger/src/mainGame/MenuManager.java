@@ -19,6 +19,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.SwingConstants;
+
+import npcOrganizer.NpcManager;
+
 import javax.swing.JTextField;
 
 public class MenuManager extends GameManager {

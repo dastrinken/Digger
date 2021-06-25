@@ -17,6 +17,7 @@ import jserver.Board;
 import jserver.Symbol;
 import jserver.XSendAdapter;
 import levelOrganizer.ItemArrays;
+import npcOrganizer.NpcManager;
 import plotter.Graphic;
 import java.awt.Font;
 import java.awt.FontFormatException;
@@ -75,7 +76,7 @@ public class GameManager extends StartGame implements KeyListener {
 	protected static float soundsVolume = .1f;
 
 	protected GameManager() {
-		System.out.println("Objektinstanz gebildet.");
+		System.out.println("Objektinstanz GameManager gebildet.");
 	}
 
 	public static synchronized GameManager getInstance() {
@@ -392,9 +393,8 @@ public class GameManager extends StartGame implements KeyListener {
 			} else if (keyCode == KeyEvent.VK_D || keyCode == KeyEvent.VK_RIGHT) {
 				moveRight();
 			}
-			
 			paintPlayer();
-
+			
 			checkFrostCounter();
 			checkPosition(posX, posY);
 			checkLava(posX, posY);
@@ -534,7 +534,7 @@ public class GameManager extends StartGame implements KeyListener {
 				errorMsg.setFont(createCustomFont(9f));
 				errorMsg.setHorizontalAlignment(SwingConstants.CENTER);
 				emptyName.add(errorMsg);
-
+				
 				emptyName.setAlwaysOnTop(true);
 				emptyName.setLocationRelativeTo(null);
 				emptyName.setVisible(true);

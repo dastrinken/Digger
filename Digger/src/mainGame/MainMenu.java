@@ -18,6 +18,8 @@ import java.awt.Graphics;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
+import npcOrganizer.NpcManager;
+
 /**
  * This program is a Remake of the original game "Digger" released in 1983 as
  * part of a study project by Armin Prinz & Sebastian Ziegler
