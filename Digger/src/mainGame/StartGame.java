@@ -35,7 +35,7 @@ public class StartGame {
 	
 	//for testing purposes, delete before release
 	public static void cheat() {
-		player = new Player(1, 5, 10);
+		player = new Player(1, 5, 2);
 		manager = GameManager.getInstance();
 		manager.createBoard(player);
 		GameManager.setUpBoard();

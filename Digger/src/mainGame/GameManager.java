@@ -52,9 +52,6 @@ public class GameManager extends StartGame implements KeyListener {
 	protected static int posY;
 	
 	boolean fieldAvailable;
-	//NPC-Variables (enemies)
-	static public int enPosX;
-	static public int enPosY;
 	
 	// In-game Item variables
 	public static int collectedPoints;
@@ -184,29 +181,13 @@ public class GameManager extends StartGame implements KeyListener {
 		symbol.getImageObject().setWorldWidth(0);
 
 		ItemPainter.setUpItems(level);
-		setUpEnemies(level);
+		NpcManager.setUpEnemies(level);
 		updatePoints();
 		graphic.setVisible(true);
 	}
 	
-	public static void setUpEnemies(int level) {
-		//loading enemy behaviour
-		NpcManager.pepperBehaviour();
-		//deciding if enemies are present via level switch-case
-		switch(level) {
-		case 10:
-			NpcManager.pepperStartPos(level);
-			NpcManager.startPepper();
-			break;
-		default:
-			break;
-		}
-	}
-	
 	public void checkPosition(int posX, int posY) {
-		if(posX == enPosX && posY == enPosY) {
-			loseLife();
-		}
+		NpcManager.checkPlayerCollision();
 		int x = 999, y = 999;
 		// Check for Tomatoes
 		for (int i = 0; i < collectableArray.length; i++) {
@@ -398,7 +379,7 @@ public class GameManager extends StartGame implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		//variable "move" to disable player movement in some situations (transition, game over, etc.)
+		//variable "move" to prevent player movement in some situations (transition, game over, etc.)
 		if (move) {
 			int keyCode = e.getKeyCode();
 			// UP
@@ -413,7 +394,8 @@ public class GameManager extends StartGame implements KeyListener {
 			}
 			
 			paintPlayer();
-			
+
+			checkFrostCounter();
 			checkPosition(posX, posY);
 			checkLava(posX, posY);
 			
@@ -442,7 +424,6 @@ public class GameManager extends StartGame implements KeyListener {
 		} else {
 			fieldAvailable = false;
 		}
-		checkFrostCounter();
 	}
 	
 	public void moveDown() {
@@ -459,7 +440,6 @@ public class GameManager extends StartGame implements KeyListener {
 		} else {
 			fieldAvailable = false;
 		}
-		checkFrostCounter();
 	}
 	
 	public void moveLeft() {
@@ -477,7 +457,6 @@ public class GameManager extends StartGame implements KeyListener {
 		} else {
 			fieldAvailable = false;
 		}
-		checkFrostCounter();
 	}
 	
 	public void moveRight() {
@@ -495,7 +474,6 @@ public class GameManager extends StartGame implements KeyListener {
 		} else {
 			fieldAvailable = false;
 		}
-		checkFrostCounter();
 	}
 
 	public void paintPlayer() {
@@ -521,6 +499,7 @@ public class GameManager extends StartGame implements KeyListener {
 			System.out.println("Frostprotection reduced! Available for: " + frostedCounter + " fields");
 		}
 	}
+	
 	public static boolean save() {
 		boolean saved;
 		try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("savegame.bin"))) {

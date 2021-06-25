@@ -7,73 +7,120 @@ import java.util.Random;
 import javax.swing.Timer;
 
 public class NpcManager extends GameManager {
-	static private int lastMove;
+	private static int lastMove;
 	public static Timer pepperMove;
+	private static int dirCounter;
+	static public int enPosX = 999;
+	static public int enPosY = 999;
 
 	public NpcManager() {
 	}
+	
+	public static void setUpEnemies(int level) {
+		NpcManager pepper = new NpcManager();
+		NpcManager pepper2 = new NpcManager();
+		//loading enemy behaviour
+		pepper.pepperBehaviour();
+		//deciding if enemies are present via level switch-case
+		switch(level) {
+		case 1:
+			pepper.pepperStartPos(level);
+			pepper.startPepper();
+			break;
+		case 2:
+			pepper.pepperStartPos(level);
+			pepper.startPepper();
 
-	public static void pepperBehaviour() {
+			pepper2.pepperStartPos(level);
+			pepper2.startPepper();
+			break;
+		case 10:
+			pepper.pepperStartPos(level);
+			pepper.startPepper();
+			break;
+		default:
+			enPosX = 999;
+			enPosY = 999;
+			break;
+		}
+	}
+
+	public void pepperBehaviour() {
 		Random rnd = new Random();
-		int delay = 500; // peppers speed
+		int delay = 300; // peppers speed
 		ActionListener pepperRun = new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				int moveTo;
 				int rollDice;
 				// 0 = UP ; 1 = DOWN ; 2 = LEFT ; 3 = RIGHT
-				moveTo = rnd.nextInt(4);
-				if (lastMove == 0) {
-					if (fieldAvailable(2)) {
-						if (fieldAvailable(3)) {
-							rollDice = rnd.nextInt(2) + 1;
-							if (rollDice % 2 == 0) {
-								moveTo = 2;
-							} else {
-								moveTo = 3;
-							}
-						}
-					} else if (fieldAvailable(3)) {
-						moveTo = 3;
-					} else if (fieldAvailable(0)) {
-						moveTo = 0;
+				if (fieldAvailable(lastMove)) {
+					if (dirCounter > 10) {
+						moveTo = rnd.nextInt(4);
 					} else {
-						moveTo = 1;
-					}
-				} else if (lastMove == 1) {
-					if (fieldAvailable(3)) {
-						moveTo = 3;
-					} else if (fieldAvailable(2)) {
-						moveTo = 2;
-					} else if (fieldAvailable(1)) {
-						moveTo = 1;
-					} else {
-						moveTo = 0;
-					}
-				} else if (lastMove == 2) {
-					if (fieldAvailable(1)) {
-						moveTo = 1;
-					} else if (fieldAvailable(0)) {
-						moveTo = 0;
-					} else if (fieldAvailable(2)) {
-						moveTo = 2;
-					} else {
-						moveTo = 3;
-					}
-				} else if (lastMove == 3) {
-					if (fieldAvailable(1)) {
-						moveTo = 1;
-					} else if (fieldAvailable(0)) {
-						moveTo = 0;
-					} else if (fieldAvailable(3)) {
-						moveTo = 3;
-					} else {
-						moveTo = 2;
+						moveTo = lastMove;
 					}
 				} else {
 					moveTo = rnd.nextInt(4);
+					if (lastMove == 0) {
+						if (fieldAvailable(2)) {
+							if (fieldAvailable(3)) {
+								rollDice = rnd.nextInt(2) + 1;
+								if (rollDice % 2 == 0) {
+									moveTo = 2;
+								} else {
+									moveTo = 3;
+								}
+							} else {
+								moveTo = 2;
+							}
+						} else if (fieldAvailable(3)) {
+							moveTo = 3;
+						} else if (fieldAvailable(0)) {
+							moveTo = 0;
+						} else {
+							moveTo = 1;
+						}
+					} else if (lastMove == 1) {
+						if (fieldAvailable(3)) {
+							moveTo = 3;
+						} else if (fieldAvailable(2)) {
+							moveTo = 2;
+						} else if (fieldAvailable(1)) {
+							moveTo = 1;
+						} else {
+							moveTo = 0;
+						}
+					} else if (lastMove == 2) {
+						if (fieldAvailable(1)) {
+							moveTo = 1;
+						} else if (fieldAvailable(0)) {
+							moveTo = 0;
+						} else if (fieldAvailable(2)) {
+							moveTo = 2;
+						} else {
+							moveTo = 3;
+						}
+					} else if (lastMove == 3) {
+						if (fieldAvailable(1)) {
+							moveTo = 1;
+						} else if (fieldAvailable(0)) {
+							moveTo = 0;
+						} else if (fieldAvailable(3)) {
+							moveTo = 3;
+						} else {
+							moveTo = 2;
+						}
+					} else {
+						moveTo = rnd.nextInt(4);
+					}
 				}
 
-				System.out.println("LastMove: " + lastMove + " moveTo: " + moveTo);
+				if (lastMove == moveTo) {
+					dirCounter++;
+				} else {
+					dirCounter = 0;
+				}
+//				System.out.println("LastMove: " + lastMove + " moveTo: " + moveTo + "dirCounter: " + dirCounter);
 				lastMove = moveTo;
 				// UP
 				if (moveTo == 0 && fieldAvailable(0)) {
@@ -111,7 +158,6 @@ public class NpcManager extends GameManager {
 			}
 		};
 		pepperMove = new Timer(delay, pepperRun);
-
 	}
 
 	public static boolean fieldAvailable(int direction) {
@@ -167,8 +213,18 @@ public class NpcManager extends GameManager {
 		return isAvailable;
 	}
 
-	public static void pepperStartPos(int level) {
+	public void pepperStartPos(int level) {
 		switch (level) {
+		case 1:
+			enPosX = 0;
+			enPosY = 5;
+			board.receiveMessage("image " + enPosX + " " + enPosY + " ./images/pepper.png \n");
+			break;
+		case 2:
+			enPosX = 6;
+			enPosY = 18;
+			board.receiveMessage("image " + enPosX + " " + enPosY + " ./images/pepper.png \n");
+			break;
 		case 10:
 			enPosX = 0;
 			enPosY = 19;
@@ -179,7 +235,7 @@ public class NpcManager extends GameManager {
 		}
 	}
 
-	public static void startPepper() {
+	public void startPepper() {
 		pepperMove.start();
 	}
 
@@ -189,7 +245,7 @@ public class NpcManager extends GameManager {
 		}
 	}
 
-	private static void checkPlayerCollision() {
+	static void checkPlayerCollision() {
 		if (posX == enPosX && posY == enPosY) {
 			loseLife();
 		}
