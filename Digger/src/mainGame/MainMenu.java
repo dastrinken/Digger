@@ -18,8 +18,6 @@ import java.awt.Graphics;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
-import npcOrganizer.NpcManager;
-
 /**
  * This program is a Remake of the original game "Digger" released in 1983 as
  * part of a study project by Armin Prinz & Sebastian Ziegler
@@ -33,21 +31,25 @@ import npcOrganizer.NpcManager;
 public class MainMenu {
 	public static JFrame mainFrame;
 	
-	public static ImageIcon icon = new ImageIcon("./images/solid.png");
+	public static ImageIcon icon = new ImageIcon("./images/icon.png");
 	static ImageIcon background = new ImageIcon("./images/background.jpg");
 	static Font customFontRegular = GameManager.createCustomFont(12f);
 	static Font customFontSmall = GameManager.createCustomFont(7.5f);
+	
+	private static int cowLvlEnabler;
 
 	public static void main(String[] args) {
-		SoundManager.playMusic();
+		SoundManager sounds = new SoundManager();
+		SettingsIO.collectProperties();
+		sounds.startUp();
 		setFrame();
 	}
+	
 	
 	/**
 	 * @wbp.parser.entryPoint
 	 */
 	public static void setFrame() {
-		NpcManager.stopPepper();
 		try {
 		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
 		        if ("Nimbus".equals(info.getName())) {
@@ -84,7 +86,7 @@ public class MainMenu {
 		btnStart.setBounds(new Rectangle(10, 0, 400, 75));
 		btnStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				StartGame.main(null);
+				StartGame.newGame();
 				mainFrame.setVisible(false);
 			}
 		});
@@ -154,7 +156,10 @@ public class MainMenu {
 		cheatBtn.setBounds(463, 251, 37, 23);
 		cheatBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				StartGame.cheat();
+				cowLvlEnabler++;
+				if(cowLvlEnabler == 1) {
+					StartGame.cheat();
+				}
 			}
 		});
 		desktopPane.add(cheatBtn);
