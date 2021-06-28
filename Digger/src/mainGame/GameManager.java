@@ -17,13 +17,11 @@ import jserver.Board;
 import jserver.Symbol;
 import jserver.XSendAdapter;
 import levelOrganizer.ItemArrays;
-import npcOrganizer.NpcManager;
 import plotter.Graphic;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
 
-import javax.sound.sampled.Clip;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
@@ -46,7 +44,7 @@ public class GameManager extends StartGame implements KeyListener {
 	public static Board board;
 	protected static Graphic graphic;
 	protected static XSendAdapter xsend;
-	protected static Symbol symbol;
+	public static Symbol symbol;
 
 	public static final int boardSize = 20;
 	protected static int posX;
@@ -66,15 +64,6 @@ public class GameManager extends StartGame implements KeyListener {
 	protected static int[][] healthArray;
 	protected static int[][] frostArray;
 
-	// Music variables
-	protected static Clip bgMusic;
-	protected static Clip soundEffect;
-	protected static boolean musicOn = true;
-	protected static boolean soundsOn = true;
-	protected static int musicSliderValue = 50;
-	protected static int soundsSliderValue = 100;
-	protected static float soundsVolume = .1f;
-
 	protected GameManager() {
 		System.out.println("Objektinstanz GameManager gebildet.");
 	}
@@ -84,6 +73,14 @@ public class GameManager extends StartGame implements KeyListener {
 			GameManager.manager = new GameManager();
 		}
 		return manager;
+	}
+
+	public static int getPosX() {
+		return posX;
+	}
+
+	public static int getPosY() {
+		return posY;
 	}
 
 	public static Font createCustomFont(float size) {
@@ -150,8 +147,6 @@ public class GameManager extends StartGame implements KeyListener {
 	}
 
 	public static void setUpBoard() {
-		NpcManager.stopPepper();
-		
 		level = player.getLevel();
 		collectedPoints = player.getPoints();
 		collectableCounter = player.getPtCounter();
@@ -182,13 +177,13 @@ public class GameManager extends StartGame implements KeyListener {
 		symbol.getImageObject().setWorldWidth(0);
 
 		ItemPainter.setUpItems(level);
-		NpcManager.setUpEnemies(level);
+		npc.setUpEnemies(level);
 		updatePoints();
 		graphic.setVisible(true);
 	}
 	
 	public void checkPosition(int posX, int posY) {
-		NpcManager.checkPlayerCollision();
+		npc.checkCollision(level, posX, posY);
 		int x = 999, y = 999;
 		// Check for Tomatoes
 		for (int i = 0; i < collectableArray.length; i++) {
@@ -330,7 +325,9 @@ public class GameManager extends StartGame implements KeyListener {
 		}
 	}
 
-	protected static void loseLife() {
+	public static void loseLife() {
+		npc.stopEnemies(level);
+		SoundManager.playSound("dmg");
 		int lives = player.getLives();
 		if (lives > 0) {
 			player.setLives(--lives);
@@ -361,6 +358,7 @@ public class GameManager extends StartGame implements KeyListener {
 			break;
 		}
 		if (collectableCounter == 0) {
+			npc.stopEnemies(level);
 			player.setLevel(++level);
 			player.setPoints(collectedPoints);
 			player.resetCounter(player.getLevel());
@@ -375,9 +373,8 @@ public class GameManager extends StartGame implements KeyListener {
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
 	}
-
+	//TODO: use game-loop instead of keyPressed
 	@Override
 	public void keyPressed(KeyEvent e) {
 		//variable "move" to prevent player movement in some situations (transition, game over, etc.)
@@ -407,9 +404,8 @@ public class GameManager extends StartGame implements KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-
 	}
+	
 	public void moveUp() {
 		if (posY < boardSize - 1 && checkSolids(posX, posY + 1)) {
 			fieldAvailable = true;

@@ -3,17 +3,24 @@ package mainGame;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 
+import npcOrganizer.NpcManager;
+
 public class StartGame {
 	static GameManager manager;
+	static NpcManager npc;
 	public static Player player;
 	public static int lives = 3;
 	public static int points = 0;
 	public static int level;
+	
+	//disable cheat before release!
+	private static Cheat cheat = new Cheat();
 
-	public static void main(String[] args) {
+	public static void newGame() {
 		// Start a new game (& only a new game, use MainMenu.java to start the whole program)
 		player = new Player(lives, points, 1);
 		manager = GameManager.getInstance();
+		npc = NpcManager.getInstance();
 		manager.createBoard(player);
 		GameManager.setUpBoard();
 	}
@@ -29,15 +36,13 @@ public class StartGame {
 			System.out.println();
 		}
 		manager = GameManager.getInstance();
+		npc = NpcManager.getInstance();
 		manager.createBoard(player);
 		GameManager.setUpBoard();
 	}
 	
 	//for testing purposes, delete before release
 	public static void cheat() {
-		player = new Player(1, 5, 2);
-		manager = GameManager.getInstance();
-		manager.createBoard(player);
-		GameManager.setUpBoard();
+		cheat.cheat();
 	}
 }

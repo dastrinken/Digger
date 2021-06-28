@@ -4,6 +4,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 
@@ -19,8 +21,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.SwingConstants;
-
-import npcOrganizer.NpcManager;
 
 import javax.swing.JTextField;
 
@@ -241,11 +241,11 @@ public class MenuManager extends GameManager {
 		optionFrame.getContentPane().setLayout(null);
 
 		musicCheckbox = new JCheckBox("Enabled");
-		musicCheckbox.setSelected(musicOn);
+		musicCheckbox.setSelected(SoundManager.musicOn);
 		musicCheckbox.setBounds(106, 7, 97, 26);
 		optionFrame.getContentPane().add(musicCheckbox);
 
-		musicVolumeSlider = new JSlider(0, 100, musicSliderValue);
+		musicVolumeSlider = new JSlider(0, 100, SoundManager.musicSliderValue);
 		musicVolumeSlider.setBounds(224, 7, 200, 26);
 		optionFrame.getContentPane().add(musicVolumeSlider);
 
@@ -258,35 +258,47 @@ public class MenuManager extends GameManager {
 		optionFrame.getContentPane().add(soundLabel);
 
 		soundsCheckbox = new JCheckBox("Enabled");
-		soundsCheckbox.setSelected(soundsOn);
+		soundsCheckbox.setSelected(SoundManager.soundsOn);
 		soundsCheckbox.setBounds(106, 43, 97, 26);
 		optionFrame.getContentPane().add(soundsCheckbox);
 
-		soundsVolumeSlider = new JSlider(0, 100, soundsSliderValue);
+		soundsVolumeSlider = new JSlider(0, 100, SoundManager.soundsSliderValue);
 		soundsVolumeSlider.setBounds(224, 44, 200, 26);
 		optionFrame.getContentPane().add(soundsVolumeSlider);
 
 		JButton saveBtn = new JButton("Apply");
+		saveBtn.addMouseListener(new MouseAdapter() {
+			public void mouseEntered(MouseEvent e) {
+				SoundManager.menuBtnSound();
+			}
+		});
 		saveBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// saving variables
-				musicOn = musicCheckbox.isSelected();
-				soundsOn = soundsCheckbox.isSelected();
-				musicSliderValue = musicVolumeSlider.getValue();
-				soundsSliderValue = soundsVolumeSlider.getValue();
+				SoundManager.musicOn = musicCheckbox.isSelected();
+				SettingsIO.saveProperties("music", String.valueOf(SoundManager.musicOn));
+				
+				SoundManager.musicSliderValue = musicVolumeSlider.getValue();
+				SettingsIO.saveProperties("musicValue", String.valueOf(SoundManager.musicSliderValue));
+				
+				SoundManager.soundsOn = soundsCheckbox.isSelected();
+				SettingsIO.saveProperties("sound", String.valueOf(SoundManager.soundsOn));
+				
+				SoundManager.soundsSliderValue = soundsVolumeSlider.getValue();
+				SettingsIO.saveProperties("soundValue", String.valueOf(SoundManager.soundsSliderValue));
+				
 
 				// applying user settings
 				if (musicCheckbox.isSelected()) {
-					float volume = (float) musicVolumeSlider.getValue();
-					SoundManager.setMusicVolume(volume / 1000);
+					if(SoundManager.musicPlaying == false) {
+						SoundManager.playMusic();
+					}
+					SoundManager.setMusicVolume();
 				} else {
-					SoundManager.setMusicVolume(0);
-				}
-				if (soundsCheckbox.isSelected()) {
-					float volume = (float) soundsVolumeSlider.getValue();
-					soundsVolume = volume / 1000;
-				} else {
-					soundsVolume = 0;
+					if(SoundManager.bgMusic != null) {
+						SoundManager.bgMusic.close();
+					}
+					SoundManager.musicPlaying = false;
 				}
 			}
 		});
@@ -302,7 +314,6 @@ public class MenuManager extends GameManager {
 	 * @wbp.parser.entryPoint
 	 */
 	public static void getGameOverMenu(int level) {
-		NpcManager.stopPepper();
 		String hintString;
 		gameOver.setSize(500, 200);
 		gameOver.getContentPane().setLayout(null);
@@ -338,7 +349,10 @@ public class MenuManager extends GameManager {
 
 		switch (level) {
 		case 1:
-			hintString = "How is it possible to lose in Lvl 1?";
+			hintString = "Peppers are evil.";
+			break;
+		case 2:
+			hintString = "Double pepper, double danger.";
 			break;
 		case 3:
 			hintString = "Hint: The floor is lava!";
