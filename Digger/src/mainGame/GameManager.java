@@ -17,6 +17,7 @@ import jserver.Board;
 import jserver.Symbol;
 import jserver.XSendAdapter;
 import levelOrganizer.ItemArrays;
+import levelOrganizer.ItemPainter;
 import plotter.Graphic;
 import java.awt.Font;
 import java.awt.FontFormatException;
@@ -49,14 +50,14 @@ public class GameManager extends StartGame implements KeyListener {
 	public static final int boardSize = 20;
 	protected static int posX;
 	protected static int posY;
-	
+
 	boolean fieldAvailable;
-	
+
 	// In-game Item variables
 	public static int collectedPoints;
 	public static int collectableCounter;
 	public static int dmgCounter;
-	public int frostedCounter;
+	public static int frostedCounter;
 	protected static int[][] collectableArray;
 	protected static int[][] solidsArray;
 	protected static int[][] onionsArray;
@@ -147,6 +148,7 @@ public class GameManager extends StartGame implements KeyListener {
 	}
 
 	public static void setUpBoard() {
+		frostedCounter = 0;
 		level = player.getLevel();
 		collectedPoints = player.getPoints();
 		collectableCounter = player.getPtCounter();
@@ -181,71 +183,62 @@ public class GameManager extends StartGame implements KeyListener {
 		updatePoints();
 		graphic.setVisible(true);
 	}
-	
+
 	public void checkPosition(int posX, int posY) {
 		npc.checkCollision(level, posX, posY);
 		int x = 999, y = 999;
 		// Check for Tomatoes
 		for (int i = 0; i < collectableArray.length; i++) {
-			for (int j = 0; j < 2; j++) {
-				x = collectableArray[i][0];
-				y = collectableArray[i][1];
-				if (x == posX && y == posY) {
-					collectableArray[i][0] = 999;
-					collectableArray[i][1] = 999;
-					CollectPts(posX, posY, "tomato");
-				}
+			x = collectableArray[i][0];
+			y = collectableArray[i][1];
+			if (x == posX && y == posY) {
+				collectableArray[i][0] = 999;
+				collectableArray[i][1] = 999;
+				CollectPts(posX, posY, "tomato");
 			}
 		}
 		// Check for Onions
 		for (int i = 0; i < onionsArray.length; i++) {
-			for (int j = 0; j < 2; j++) {
-				x = onionsArray[i][0];
-				y = onionsArray[i][1];
-				if (x == posX && y == posY) {
-					onionsArray[i][0] = 999;
-					onionsArray[i][1] = 999;
-					CollectPts(posX, posY, "onion");
-				}
+			x = onionsArray[i][0];
+			y = onionsArray[i][1];
+			if (x == posX && y == posY) {
+				onionsArray[i][0] = 999;
+				onionsArray[i][1] = 999;
+				CollectPts(posX, posY, "onion");
 			}
 		}
 		// Check for Health plus
 		for (int i = 0; i < healthArray.length; i++) {
 			int lives = player.getLives();
-			for (int j = 0; j < 2; j++) {
-				x = healthArray[i][0];
-				y = healthArray[i][1];
-				if (x == posX && y == posY) {
-					healthArray[i][0] = 999;
-					healthArray[i][1] = 999;
-					player.setLives(++lives);
-					// Repaint display
-					livesDisplay.removeAll();
-					for (int k = 0; k < player.getLives(); k++) {
-						livesDisplay.add(new JLabel(heartIcon));
-					}
-					SoundManager.playSound("life");
+			x = healthArray[i][0];
+			y = healthArray[i][1];
+			if (x == posX && y == posY) {
+				healthArray[i][0] = 999;
+				healthArray[i][1] = 999;
+				player.setLives(++lives);
+				// Repaint display
+				livesDisplay.removeAll();
+				for (int k = 0; k < player.getLives(); k++) {
+					livesDisplay.add(new JLabel(heartIcon));
 				}
+				SoundManager.playSound("life");
 			}
 		}
 		// Check for Frost protection
 		for (int i = 0; i < frostArray.length; i++) {
-			for (int j = 0; j < 2; j++) {
-				x = frostArray[i][0];
-				y = frostArray[i][1];
-				if (x == posX && y == posY) {
-					frostArray[i][0] = 999;
-					frostArray[i][1] = 999;
-					frostedCounter += 9;
-					System.out.println("Frost protection achieved! Available for " + frostedCounter + " fields");
-					SoundManager.playSound("frost");
+			x = frostArray[i][0];
+			y = frostArray[i][1];
+			if (x == posX && y == posY) {
+				frostArray[i][0] = 999;
+				frostArray[i][1] = 999;
+				frostedCounter += 9;
+				System.out.println("Frost protection achieved! Available for " + frostedCounter + " fields");
+				SoundManager.playSound("frost");
 
-					if (moveLeft == true) {
-						board.receiveMessage("image " + posX + " " + posY + " images/frosted_chef.png \n");
-					}
-					else {
-						board.receiveMessage("image " + posX + " " + posY + " images/frosted_chef_r.png \n");
-					}
+				if (moveLeft == true) {
+					board.receiveMessage("image " + posX + " " + posY + " images/frosted_chef.png \n");
+				} else {
+					board.receiveMessage("image " + posX + " " + posY + " images/frosted_chef_r.png \n");
 				}
 			}
 		}
@@ -296,7 +289,9 @@ public class GameManager extends StartGame implements KeyListener {
 			}
 		}
 	}
-	//method lavaPainter, used for repainting lava on floor after player digged through
+
+	// method lavaPainter, used for repainting lava on floor after player digged
+	// through
 	public boolean lavaPainter(int posX, int posY) {
 		boolean repaint = false;
 		int x, y;
@@ -374,10 +369,12 @@ public class GameManager extends StartGame implements KeyListener {
 	@Override
 	public void keyTyped(KeyEvent e) {
 	}
-	//TODO: use game-loop instead of keyPressed
+
+	// TODO: use game-loop instead of keyPressed
 	@Override
 	public void keyPressed(KeyEvent e) {
-		//variable "move" to prevent player movement in some situations (transition, game over, etc.)
+		// variable "move" to prevent player movement in some situations (transition,
+		// game over, etc.)
 		if (move) {
 			int keyCode = e.getKeyCode();
 			// UP
@@ -391,12 +388,12 @@ public class GameManager extends StartGame implements KeyListener {
 				moveRight();
 			}
 			paintPlayer();
-			
+
 			checkFrostCounter();
 			checkPosition(posX, posY);
 			checkLava(posX, posY);
-			
-			//resizing image
+
+			// resizing image
 			symbol = board.getSymbol(posX, posY);
 			symbol.getImageObject().setWorldWidth(0);
 		}
@@ -405,7 +402,7 @@ public class GameManager extends StartGame implements KeyListener {
 	@Override
 	public void keyReleased(KeyEvent e) {
 	}
-	
+
 	public void moveUp() {
 		if (posY < boardSize - 1 && checkSolids(posX, posY + 1)) {
 			fieldAvailable = true;
@@ -421,7 +418,7 @@ public class GameManager extends StartGame implements KeyListener {
 			fieldAvailable = false;
 		}
 	}
-	
+
 	public void moveDown() {
 		if (posY > 0 && checkSolids(posX, posY - 1)) {
 			fieldAvailable = true;
@@ -437,7 +434,7 @@ public class GameManager extends StartGame implements KeyListener {
 			fieldAvailable = false;
 		}
 	}
-	
+
 	public void moveLeft() {
 		moveLeft = true;
 		if (posX > 0 && checkSolids(posX - 1, posY)) {
@@ -454,7 +451,7 @@ public class GameManager extends StartGame implements KeyListener {
 			fieldAvailable = false;
 		}
 	}
-	
+
 	public void moveRight() {
 		moveLeft = false;
 		if (posX < boardSize - 1 && checkSolids(posX + 1, posY)) {
@@ -475,27 +472,27 @@ public class GameManager extends StartGame implements KeyListener {
 	public void paintPlayer() {
 		xsend.farbe2(posX, posY, 0x95612D);
 		if (moveLeft == true) {
-			if(frostedCounter > 1) {
+			if (frostedCounter > 1) {
 				board.receiveMessage("image " + posX + " " + posY + " images/frosted_chef.png \n");
 			} else {
 				board.receiveMessage("image " + posX + " " + posY + " images/chef.png \n");
 			}
 		} else {
-			if(frostedCounter > 1) {
+			if (frostedCounter > 1) {
 				board.receiveMessage("image " + posX + " " + posY + " images/frosted_chef_r.png \n");
 			} else {
 				board.receiveMessage("image " + posX + " " + posY + " images/chef_r.png \n");
 			}
 		}
 	}
-	
+
 	public void checkFrostCounter() {
 		if (frostedCounter > 0 && fieldAvailable) {
 			--frostedCounter;
 			System.out.println("Frostprotection reduced! Available for: " + frostedCounter + " fields");
 		}
 	}
-	
+
 	public static boolean save() {
 		boolean saved;
 		try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("savegame.bin"))) {
@@ -530,7 +527,7 @@ public class GameManager extends StartGame implements KeyListener {
 				errorMsg.setFont(createCustomFont(9f));
 				errorMsg.setHorizontalAlignment(SwingConstants.CENTER);
 				emptyName.add(errorMsg);
-				
+
 				emptyName.setAlwaysOnTop(true);
 				emptyName.setLocationRelativeTo(null);
 				emptyName.setVisible(true);

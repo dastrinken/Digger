@@ -80,16 +80,17 @@ public class Player implements Serializable {
 			dmgCounter = 3;
 			break;
 		case 6:
-			ptCounter = 17;
+			ptCounter = 18;
 			dmgCounter = 3;
 			break;		
 		case 7:
 			ptCounter = 9;
 			dmgCounter = 3;
 			break;	
-		//Hier neue Level einfügen
-			
-		//default case
+		case 10:
+			ptCounter = 9;
+			dmgCounter = 3;
+			break;
 		default:
 			ptCounter = level+4;
 			dmgCounter = 3;
