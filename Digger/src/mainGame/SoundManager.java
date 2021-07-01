@@ -27,8 +27,9 @@ public class SoundManager {
 
 	public static void setMusicVolume() {
 		float volume = (float) musicSliderValue / 1000;
-		if (volume < 0f || volume > 1f)
+		if (volume < 0f || volume > 1f) {
 			throw new IllegalArgumentException("Music volume not valid: " + volume);
+		}
 		FloatControl gainControl = (FloatControl) bgMusic.getControl(FloatControl.Type.MASTER_GAIN);
 		gainControl.setValue(10f * (float) Math.log10(volume));
 	}
@@ -40,11 +41,11 @@ public class SoundManager {
 		} else {
 			volume = 0f;
 		}
-		if (volume < 0f || volume > 1f)
+		if (volume < 0f || volume > 1f) {
 			throw new IllegalArgumentException("Sounds volume not valid: " + volume);
+		}
 		FloatControl gainControl = (FloatControl) soundEffect.getControl(FloatControl.Type.MASTER_GAIN);
 		gainControl.setValue(10f * (float) Math.log10(volume));
-
 	}
 
 	public static void menuBtnSound() {

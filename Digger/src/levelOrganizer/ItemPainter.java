@@ -1,4 +1,6 @@
-package mainGame;
+package levelOrganizer;
+
+import mainGame.GameManager;
 
 public class ItemPainter extends GameManager {
 	private static int xCollectable;
@@ -37,7 +39,7 @@ public class ItemPainter extends GameManager {
 		case 1:
 			for (int i = 0; i <= 19; i++) {
 				xsend.farbe2(i, 16, 0x95612D);
-				// board.receiveMessage("image " + i + " " + 16 + " - \n");
+				board.receiveMessage("image " + i + " " + 16 + " - \n");
 			}
 			break;
 		case 2:
@@ -65,9 +67,22 @@ public class ItemPainter extends GameManager {
 			xsend.farbe2(11, 12, 0x95612D);
 			board.receiveMessage("image " + 11 + " " + 12 + " - \n");
 			
-			for(int i = 11; i <= 17; i++) {
-				xsend.farbe2(i, 11, 0x95612D);
-				board.receiveMessage("image " + i + " " + 11 + " - \n");
+			for(int i = 2; i <= 17; i++) {
+				if(i != 10) {
+					xsend.farbe2(i, 11, 0x95612D);
+					board.receiveMessage("image " + i + " " + 11 + " - \n");
+				}
+			}
+			
+			xsend.farbe2(16, 10, 0x95612D);
+			board.receiveMessage("image " + 16 + " " + 10 + " - \n");
+
+			xsend.farbe2(5, 10, 0x95612D);
+			board.receiveMessage("image " + 5 + " " + 10 + " - \n");
+			
+			for(int i = 3; i <= 17; i++) {
+				xsend.farbe2(i, 9, 0x95612D);
+				board.receiveMessage("image " + i + " " + 9 + " - \n");
 			}
 			break;
 		case 7:
@@ -86,6 +101,20 @@ public class ItemPainter extends GameManager {
 			for(int i = 0; i < 3; i++) {
 				xsend.farbe2(i + 10, 14, 0x95612D);
 				board.receiveMessage("image " + (i + 10) + " " + 14 + " - \n");
+			}
+			break;
+		case 10:
+			for (int i = 0; i < 9; i++) {
+				xsend.farbe2(4, i + 6, 0x95612D);
+				board.receiveMessage("image " + 4 + " " + (i + 6) + " - \n");
+			}
+			for (int i = 0; i < 3; i++) {
+				xsend.farbe2(5, i + 6, 0x95612D);
+				board.receiveMessage("image " + 5 + " " + (i + 6) + " - \n");
+			}
+			for (int i = 0; i < 3; i++) {
+				xsend.farbe2(5, i + 12, 0x95612D);
+				board.receiveMessage("image " + 5 + " " + (i + 12) + " - \n");
 			}
 			break;
 		default:
@@ -112,6 +141,15 @@ public class ItemPainter extends GameManager {
 		case 5:
 			board.receiveMessage("image " + 0 + " " + 15 + " ./images/fire_tomato.jpg \n");
 			break;
+		case 6:
+			board.receiveMessage("image " + 0 + " " + 1 + " ./images/fire_tomato.jpg \n");
+			board.receiveMessage("image " + 0 + " " + 2 + " ./images/fire_tomato.jpg \n");
+			board.receiveMessage("image " + 1 + " " + 0 + " ./images/fire_tomato.jpg \n");
+			board.receiveMessage("image " + 1 + " " + 2 + " ./images/fire_tomato.jpg \n");
+			board.receiveMessage("image " + 2 + " " + 0 + " ./images/fire_tomato.jpg \n");
+			board.receiveMessage("image " + 2 + " " + 1 + " ./images/fire_tomato.jpg \n");
+			board.receiveMessage("image " + 2 + " " + 2 + " ./images/fire_tomato.jpg \n");
+			break;
 		default:
 			break;
 		}
@@ -129,6 +167,11 @@ public class ItemPainter extends GameManager {
 		switch (level) {
 		case 4:
 			board.receiveMessage("image " + 1 + " " + 9 + " ./images/fire_onion.jpg \n");
+			board.receiveMessage("image " + 1 + " " + 13 + " ./images/fire_onion.jpg \n");
+			break;
+		case 5:
+			board.receiveMessage("image " + 5 + " " + 5 + " ./images/fire_onion.jpg \n");
+			board.receiveMessage("image " + 17 + " " + 0 + " ./images/fire_onion.jpg \n");
 			break;
 		default:
 			break;
@@ -147,7 +190,7 @@ public class ItemPainter extends GameManager {
 		// Using switch-case for lava health for better performance
 		switch (level) {
 		case 4:
-			board.receiveMessage("image " + 1 + " " + 13 + " ./images/fire_life.jpg \n");
+			board.receiveMessage("image " + 0 + " " + 1 + " ./images/fire_life.jpg \n");
 			break;
 		case 5:
 			board.receiveMessage("image " + 7 + " " + 17 + " ./images/fire_life.jpg \n");
@@ -166,6 +209,16 @@ public class ItemPainter extends GameManager {
 
 			symbol = board.getSymbol(xCollectable, yCollectable);
 			symbol.getImageObject().setWorldWidth(0);
+		}
+		switch (level) {
+		case 5:
+			board.receiveMessage("image " + 4 + " " + 5 + " ./images/frost_fire.jpg \n");
+			break;
+		case 6:
+			board.receiveMessage("image " + 0 + " " + 0 + " ./images/frost_fire.jpg \n");
+			break;
+		default:
+			break;
 		}
 	}
 

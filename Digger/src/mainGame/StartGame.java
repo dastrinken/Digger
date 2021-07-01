@@ -5,7 +5,7 @@ import java.io.ObjectInputStream;
 
 import npcOrganizer.NpcManager;
 
-public class StartGame {
+abstract public class StartGame {
 	static GameManager manager;
 	static NpcManager npc;
 	public static Player player;
@@ -17,7 +17,6 @@ public class StartGame {
 	private static Cheat cheat = new Cheat();
 
 	public static void newGame() {
-		// Start a new game (& only a new game, use MainMenu.java to start the whole program)
 		player = new Player(lives, points, 1);
 		manager = GameManager.getInstance();
 		npc = NpcManager.getInstance();

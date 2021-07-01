@@ -126,6 +126,7 @@ public class MenuManager extends GameManager {
 		JMenuItem restart = new JMenuItem("Restart Level");
 		restart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				npc.stopEnemies(level);
 				setUpBoard();
 			}
 		});
