@@ -106,6 +106,9 @@ public class SoundManager {
 		case "gameOver":
 			location = "./sounds/gameOver.wav";
 			break;
+		case "diamond":
+			location = "./sounds/diamond.wav";
+			break;
 		}
 		try {
 			url = new File(location).toURI().toURL();
