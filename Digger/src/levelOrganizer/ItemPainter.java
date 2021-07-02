@@ -13,12 +13,14 @@ public class ItemPainter extends GameManager {
 	public static void setUpItems(int level) {
 		setUpEarth();
 		setUpLava();
+		setUpDiamonds();
 		setUpOnions(level);
 		setUpTomatoes(level);
 		setUpHealth(level);
 		setUpFrosties(level);
 		setUpSolids();
 		setUpEnemyPath(level);
+		setUpEmptyCauldrons();
 	}
 
 	private static void setUpEarth() {
@@ -33,7 +35,7 @@ public class ItemPainter extends GameManager {
 			}
 		}
 	}
-
+	//Enemies use board color to decide which way to go, removing the image (optional) makes enemies way visible from the beginning
 	private static void setUpEnemyPath(int level) {
 		switch (level) {
 		case 1:
@@ -122,6 +124,8 @@ public class ItemPainter extends GameManager {
 		}
 	}
 
+	//Switch-cases are just for items painted above hot (fire) earth. Use ItemArrays.java to define new levels.
+	//This goes for all painters (setUpOnions, setUpHealth etc...)
 	private static void setUpTomatoes(int level) {
 		for (int i = 0; i < collectableArray.length; i++) {
 			xCollectable = collectableArray[i][0];
@@ -150,6 +154,10 @@ public class ItemPainter extends GameManager {
 			board.receiveMessage("image " + 2 + " " + 1 + " ./images/fire_tomato.jpg \n");
 			board.receiveMessage("image " + 2 + " " + 2 + " ./images/fire_tomato.jpg \n");
 			break;
+		case 7:
+			board.receiveMessage("image " + 14 + " " + 0 + " ./images/fire_tomato.jpg \n");
+			board.receiveMessage("image " + 1 + " " + 18 + " ./images/fire_tomato.jpg \n");
+			break;
 		default:
 			break;
 		}
@@ -173,6 +181,15 @@ public class ItemPainter extends GameManager {
 			board.receiveMessage("image " + 5 + " " + 5 + " ./images/fire_onion.jpg \n");
 			board.receiveMessage("image " + 17 + " " + 0 + " ./images/fire_onion.jpg \n");
 			break;
+		case 6:
+			board.receiveMessage("image " + 12 + " " + 0 + " ./images/fire_onion.jpg \n");
+			board.receiveMessage("image " + 13 + " " + 15 + " ./images/fire_onion.jpg \n");
+			break;
+		case 7:
+			board.receiveMessage("image " + 17 + " " + 0 + " ./images/fire_onion.jpg \n");
+			board.receiveMessage("image " + 16 + " " + 0 + " ./images/fire_onion.jpg \n");
+			board.receiveMessage("image " + 15 + " " + 0 + " ./images/fire_onion.jpg \n");
+			break;
 		default:
 			break;
 		}
@@ -194,6 +211,9 @@ public class ItemPainter extends GameManager {
 			break;
 		case 5:
 			board.receiveMessage("image " + 7 + " " + 17 + " ./images/fire_life.jpg \n");
+			break;
+		case 7:
+			board.receiveMessage("image " + 19 + " " + 0 + " ./images/fire_life.jpg \n");
 			break;
 		default:
 			break;
@@ -257,5 +277,50 @@ public class ItemPainter extends GameManager {
 			symbol = board.getSymbol(xCollectable, yCollectable);
 			symbol.getImageObject().setWorldWidth(0);
 		}
+	}
+
+	private static void setUpDiamonds() {
+		for (int i = 0; i < diamondsArray.length; i++) {
+			xCollectable = diamondsArray[i][0];
+			yCollectable = diamondsArray[i][1];
+			board.receiveMessage("image " + xCollectable + " " + yCollectable + " ./images/diamond.jpg \n");
+
+			symbol = board.getSymbol(xCollectable, yCollectable);
+			symbol.getImageObject().setWorldWidth(0);
+		}
+	}
+	
+	private static void setUpEmptyCauldrons() {
+		for (int i = 0; i < emptyCauldronArray.length; i++) {
+			xCollectable = emptyCauldronArray[i][0];
+			yCollectable = emptyCauldronArray[i][1];
+			board.receiveMessage("image " + xCollectable + " " + yCollectable + " ./images/cauldron_empty.jpg \n");
+
+			symbol = board.getSymbol(xCollectable, yCollectable);
+			symbol.getImageObject().setWorldWidth(0);
+		}
+	}
+	
+	public static void activateCauldrons(int level) {
+		switch(level) {
+		case 7:
+			xCollectable = emptyCauldronArray[0][0];
+			yCollectable = emptyCauldronArray[0][1];
+			
+			break;
+		default:
+			break;
+		}
+		
+		for (int k = xCollectable - 1; k <= xCollectable + 1; k++) {
+			for (int l = yCollectable - 1; l <= yCollectable + 1; l++) {
+				for (int j = 0; j < lavaArray.length; j++) {
+					if (k < boardSize && k >= 0 && l < boardSize && l >= 0) {
+						board.receiveMessage("image " + k + " " + l + " ./images/earth_fire.jpg \n");
+					}
+				}
+			}
+		}
+		board.receiveMessage("image " + xCollectable + " " + yCollectable + " ./images/cauldron.jpg \n");
 	}
 }

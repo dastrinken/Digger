@@ -64,6 +64,9 @@ public class GameManager extends StartGame implements KeyListener {
 	protected static int[][] lavaArray;
 	protected static int[][] healthArray;
 	protected static int[][] frostArray;
+	protected static int[][] diamondsArray;
+	protected static int[][] emptyCauldronArray;
+	public static boolean emptyCauldronsActive;
 
 	protected GameManager() {
 		System.out.println("Objektinstanz GameManager gebildet.");
@@ -148,6 +151,7 @@ public class GameManager extends StartGame implements KeyListener {
 	}
 
 	public static void setUpBoard() {
+		emptyCauldronsActive = false;
 		frostedCounter = 0;
 		level = player.getLevel();
 		collectedPoints = player.getPoints();
@@ -160,6 +164,8 @@ public class GameManager extends StartGame implements KeyListener {
 		lavaArray = ItemArrays.getLavaPos(level);
 		healthArray = ItemArrays.getHealthPos(level);
 		frostArray = ItemArrays.getFrostPos(level);
+		diamondsArray = ItemArrays.getDiamondPos(level);
+		emptyCauldronArray = ItemArrays.getEmptyCauldronPos(level);
 
 		player.resetCounter(level);
 		lvlDisplay.setText("Level " + String.valueOf(level));
@@ -205,6 +211,18 @@ public class GameManager extends StartGame implements KeyListener {
 				onionsArray[i][0] = 999;
 				onionsArray[i][1] = 999;
 				CollectPts(posX, posY, "onion");
+			}
+		}
+		// Check for Diamonds
+		for (int i = 0; i < diamondsArray.length; i++) {
+			x = diamondsArray[i][0];
+			y = diamondsArray[i][1];
+			if (x == posX && y == posY) {
+				diamondsArray[i][0] = 999;
+				diamondsArray[i][1] = 999;
+				CollectPts(posX, posY, "diamond");
+				emptyCauldronsActive = true;
+				ItemPainter.activateCauldrons(level);
 			}
 		}
 		// Check for Health plus
@@ -257,6 +275,19 @@ public class GameManager extends StartGame implements KeyListener {
 				}
 			}
 		}
+		// empty Cauldrons
+		if (emptyCauldronsActive == false) {
+			for (int i = 0; i < emptyCauldronArray.length; i++) {
+				for (int j = 0; j < 2; j++) {
+					x = emptyCauldronArray[i][0];
+					y = emptyCauldronArray[i][1];
+					if (x == posX && y == posY) {
+						fieldAvailable = false;
+						SoundManager.playSound("stone");
+					}
+				}
+			}
+		}
 		return fieldAvailable;
 	}
 
@@ -280,6 +311,34 @@ public class GameManager extends StartGame implements KeyListener {
 									if (frostedCounter == 0) {
 										lavaField = true;
 										afflictDmg();
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		if(emptyCauldronsActive == true) {
+			for (int i = 0; i < emptyCauldronArray.length; i++) {
+				for (int j = 0; j < 2; j++) {
+					x = emptyCauldronArray[i][0];
+					y = emptyCauldronArray[i][1];
+					if (lavaField == false) {
+						if (x == posX && y == posY) {
+							lavaField = true;
+							loseLife();
+							System.out.println("Game Over!");
+							// Game Over!
+						} else {
+							for (int k = x - 1; k <= x + 1; k++) {
+								for (int l = y - 1; l <= y + 1; l++) {
+									if (k == posX && l == posY) {
+										if (frostedCounter == 0) {
+											lavaField = true;
+											afflictDmg();
+										}
 									}
 								}
 							}
@@ -350,6 +409,10 @@ public class GameManager extends StartGame implements KeyListener {
 		case "onion":
 			collectedPoints += 5;
 			SoundManager.playSound("onion");
+			break;
+		case "diamond":
+			collectedPoints += 50;
+			SoundManager.playSound("diamond");
 			break;
 		}
 		if (collectableCounter == 0) {

@@ -208,7 +208,6 @@ public class Pepper {
 					moveTo = lastMove;
 				}
 			}
-			System.out.println("Roll="+roll+" moveTo="+moveTo);
 		} else if(fieldAvailable(1)) {
 			roll = rnd.nextInt(2) + 1;
 			if(roll % 2 != 0) {
@@ -233,7 +232,6 @@ public class Pepper {
 				} else {
 					moveTo = 3;
 				}
-				System.out.println("Roll="+roll+" moveTo="+moveTo);
 			} else {
 				if(roll % 2 != 0) {
 					moveTo = 2;

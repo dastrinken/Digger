@@ -101,6 +101,7 @@ public abstract class ItemArrays extends GameManager {
 			break;
 		case 6:
 			tomatos = new int[18][2];
+
 			tomatos[0][0] = 0;
 			tomatos[0][1] = 1;
 
@@ -149,13 +150,13 @@ public abstract class ItemArrays extends GameManager {
 			tomatos[15][0] = 13;
 			tomatos[15][1] = 18;
 
-			tomatos[16][0] = 14;
-			tomatos[16][1] = 1;
+			tomatos[16][0] = 3;
+			tomatos[16][1] = 12;
 
 			tomatos[17][0] = 0;
 			tomatos[17][1] = 18;
-			break;
 
+			break;
 		case 7:
 			tomatos = new int[9][2];
 
@@ -185,6 +186,45 @@ public abstract class ItemArrays extends GameManager {
 
 			tomatos[8][0] = 19;
 			tomatos[8][1] = 18;
+			break;
+		case 8:
+			tomatos = new int[6][2];
+			tomatos[0][0] = 2;
+			tomatos[0][1] = 19;
+
+			tomatos[1][0] = 4;
+			tomatos[1][1] = 19;
+
+			tomatos[2][0] = 8;
+			tomatos[2][1] = 19;
+
+			tomatos[3][0] = 0;
+			tomatos[3][1] = 0;
+
+			tomatos[4][0] = 10;
+			tomatos[4][1] = 0;
+
+			tomatos[5][0] = 16;
+			tomatos[5][1] = 0;
+
+			break;
+		case 9:
+			tomatos = new int[5][2];
+
+			tomatos[0][0] = 0;
+			tomatos[0][1] = 7;
+
+			tomatos[1][0] = 4;
+			tomatos[1][1] = 2;
+
+			tomatos[2][0] = 6;
+			tomatos[2][1] = 2;
+
+			tomatos[3][0] = 7;
+			tomatos[3][1] = 2;
+
+			tomatos[4][0] = 10;
+			tomatos[4][1] = 13;
 			break;
 		case 10:
 			tomatos = new int[9][2];
@@ -801,7 +841,100 @@ public abstract class ItemArrays extends GameManager {
 				solids[i + 61][1] = i + 6;
 			}
 			break;
+		case 8:
+			solids = new int[39][2];
 
+			for (int i = 0; i <= 3; i++) {
+				solids[i][0] = 3;
+				solids[i][1] = i + 16;
+			}
+			for (int i = 0; i <= 3; i++) {
+				solids[i + 4][0] = 7;
+				solids[i + 4][1] = i + 16;
+			}
+			for (int i = 0; i <= 3; i++) {
+				solids[i + 8][0] = 11;
+				solids[i + 8][1] = i + 16;
+			}
+			for (int i = 0; i <= 3; i++) {
+				solids[i + 12][0] = 15;
+				solids[i + 12][1] = i + 16;
+			}
+			for (int i = 0; i <= 2; i++) {
+				solids[i + 16][0] = 19;
+				solids[i + 16][1] = i + 16;
+			}
+			for (int i = 0; i <= 3; i++) {
+				solids[i + 19][0] = 3;
+				solids[i + 19][1] = i;
+			}
+			for (int i = 0; i <= 3; i++) {
+				solids[i + 23][0] = 7;
+				solids[i + 23][1] = i;
+			}
+			for (int i = 0; i <= 3; i++) {
+				solids[i + 27][0] = 11;
+				solids[i + 27][1] = i;
+			}
+			for (int i = 0; i <= 3; i++) {
+				solids[i + 31][0] = 15;
+				solids[i + 31][1] = i;
+
+			}
+			for (int i = 0; i <= 3; i++) {
+				solids[i + 35][0] = 19;
+				solids[i + 35][1] = i;
+			}
+
+			break;
+		case 9:
+			solids = new int[61][2];
+
+			for (int i = 0; i <= 4; i++) {
+				solids[i][0] = i;
+				solids[i][1] = 5;
+			}
+			for (int i = 0; i <= 4; i++) {
+				solids[i + 5][0] = i + 1;
+				solids[i + 5][1] = 1;
+			}
+			for (int i = 0; i <= 5; i++) {
+				solids[i + 10][0] = i + 2;
+				solids[i + 10][1] = 3;
+			}
+			for (int i = 0; i <= 3; i++) {
+				solids[i + 16][0] = 9;
+				solids[i + 16][1] = i + 9;
+			}
+			for (int i = 0; i <= 3; i++) {
+				solids[i + 20][0] = 8;
+				solids[i + 20][1] = i + 1;
+			}
+			for (int i = 0; i <= 6; i++) {
+				solids[i + 24][0] = i;
+				solids[i + 24][1] = 9;
+			}
+			for (int i = 0; i <= 9; i++) {
+				solids[i + 31][0] = 9;
+				solids[i + 31][1] = i + 6;
+			}
+			for (int i = 0; i <= 8; i++) {
+				solids[i + 41][0] = 11;
+				solids[i + 41][1] = i + 6;
+			}
+
+			solids[50][0] = 4;
+			solids[50][1] = 4;
+
+			solids[51][0] = 5;
+			solids[51][1] = 2;
+
+			for (int i = 11; i <= 19; i++) {
+				solids[i + 41][0] = i;
+				solids[i + 41][1] = 5;
+			}
+
+			break;
 		case 10:
 			solids = new int[75][2];
 			for (int i = 0; i <= 10; i++) {
@@ -949,12 +1082,23 @@ public abstract class ItemArrays extends GameManager {
 			onions[2][1] = 5;
 			break;
 		case 6:
-			onions = new int[2][2];
+			onions = new int[5][2];
+
 			onions[0][0] = 3;
 			onions[0][1] = 4;
 
 			onions[1][0] = 4;
 			onions[1][1] = 3;
+
+			onions[2][0] = 14;
+			onions[2][1] = 1;
+
+			onions[3][0] = 13;
+			onions[3][1] = 15;
+
+			onions[4][0] = 12;
+			onions[4][1] = 0;
+
 			break;
 		case 7:
 			onions = new int[4][2];
@@ -970,6 +1114,47 @@ public abstract class ItemArrays extends GameManager {
 
 			onions[3][0] = 17;
 			onions[3][1] = 0;
+
+			break;
+		case 8:
+			onions = new int[8][2];
+
+			onions[0][0] = 18;
+			onions[0][1] = 9;
+
+			onions[1][0] = 9;
+			onions[1][1] = 11;
+
+			onions[2][0] = 12;
+			onions[2][1] = 19;
+
+			onions[3][0] = 17;
+			onions[3][1] = 0;
+
+			onions[4][0] = 14;
+			onions[4][1] = 0;
+
+			onions[5][0] = 16;
+			onions[5][1] = 11;
+
+			onions[6][0] = 7;
+			onions[6][1] = 8;
+
+			onions[7][0] = 14;
+			onions[7][1] = 11;
+
+			break;
+		case 9:
+			onions = new int[3][2];
+
+			onions[0][0] = 0;
+			onions[0][1] = 8;
+
+			onions[1][0] = 2;
+			onions[1][1] = 4;
+
+			onions[2][0] = 11;
+			onions[2][1] = 15;
 
 			break;
 		case 10:
@@ -1220,6 +1405,48 @@ public abstract class ItemArrays extends GameManager {
 			lava[6][1] = 1;
 
 			break;
+		case 8:
+			lava = new int[12][2];
+
+			int j = 1;
+			for (int i = 0; i <= 4; i++) {
+				lava[i][0] = j;
+				lava[i][1] = 17;
+
+				lava[i + 5][0] = j;
+				lava[i + 5][1] = 2;
+
+				j = j + 4;
+			}
+			lava[10][0] = 6;
+			lava[10][1] = 9;
+
+			lava[11][0] = 15;
+			lava[11][1] = 12;
+
+			break;
+		case 9:
+			lava = new int[6][2];
+
+			lava[0][0] = 2;
+			lava[0][1] = 6;
+
+			lava[1][0] = 2;
+			lava[1][1] = 8;
+
+			lava[2][0] = 0;
+			lava[2][1] = 3;
+
+			lava[3][0] = 10;
+			lava[3][1] = 14;
+
+			lava[4][0] = 7;
+			lava[4][1] = 9;
+
+			lava[5][0] = 7;
+			lava[5][1] = 11;
+
+			break;
 		case 10:
 			lava = new int[7][2];
 
@@ -1299,6 +1526,24 @@ public abstract class ItemArrays extends GameManager {
 
 			health[0][0] = 19;
 			health[0][1] = 0;
+
+			break;
+		case 8:
+			health = new int[1][2];
+
+			health[0][0] = 4;
+			health[0][1] = 0;
+			break;
+		case 9:
+			health = new int[3][2];
+			health[0][0] = 0;
+			health[0][1] = 6;
+
+			health[1][0] = 3;
+			health[1][1] = 4;
+
+			health[2][0] = 8;
+			health[2][1] = 12;
 
 			break;
 		case 10:
@@ -1400,7 +1645,52 @@ public abstract class ItemArrays extends GameManager {
 			frosties[2][1] = 5;
 
 			break;
+		case 8:
+			frosties = new int[10][2];
 
+			frosties[0][0] = 16;
+			frosties[0][1] = 19;
+
+			frosties[1][0] = 14;
+			frosties[1][1] = 19;
+
+			frosties[2][0] = 2;
+			frosties[2][1] = 15;
+
+			frosties[3][0] = 3;
+			frosties[3][1] = 15;
+
+			frosties[4][0] = 7;
+			frosties[4][1] = 15;
+
+			frosties[5][0] = 0;
+			frosties[5][1] = 4;
+
+			frosties[6][0] = 3;
+			frosties[6][1] = 4;
+
+			frosties[7][0] = 11;
+			frosties[7][1] = 15;
+
+			frosties[8][0] = 15;
+			frosties[8][1] = 4;
+
+			frosties[9][0] = 10;
+			frosties[9][1] = 4;
+
+			break;
+		case 9:
+			frosties = new int[3][2];
+
+			frosties[0][0] = 4;
+			frosties[0][1] = 7;
+
+			frosties[1][0] = 0;
+			frosties[1][1] = 1;
+
+			frosties[2][0] = 2;
+			frosties[2][1] = 10;
+			break;
 		case 10:
 			frosties = new int[3][2];
 
@@ -1430,5 +1720,37 @@ public abstract class ItemArrays extends GameManager {
 			break;
 		}
 		return frosties;
+	}
+
+	public static int[][] getDiamondPos(int level) {
+		int[][] diamond = null;
+		switch (level) {
+		case 7:
+			diamond = new int[1][2];
+
+			diamond[0][0] = 10;
+			diamond[0][1] = 12;
+			break;
+		default:
+			diamond = new int[0][0];
+			break;
+		}
+		return diamond;
+	}
+
+	public static int[][] getEmptyCauldronPos(int level) {
+		int[][] emptyCauldron = null;
+		switch (level) {
+		case 7:
+			emptyCauldron = new int[1][2];
+
+			emptyCauldron[0][0] = 9;
+			emptyCauldron[0][1] = 7;
+			break;
+		default:
+			emptyCauldron = new int[0][0];
+			break;
+		}
+		return emptyCauldron;
 	}
 }

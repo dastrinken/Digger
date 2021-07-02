@@ -60,6 +60,7 @@ public class Player implements Serializable {
 	}
 
 	public void resetCounter(int level) {
+		dmgCounter = 3;
 		switch (level) {
 		case 1:
 			ptCounter = 5;
@@ -69,31 +70,30 @@ public class Player implements Serializable {
 			break;
 		case 3: 
 			ptCounter = 6;
-			dmgCounter = 3;
 			break;
 		case 4: 
 			ptCounter = 5;
-			dmgCounter = 3;
 			break;
 		case 5: 
 			ptCounter = 5;
-			dmgCounter = 3;
 			break;
 		case 6:
 			ptCounter = 18;
-			dmgCounter = 3;
 			break;		
 		case 7:
 			ptCounter = 9;
-			dmgCounter = 3;
 			break;	
+		case 8:
+			ptCounter = 6;
+			break;	
+		case 9:
+			ptCounter = 5;
+			break;
 		case 10:
 			ptCounter = 9;
-			dmgCounter = 3;
 			break;
 		default:
 			ptCounter = level+4;
-			dmgCounter = 3;
 			break;
 		}
 		
