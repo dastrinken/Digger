@@ -1,9 +1,6 @@
 package mainGame;
 
-import java.io.Serializable;
-
-@SuppressWarnings("serial")
-public class Player implements Serializable {
+public class Player {
 	private int points;
 	private int lives;
 	private String name;

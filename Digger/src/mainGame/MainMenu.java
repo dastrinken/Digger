@@ -29,6 +29,9 @@ import javax.swing.UIManager.LookAndFeelInfo;
  */
 
 public class MainMenu {
+	/**
+	 * Entry point, main method starts the game menu.
+	 */
 	public static JFrame mainFrame;
 	
 	public static ImageIcon icon = new ImageIcon("./images/icon.png");

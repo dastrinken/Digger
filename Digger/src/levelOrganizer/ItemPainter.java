@@ -18,9 +18,9 @@ public class ItemPainter extends GameManager {
 		setUpTomatoes(level);
 		setUpHealth(level);
 		setUpFrosties(level);
-		setUpSolids();
 		setUpEnemyPath(level);
 		setUpEmptyCauldrons();
+		setUpSolids();
 	}
 
 	private static void setUpEarth() {
@@ -307,14 +307,18 @@ public class ItemPainter extends GameManager {
 			xCollectable = emptyCauldronArray[0][0];
 			yCollectable = emptyCauldronArray[0][1];
 			
+			paintActivatedCauldrons(xCollectable, yCollectable);
+			
 			break;
 		default:
 			break;
 		}
-		
-		for (int k = xCollectable - 1; k <= xCollectable + 1; k++) {
-			for (int l = yCollectable - 1; l <= yCollectable + 1; l++) {
-				for (int j = 0; j < lavaArray.length; j++) {
+	}
+	
+	public static void paintActivatedCauldrons(int x, int y) {
+		for (int k = x - 1; k <= x + 1; k++) {
+			for (int l = y - 1; l <= y + 1; l++) {
+				for (int j = 0; j < emptyCauldronArray.length; j++) {
 					if (k < boardSize && k >= 0 && l < boardSize && l >= 0) {
 						board.receiveMessage("image " + k + " " + l + " ./images/earth_fire.jpg \n");
 					}
@@ -322,5 +326,6 @@ public class ItemPainter extends GameManager {
 			}
 		}
 		board.receiveMessage("image " + xCollectable + " " + yCollectable + " ./images/cauldron.jpg \n");
+		setUpSolids();
 	}
 }
