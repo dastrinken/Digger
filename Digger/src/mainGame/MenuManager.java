@@ -1,7 +1,9 @@
 package mainGame;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -18,6 +20,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.SwingConstants;
@@ -26,6 +29,7 @@ import javax.swing.JTextField;
 
 public class MenuManager extends GameManager {
 	public static ImageIcon icon = new ImageIcon("./images/solid.png");
+	public static ImageIcon backgroundWin = new ImageIcon("./images/win.jpg");
 	private static File saveFile = new File("savegame.bin");
 	private static File highScore = new File("highScore.txt");
 	private static JCheckBox musicCheckbox;
@@ -316,13 +320,33 @@ public class MenuManager extends GameManager {
 	 */
 	public static void getGameOverMenu(int level) {
 		String hintString;
+		String gameOverString;
+		
+		if(level >= maxLevel) {
+			gameOverString = "You won! :D";
+		} else {
+			gameOverString = "Game Over :(";
+		}
 		gameOver.setSize(500, 200);
+		
 		gameOver.getContentPane().setLayout(null);
 		gameOver.setUndecorated(true);
 
-		JLabel gameOverLbl = new JLabel("Game Over :(");
+		@SuppressWarnings("serial")
+		JPanel backgroundPane = new JPanel() {
+			public void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				g.drawImage(backgroundWin.getImage(), 0, 0, this);
+			}
+		};
+		backgroundPane.setBounds(0, 0, 500, 200);
+		backgroundPane.setLayout(null);
+		gameOver.getContentPane().add(backgroundPane);
+
+		JLabel gameOverLbl = new JLabel(gameOverString);
 		gameOverLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		gameOverLbl.setBounds(114, 11, 282, 23);
+		gameOverLbl.setForeground(new Color(0,0,0,255));
 		gameOverLbl.setFont(createCustomFont(13f));
 
 		JButton gameOverBtn = new JButton("Save Highscore");
@@ -345,8 +369,8 @@ public class MenuManager extends GameManager {
 		});
 		gameOverBtn.setBounds(114, 159, 181, 30);
 
-		gameOver.getContentPane().add(gameOverLbl);
-		gameOver.getContentPane().add(gameOverBtn);
+		backgroundPane.add(gameOverLbl);
+		backgroundPane.add(gameOverBtn);
 
 		switch (level) {
 		case 1:
@@ -359,21 +383,24 @@ public class MenuManager extends GameManager {
 			hintString = "Hint: The floor is lava!";
 			break;
 		default:
-			hintString = "<html><body style=\"text-align:center; margin: auto;\"><p><u>Hint:</u><br/><br/>Some blocks afflict damage.<br/>Try to avoid those, okay?</p></body></html>";
-			break;
+			if(level >= maxLevel) {
+				hintString = "Enter your highscore:";
+			} else {
+				hintString = "<html><body style=\"text-align:center; margin: auto;\"><p><u>Hint:</u><br/><br/>Some blocks afflict damage.<br/>Try to avoid those, okay?</p></body></html>";
+			}break;
 		}
 
 		JLabel hintLbl = new JLabel(hintString);
 		hintLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		hintLbl.setBounds(10, 36, 480, 96);
 		hintLbl.setFont(createCustomFont(9f));
-		gameOver.getContentPane().add(hintLbl);
+		backgroundPane.add(hintLbl);
 
 		nameField = new JTextField();
 		nameField.setHorizontalAlignment(SwingConstants.CENTER);
 		nameField.setText("Enter your name");
 		nameField.setBounds(114, 135, 282, 25);
-		gameOver.getContentPane().add(nameField);
+		backgroundPane.add(nameField);
 		nameField.setColumns(10);
 
 		JButton quitBtn = new JButton("Quit");
@@ -385,7 +412,7 @@ public class MenuManager extends GameManager {
 				MainMenu.setFrame();
 			}
 		});
-		gameOver.getContentPane().add(quitBtn);
+		backgroundPane.add(quitBtn);
 
 		gameOver.setResizable(false);
 		gameOver.setAlwaysOnTop(true);

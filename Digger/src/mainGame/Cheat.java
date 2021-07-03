@@ -38,7 +38,7 @@ public class Cheat {
 	public void chooseAll() {
 		JFrame chooseFrame = new JFrame();
 		chooseFrame.setTitle("Levelchooser (Cheat)");
-		chooseFrame.setSize(200, 200);
+		chooseFrame.setSize(200, 250);
 		chooseFrame.getContentPane().setLayout(null);
 
 		lvlField = new JTextField();
@@ -77,7 +77,7 @@ public class Cheat {
 		ptsField.setColumns(10);
 
 		JButton startBtn = new JButton("Start!");
-		startBtn.setBounds(10, 117, 155, 33);
+		startBtn.setBounds(10, 176, 155, 33);
 		startBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				level = Integer.valueOf(lvlField.getText());
@@ -88,6 +88,12 @@ public class Cheat {
 			}
 		});
 		chooseFrame.getContentPane().add(startBtn);
+		
+		JLabel cautionLbl = new JLabel("<html>This is for testing purposes.<br/>Don't expect anything to work properly.</html>");
+		cautionLbl.setVerticalAlignment(SwingConstants.TOP);
+		cautionLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		cautionLbl.setBounds(10, 110, 155, 55);
+		chooseFrame.getContentPane().add(cautionLbl);
 
 		chooseFrame.setLocationRelativeTo(null);
 		chooseFrame.setAlwaysOnTop(true);

@@ -28,10 +28,15 @@ import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 
 public class GameManager extends StartGame implements KeyListener {
+	/**
+	 * Main class to organize most of the game.
+	 * 
+	 */
 	// General variables
 	private static GameManager manager = new GameManager();
 	protected static boolean move = true;
 	private static boolean moveLeft = true;
+	protected static int maxLevel = 10;
 
 	// Menu and display variables
 	public static Font customFont;
@@ -154,40 +159,44 @@ public class GameManager extends StartGame implements KeyListener {
 		emptyCauldronsActive = false;
 		frostedCounter = 0;
 		level = player.getLevel();
-		collectedPoints = player.getPoints();
-		collectableCounter = player.getPtCounter();
-		dmgCounter = player.getDmgCounter();
+		if(level > maxLevel) {
+			MenuManager.getGameOverMenu(level);
+		} else {
+			collectedPoints = player.getPoints();
+			collectableCounter = player.getPtCounter();
+			dmgCounter = player.getDmgCounter();
 
-		collectableArray = ItemArrays.getTomatoPos(level);
-		solidsArray = ItemArrays.getSolidsPos(level);
-		onionsArray = ItemArrays.getOnionsPos(level);
-		lavaArray = ItemArrays.getLavaPos(level);
-		healthArray = ItemArrays.getHealthPos(level);
-		frostArray = ItemArrays.getFrostPos(level);
-		diamondsArray = ItemArrays.getDiamondPos(level);
-		emptyCauldronArray = ItemArrays.getEmptyCauldronPos(level);
+			collectableArray = ItemArrays.getTomatoPos(level);
+			solidsArray = ItemArrays.getSolidsPos(level);
+			onionsArray = ItemArrays.getOnionsPos(level);
+			lavaArray = ItemArrays.getLavaPos(level);
+			healthArray = ItemArrays.getHealthPos(level);
+			frostArray = ItemArrays.getFrostPos(level);
+			diamondsArray = ItemArrays.getDiamondPos(level);
+			emptyCauldronArray = ItemArrays.getEmptyCauldronPos(level);
 
-		player.resetCounter(level);
-		lvlDisplay.setText("Level " + String.valueOf(level));
-		move = true;
-		posX = boardSize - 1;
-		posY = boardSize - 1;
+			player.resetCounter(level);
+			lvlDisplay.setText("Level " + String.valueOf(level));
+			move = true;
+			posX = boardSize - 1;
+			posY = boardSize - 1;
 
-		graphic.setLocationRelativeTo(null);
-		graphic.setVisible(false);
+			graphic.setLocationRelativeTo(null);
+			graphic.setVisible(false);
 
-		xsend.groesse(boardSize, boardSize);
-		xsend.flaeche(0x95612D);
-		xsend.formen("none");
-		xsend.rahmen(XSendAdapter.BLACK);
-		board.receiveMessage("image " + posX + " " + posY + " images/chef.png \n");
-		symbol = board.getSymbol(posX, posY);
-		symbol.getImageObject().setWorldWidth(0);
+			xsend.groesse(boardSize, boardSize);
+			xsend.flaeche(0x95612D);
+			xsend.formen("none");
+			xsend.rahmen(XSendAdapter.BLACK);
+			board.receiveMessage("image " + posX + " " + posY + " images/chef.png \n");
+			symbol = board.getSymbol(posX, posY);
+			symbol.getImageObject().setWorldWidth(0);
 
-		ItemPainter.setUpItems(level);
-		npc.setUpEnemies(level);
-		updatePoints();
-		graphic.setVisible(true);
+			ItemPainter.setUpItems(level);
+			npc.setUpEnemies(level);
+			updatePoints();
+			graphic.setVisible(true);
+		}
 	}
 
 	public void checkPosition(int posX, int posY) {
