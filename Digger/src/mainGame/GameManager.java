@@ -360,7 +360,7 @@ public class GameManager extends StartGame implements KeyListener {
 
 	// method lavaPainter, used for repainting lava on floor after player digged
 	// through
-	public boolean lavaPainter(int posX, int posY) {
+	public static boolean lavaPainter(int posX, int posY) {
 		boolean repaint = false;
 		int x, y;
 		for (int i = 0; i < lavaArray.length; i++) {

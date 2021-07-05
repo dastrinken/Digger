@@ -145,9 +145,14 @@ public class Pepper {
 	}
 	
 	protected void movePepper(int moveTo) {
+		//checking for lavaField and repainting
+		if (GameManager.lavaPainter(enPosX, enPosY)) {
+			GameManager.board.receiveMessage("image " + enPosX + " " + enPosY + " ./images/earth_fire.jpg \n");
+		} else {
+			GameManager.board.receiveMessage("image " + enPosX + " " + enPosY + " - \n");
+		}
 		// UP
 		if (moveTo == 0 && fieldAvailable(0)) {
-			GameManager.board.receiveMessage("image " + enPosX + " " + enPosY + " - \n");
 			GameManager.board.receiveMessage("image " + enPosX + " " + (enPosY + 1) + " ./images/pepper.png \n");
 
 			enPosY += 1;
@@ -155,7 +160,6 @@ public class Pepper {
 		}
 		// DOWN
 		else if (moveTo == 1 && fieldAvailable(1)) {
-			GameManager.board.receiveMessage("image " + enPosX + " " + enPosY + " - \n");
 			GameManager.board.receiveMessage("image " + enPosX + " " + (enPosY - 1) + " ./images/pepper.png \n");
 
 			enPosY -= 1;
@@ -163,7 +167,6 @@ public class Pepper {
 		}
 		// LEFT
 		else if (moveTo == 2 && fieldAvailable(2)) {
-			GameManager.board.receiveMessage("image " + enPosX + " " + enPosY + " - \n");
 			GameManager.board.receiveMessage("image " + (enPosX - 1) + " " + enPosY + " ./images/pepper.png \n");
 
 			enPosX -= 1;
@@ -171,7 +174,6 @@ public class Pepper {
 		}
 		// RIGHT
 		else if (moveTo == 3 && fieldAvailable(3)) {
-			GameManager.board.receiveMessage("image " + enPosX + " " + enPosY + " - \n");
 			GameManager.board.receiveMessage("image " + (enPosX + 1) + " " + enPosY + " ./images/pepper.png \n");
 
 			enPosX += 1;

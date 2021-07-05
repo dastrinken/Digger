@@ -29,7 +29,7 @@ import javax.swing.JTextField;
 
 public class MenuManager extends GameManager {
 	public static ImageIcon icon = new ImageIcon("./images/solid.png");
-	public static ImageIcon backgroundWin = new ImageIcon("./images/win.jpg");
+	public static ImageIcon backgroundWin = new ImageIcon("./images/win.png");
 	private static File saveFile = new File("savegame.bin");
 	private static File highScore = new File("highScore.txt");
 	private static JCheckBox musicCheckbox;
@@ -140,7 +140,7 @@ public class MenuManager extends GameManager {
 			public void actionPerformed(ActionEvent e) {
 				JFrame helpControls = new JFrame();
 				helpControls.setIconImage(icon.getImage());
-				helpControls.setContentPane(new JLabel(new ImageIcon("./images/helpMenuMovement.png")));
+				helpControls.setContentPane(new JLabel(new ImageIcon("./images/helpMenuMovement.jpg")));
 				helpControls.setSize(510, 210);
 				helpControls.setResizable(false);
 				helpControls.setLocationRelativeTo(null);
@@ -323,7 +323,7 @@ public class MenuManager extends GameManager {
 		String gameOverString;
 		
 		if(level >= maxLevel) {
-			gameOverString = "You won! :D";
+			gameOverString = "You win! :D";
 		} else {
 			gameOverString = "Game Over :(";
 		}
@@ -381,6 +381,18 @@ public class MenuManager extends GameManager {
 			break;
 		case 3:
 			hintString = "Hint: The floor is lava!";
+			break;
+		case 4:
+			hintString = "Patience!";
+			break;
+		case 5:
+			hintString = "Think first.";
+			break;
+		case 6:
+			hintString = "It's not always the obvious.";
+			break;
+		case 7:
+			hintString = "Don't be greedy.";
 			break;
 		default:
 			if(level >= maxLevel) {

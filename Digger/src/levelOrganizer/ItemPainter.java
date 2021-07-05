@@ -105,6 +105,15 @@ public class ItemPainter extends GameManager {
 				board.receiveMessage("image " + (i + 10) + " " + 14 + " - \n");
 			}
 			break;
+		case 9:
+			for(int i = 16; i < 20; i++) {
+				xsend.farbe2(i, 16, 0x95612D);
+				board.receiveMessage("image " + i + " " + 16 + " - \n");
+
+				xsend.farbe2(16, i, 0x95612D);
+				board.receiveMessage("image " + 16 + " " + i + " - \n");
+			}
+			break;
 		case 10:
 			for (int i = 0; i < 9; i++) {
 				xsend.farbe2(4, i + 6, 0x95612D);
@@ -158,6 +167,9 @@ public class ItemPainter extends GameManager {
 			board.receiveMessage("image " + 14 + " " + 0 + " ./images/fire_tomato.jpg \n");
 			board.receiveMessage("image " + 1 + " " + 18 + " ./images/fire_tomato.jpg \n");
 			break;
+		case 9:
+			board.receiveMessage("image " + 10 + " " + 13 + " ./images/fire_tomato.jpg \n");
+			break;
 		default:
 			break;
 		}
@@ -190,6 +202,14 @@ public class ItemPainter extends GameManager {
 			board.receiveMessage("image " + 16 + " " + 0 + " ./images/fire_onion.jpg \n");
 			board.receiveMessage("image " + 15 + " " + 0 + " ./images/fire_onion.jpg \n");
 			break;
+		case 8:
+			board.receiveMessage("image " + 7 + " " + 8 + " ./images/fire_onion.jpg \n");
+			board.receiveMessage("image " + 16 + " " + 11 + " ./images/fire_onion.jpg \n");
+			board.receiveMessage("image " + 14 + " " + 11 + " ./images/fire_onion.jpg \n");
+			break;
+		case 9:
+			board.receiveMessage("image " + 11 + " " + 15 + " ./images/fire_onion.jpg \n");
+			break;
 		default:
 			break;
 		}
@@ -214,6 +234,9 @@ public class ItemPainter extends GameManager {
 			break;
 		case 7:
 			board.receiveMessage("image " + 19 + " " + 0 + " ./images/fire_life.jpg \n");
+			break;
+		case 9:
+			board.receiveMessage("image " + 8 + " " + 12 + " ./images/fire_life.jpg \n");
 			break;
 		default:
 			break;
