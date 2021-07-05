@@ -3,7 +3,8 @@ package npcOrganizer;
 import mainGame.GameManager;
 
 public class NpcManager {
-	private Pepper pepper, pepper2, pepper3, pepper4, pepper5, pepper6, pepper7, pepper8, pepper9;
+	private Pepper pepper;
+	private Pepper pepperArray[];
 	
 	private static NpcManager manager;
 
@@ -19,6 +20,7 @@ public class NpcManager {
 	}
 	
 	//if we decide to add more than one enemy, this should be helpful
+	//currently there's only pepper
 	public void setUpEnemies(int level) {
 		//insert all enemies to create for each level
 		switch(level) {
@@ -34,6 +36,9 @@ public class NpcManager {
 		case 7:
 			setUpPepper(level);
 			break;
+		case 9:
+			setUpPepper(level);
+			break;
 		case 10:
 			setUpPepper(level);
 			break;
@@ -43,7 +48,8 @@ public class NpcManager {
 	}
 	
 	public void setUpPepper(int level) {
-		//use case 1 as a template
+		//use case 1 as a template for one enemy
+		//case 2 as a template for more than one
 		switch(level) {
 		case 1:
 			//instantiating a new Pepper object, attributes are x / y coordinates (start position).
@@ -56,15 +62,15 @@ public class NpcManager {
 			pepper.startPepper();
 			break;
 		case 2:
-			pepper = new Pepper(6, 18);
-			pepper.pepperBehaviour();
-			pepper.pepperPaint(level);
-			pepper.startPepper();
-			
-			pepper2 = new Pepper(6, 16);
-			pepper2.pepperBehaviour();
-			pepper2.pepperPaint(level);
-			pepper2.startPepper();
+			//for more than one enemy, use pepperArray.
+			pepperArray = new Pepper[2];
+			pepperArray[0] = new Pepper(6, 18);
+			pepperArray[1] = new Pepper(6, 16);
+			for(int i = 0; i < pepperArray.length; i++) {
+				pepperArray[i].pepperBehaviour();
+				pepperArray[i].pepperPaint(level);
+				pepperArray[i].startPepper();
+			}
 			break;
 		case 4:
 			pepper = new Pepper(2, 13);
@@ -73,56 +79,31 @@ public class NpcManager {
 			pepper.startPepper();
 			break;
 		case 7:
-			pepper = new Pepper(12, 19);
-			pepper.pepperBehaviour();
-			pepper.pepperPaint(level);
-			pepper.startPepper();
+			pepperArray = new Pepper[3];
+			for(int i = 0; i < pepperArray.length; i++) {
+				pepperArray[i] = new Pepper(12, 19);
+				pepperArray[i].pepperBehaviour();
+				pepperArray[i].pepperPaint(level);
+				pepperArray[i].startPepper();
+			}
+			break;
+		case 9:
+			pepperArray = new Pepper[2];
+			for(int i = 0; i < pepperArray.length; i++) {
+				pepperArray[i] = new Pepper(16, 16);
+				pepperArray[i].pepperBehaviour();
+				pepperArray[i].pepperPaint(level);
+				pepperArray[i].startPepper();
+			}
 			break;
 		case 10:
-			pepper = new Pepper(5, 14);
-			pepper.pepperBehaviour();
-			pepper.pepperPaint(level);
-			pepper.startPepper();
-			
-			pepper2 = new Pepper(5, 14);
-			pepper2.pepperBehaviour();
-			pepper2.pepperPaint(level);
-			pepper2.startPepper();
-			
-			pepper3 = new Pepper(5, 14);
-			pepper3.pepperBehaviour();
-			pepper3.pepperPaint(level);
-			pepper3.startPepper();
-			
-			pepper4 = new Pepper(5, 14);
-			pepper4.pepperBehaviour();
-			pepper4.pepperPaint(level);
-			pepper4.startPepper();
-			
-			pepper5 = new Pepper(5, 14);
-			pepper5.pepperBehaviour();
-			pepper5.pepperPaint(level);
-			pepper5.startPepper();
-			
-			pepper6 = new Pepper(5, 14);
-			pepper6.pepperBehaviour();
-			pepper6.pepperPaint(level);
-			pepper6.startPepper();
-			
-			pepper7 = new Pepper(5, 14);
-			pepper7.pepperBehaviour();
-			pepper7.pepperPaint(level);
-			pepper7.startPepper();
-			
-			pepper8 = new Pepper(5, 14);
-			pepper8.pepperBehaviour();
-			pepper8.pepperPaint(level);
-			pepper8.startPepper();
-			
-			pepper9 = new Pepper(5, 14);
-			pepper9.pepperBehaviour();
-			pepper9.pepperPaint(level);
-			pepper9.startPepper();
+			pepperArray = new Pepper[12];
+			for(int i = 0; i < pepperArray.length; i++) {
+				pepperArray[i] = new Pepper(5, 14);
+				pepperArray[i].pepperBehaviour();
+				pepperArray[i].pepperPaint(level);
+				pepperArray[i].startPepper();
+			}
 			break;
 		default:
 			break;
@@ -135,46 +116,24 @@ public class NpcManager {
 		case 1:
 			pepper.stopPepper();
 			break;
-		case 2:
-			pepper.stopPepper();
-			pepper2.stopPepper();
-			break;
 		case 4:
 			pepper.stopPepper();
 			break;
-		case 7:
-			pepper.stopPepper();
-			break;
-		case 10:
-			pepper.stopPepper();
-			pepper2.stopPepper();
-			pepper3.stopPepper();
-			pepper4.stopPepper();
-			pepper5.stopPepper();
-			pepper6.stopPepper();
-			pepper7.stopPepper();
-			pepper8.stopPepper();
-			pepper9.stopPepper();
-			break;
 		default:
+			if(pepperArray.length > 0) {
+				for(int i = 0; i < pepperArray.length; i++) {
+					pepperArray[i].stopPepper();
+				}
+			}
 			break;
 		}
 		
 	}
 
 	public void checkCollision(int level, int playerX, int playerY) {
-		//insert all created enemies for each level
 		switch(level) {
 		case 1:
 			if(playerX == pepper.getEnPosX() && playerY == pepper.getEnPosY()){
-				GameManager.loseLife();
-			}
-			break;
-		case 2:
-			if(playerX == pepper.getEnPosX() && playerY == pepper.getEnPosY()){
-				GameManager.loseLife();
-			}
-			if(playerX == pepper2.getEnPosX() && playerY == pepper2.getEnPosY()){
 				GameManager.loseLife();
 			}
 			break;
@@ -183,41 +142,14 @@ public class NpcManager {
 				GameManager.loseLife();
 			}
 			break;
-		case 7:
-			if(playerX == pepper.getEnPosX() && playerY == pepper.getEnPosY()){
-				GameManager.loseLife();
-			}
-			break;
-		case 10:
-			if(playerX == pepper.getEnPosX() && playerY == pepper.getEnPosY()){
-				GameManager.loseLife();
-			}
-			if(playerX == pepper2.getEnPosX() && playerY == pepper2.getEnPosY()){
-				GameManager.loseLife();
-			}
-			if(playerX == pepper3.getEnPosX() && playerY == pepper3.getEnPosY()){
-				GameManager.loseLife();
-			}
-			if(playerX == pepper4.getEnPosX() && playerY == pepper4.getEnPosY()){
-				GameManager.loseLife();
-			}
-			if(playerX == pepper5.getEnPosX() && playerY == pepper5.getEnPosY()){
-				GameManager.loseLife();
-			}
-			if(playerX == pepper6.getEnPosX() && playerY == pepper6.getEnPosY()){
-				GameManager.loseLife();
-			}
-			if(playerX == pepper7.getEnPosX() && playerY == pepper7.getEnPosY()){
-				GameManager.loseLife();
-			}
-			if(playerX == pepper8.getEnPosX() && playerY == pepper8.getEnPosY()){
-				GameManager.loseLife();
-			}
-			if(playerX == pepper9.getEnPosX() && playerY == pepper9.getEnPosY()){
-				GameManager.loseLife();
-			}
-			break;
 		default:
+			if(pepperArray.length > 0) {
+				for(int i = 0; i < pepperArray.length; i++) {
+					if(playerX == pepperArray[i].getEnPosX() && playerY == pepperArray[i].getEnPosY()){
+						GameManager.loseLife();
+					}
+				}
+			}
 			break;
 		}
 		
