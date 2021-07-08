@@ -11,13 +11,13 @@ import mainGame.GameManager;
 
 public class Pepper {
 	private int lastMove;
-	int moveTo;
-	public Timer pepperMove;
+	private int moveTo;
+	private Timer pepperMove;
 	private int dirCounter;
-	public int enPosX;
-	public int enPosY;
-	Random rnd = new Random();
-	
+	private int enPosX;
+	private int enPosY;
+	private Random rnd = new Random();
+
 	ActionListener pepperRun;
 	int delay = 300; // peppers speed
 
@@ -25,7 +25,7 @@ public class Pepper {
 		this.enPosX = enPosX;
 		this.enPosY = enPosY;
 	}
-	
+
 	protected int getEnPosX() {
 		return enPosX;
 	}
@@ -33,47 +33,31 @@ public class Pepper {
 	protected int getEnPosY() {
 		return enPosY;
 	}
-
-	public void pepperPaint(int level) {
-		switch (level) {
-		case 1:
-			GameManager.board.receiveMessage("image " + enPosX + " " + enPosY + " ./images/pepper.png \n");
-			break;
-		case 2:
-			GameManager.board.receiveMessage("image " + enPosX + " " + enPosY + " ./images/pepper.png \n");
-			break;
-		case 7:
-			GameManager.board.receiveMessage("image " + enPosX + " " + enPosY + " ./images/pepper.png \n");
-			break;
-		default:
-			break;
-		}
-	}
-
+	
 	public void startPepper() {
 		pepperMove = new Timer(delay, pepperRun);
 		pepperMove.start();
+		GameManager.board.receiveMessage("image " + enPosX + " " + enPosY + " ./images/pepper.png \n");
 	}
-	
+
 	public void stopPepper() {
 		if (pepperMove != null && pepperMove.isRunning()) {
 			pepperMove.stop();
 		}
 	}
-	
+
 	public void pepperBehaviour() {
 		pepperRun = new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				int rollDice;
 				// 0 = UP ; 1 = DOWN ; 2 = LEFT ; 3 = RIGHT
 				if (fieldAvailable(lastMove)) {
-					if(lastMove == 0 || lastMove == 1) {
+					if (lastMove == 0 || lastMove == 1) {
 						moveTo = checkLeftRight(lastMove);
-					}
-					else if(lastMove == 2 || lastMove == 3) {
+					} else if (lastMove == 2 || lastMove == 3) {
 						moveTo = checkUpDown(lastMove);
 					}
-					if(moveTo == lastMove) {
+					if (moveTo == lastMove) {
 						moveTo = checkDirCounter(lastMove, dirCounter);
 					}
 				} else {
@@ -143,9 +127,13 @@ public class Pepper {
 			}
 		};
 	}
-	
+
 	protected void movePepper(int moveTo) {
-		//checking for lavaField and repainting
+		// checking for lavaField and repainting
+		// TODO: rewrite if-statement:
+		// sometimes pepper disappears for a second, when deciding which way to go just
+		// takes too long
+		// (possibly because we delete the image, before painting a new one)
 		if (GameManager.lavaPainter(enPosX, enPosY)) {
 			GameManager.board.receiveMessage("image " + enPosX + " " + enPosY + " ./images/earth_fire.jpg \n");
 		} else {
@@ -195,24 +183,24 @@ public class Pepper {
 	protected int checkUpDown(int lastMove) {
 		int moveTo, roll;
 		Random rnd = new Random();
-		if(fieldAvailable(0)) {
+		if (fieldAvailable(0)) {
 			roll = rnd.nextInt(2) + 1;
-			if(fieldAvailable(1)) {
-				if(roll % 2 != 0) {
+			if (fieldAvailable(1)) {
+				if (roll % 2 != 0) {
 					moveTo = 1;
 				} else {
 					moveTo = 0;
 				}
 			} else {
-				if(roll % 2 != 0) {
+				if (roll % 2 != 0) {
 					moveTo = 0;
 				} else {
 					moveTo = lastMove;
 				}
 			}
-		} else if(fieldAvailable(1)) {
+		} else if (fieldAvailable(1)) {
 			roll = rnd.nextInt(2) + 1;
-			if(roll % 2 != 0) {
+			if (roll % 2 != 0) {
 				moveTo = 1;
 			} else {
 				moveTo = lastMove;
@@ -226,24 +214,24 @@ public class Pepper {
 	protected int checkLeftRight(int lastMove) {
 		int moveTo, roll;
 		Random rnd = new Random();
-		if(fieldAvailable(2)) {
+		if (fieldAvailable(2)) {
 			roll = rnd.nextInt(2) + 1;
-			if(fieldAvailable(3)) {
-				if(roll % 2 != 0) {
+			if (fieldAvailable(3)) {
+				if (roll % 2 != 0) {
 					moveTo = 2;
 				} else {
 					moveTo = 3;
 				}
 			} else {
-				if(roll % 2 != 0) {
+				if (roll % 2 != 0) {
 					moveTo = 2;
 				} else {
 					moveTo = lastMove;
 				}
 			}
-		} else if(fieldAvailable(3)) {
+		} else if (fieldAvailable(3)) {
 			roll = rnd.nextInt(2) + 1;
-			if(roll % 2 != 0) {
+			if (roll % 2 != 0) {
 				moveTo = 3;
 			} else {
 				moveTo = lastMove;
@@ -259,7 +247,7 @@ public class Pepper {
 		String str;
 		String[] split;
 		Symbol symbol;
-		
+
 		switch (direction) {
 		case 0:
 			if (enPosY + 1 < GameManager.boardSize) {
@@ -307,7 +295,7 @@ public class Pepper {
 		}
 		return isAvailable;
 	}
-	
+
 	public void checkPlayerCollision() {
 		if (GameManager.getPosX() == enPosX && GameManager.getPosY() == enPosY) {
 			GameManager.loseLife();

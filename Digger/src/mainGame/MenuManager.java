@@ -178,6 +178,7 @@ public class MenuManager extends GameManager {
 		return help;
 	}
 	
+	// extra screen to get another confirmation from user (in case there already is a savegame file)
 	public static void confirmSave() {
 		JFrame saveConfirmFrame = new JFrame();
 		saveConfirmFrame.setSize(375, 60);
@@ -239,6 +240,7 @@ public class MenuManager extends GameManager {
 		saveConfirmFrame.setAlwaysOnTop(true);
 	}
 
+	// settings menu
 	public static void showOptionsMenu() {
 		JFrame optionFrame = new JFrame();
 		optionFrame.setSize(450, 295);
@@ -318,6 +320,7 @@ public class MenuManager extends GameManager {
 	/**
 	 * @wbp.parser.entryPoint
 	 */
+	//screen at the end of the game (win/lose), with possibility to enter name for highscore etc.)
 	public static void getGameOverMenu(int level) {
 		String hintString;
 		String gameOverString;

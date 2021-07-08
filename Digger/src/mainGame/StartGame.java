@@ -32,7 +32,7 @@ abstract public class StartGame {
 		} catch (Exception e) {
 			player = new Player(lives, points, 1);
 			System.out.println("Failed loading game");
-			System.out.println();
+			System.out.println(e);
 		}
 		manager = GameManager.getInstance();
 		npc = NpcManager.getInstance();

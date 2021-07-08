@@ -20,7 +20,7 @@ public class NpcManager {
 	}
 	
 	//if we decide to add more than one enemy, this should be helpful
-	//currently there's only pepper
+	//currently there's only pepper as enemy, so it's rather useless.
 	public void setUpEnemies(int level) {
 		//insert all enemies to create for each level
 		switch(level) {
@@ -56,9 +56,7 @@ public class NpcManager {
 			pepper = new Pepper(0, 16);
 			//loading enemy behaviour
 			pepper.pepperBehaviour();
-			//set up start position
-			pepper.pepperPaint(level);
-			//start timer
+			//start timer and paint pepper
 			pepper.startPepper();
 			break;
 		case 2:
@@ -68,14 +66,12 @@ public class NpcManager {
 			pepperArray[1] = new Pepper(6, 16);
 			for(int i = 0; i < pepperArray.length; i++) {
 				pepperArray[i].pepperBehaviour();
-				pepperArray[i].pepperPaint(level);
 				pepperArray[i].startPepper();
 			}
 			break;
 		case 4:
 			pepper = new Pepper(2, 13);
 			pepper.pepperBehaviour();
-			pepper.pepperPaint(level);
 			pepper.startPepper();
 			break;
 		case 7:
@@ -83,7 +79,6 @@ public class NpcManager {
 			for(int i = 0; i < pepperArray.length; i++) {
 				pepperArray[i] = new Pepper(12, 19);
 				pepperArray[i].pepperBehaviour();
-				pepperArray[i].pepperPaint(level);
 				pepperArray[i].startPepper();
 			}
 			break;
@@ -92,7 +87,6 @@ public class NpcManager {
 			for(int i = 0; i < pepperArray.length; i++) {
 				pepperArray[i] = new Pepper(16, 16);
 				pepperArray[i].pepperBehaviour();
-				pepperArray[i].pepperPaint(level);
 				pepperArray[i].startPepper();
 			}
 			break;
@@ -101,7 +95,6 @@ public class NpcManager {
 			for(int i = 0; i < pepperArray.length; i++) {
 				pepperArray[i] = new Pepper(5, 14);
 				pepperArray[i].pepperBehaviour();
-				pepperArray[i].pepperPaint(level);
 				pepperArray[i].startPepper();
 			}
 			break;
