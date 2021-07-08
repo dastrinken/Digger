@@ -73,6 +73,7 @@ public class GameManager extends StartGame implements KeyListener {
 	protected static int[][] emptyCauldronArray;
 	public static boolean emptyCauldronsActive;
 
+	//constructor and getInstance (singleton)
 	protected GameManager() {
 		System.out.println("Objektinstanz GameManager gebildet.");
 	}
@@ -84,6 +85,7 @@ public class GameManager extends StartGame implements KeyListener {
 		return manager;
 	}
 
+	//players x and y, useful getters for some methods
 	public static int getPosX() {
 		return posX;
 	}
@@ -115,6 +117,8 @@ public class GameManager extends StartGame implements KeyListener {
 	/**
 	 * @wbp.parser.entryPoint
 	 */
+	
+	//first board setup
 	public void createBoard(Player player) {
 		board = new Board();
 		board.setSize(748, 780);
@@ -155,6 +159,7 @@ public class GameManager extends StartGame implements KeyListener {
 		graphic.addSouthComponent(southPanel);
 	}
 
+	//method that builds the board each level anew
 	public static void setUpBoard() {
 		emptyCauldronsActive = false;
 		frostedCounter = 0;
@@ -199,6 +204,8 @@ public class GameManager extends StartGame implements KeyListener {
 		}
 	}
 
+	//Following methods manage what to do when something happens in the game
+	//for example: checkPosition handles iterations through item arrays and decides what to do when it finds a match
 	public void checkPosition(int posX, int posY) {
 		npc.checkCollision(level, posX, posY);
 		int x = 999, y = 999;
@@ -271,6 +278,13 @@ public class GameManager extends StartGame implements KeyListener {
 		}
 	}
 
+	public void checkFrostCounter() {
+		if (frostedCounter > 0 && fieldAvailable) {
+			--frostedCounter;
+			System.out.println("Frostprotection reduced! Available for: " + frostedCounter + " fields");
+		}
+	}
+	
 	public boolean checkSolids(int posX, int posY) {
 		int x, y;
 		boolean fieldAvailable = true;
@@ -378,7 +392,8 @@ public class GameManager extends StartGame implements KeyListener {
 		}
 		return repaint;
 	}
-
+	
+	//Next methods are to call, when collecting points, losing life or get damage
 	private void afflictDmg() {
 		--dmgCounter;
 		SoundManager.playSound("dmg");
@@ -442,6 +457,7 @@ public class GameManager extends StartGame implements KeyListener {
 	public void keyTyped(KeyEvent e) {
 	}
 
+	// methods to call when user presses a key
 	// TODO: use game-loop instead of keyPressed
 	@Override
 	public void keyPressed(KeyEvent e) {
@@ -541,6 +557,7 @@ public class GameManager extends StartGame implements KeyListener {
 		}
 	}
 
+	//paints the players character onto the board
 	public void paintPlayer() {
 		xsend.farbe2(posX, posY, 0x95612D);
 		if (moveLeft == true) {
@@ -558,13 +575,7 @@ public class GameManager extends StartGame implements KeyListener {
 		}
 	}
 
-	public void checkFrostCounter() {
-		if (frostedCounter > 0 && fieldAvailable) {
-			--frostedCounter;
-			System.out.println("Frostprotection reduced! Available for: " + frostedCounter + " fields");
-		}
-	}
-
+	//saving player object
 	public static boolean save() {
 		boolean saved;
 		try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("savegame.bin"))) {
@@ -575,6 +586,7 @@ public class GameManager extends StartGame implements KeyListener {
 		} catch (Exception e) {
 			saved = false;
 			System.out.println("Failed to save game");
+			System.out.print(e);
 			System.out.println();
 		}
 		return saved;
