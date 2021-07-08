@@ -27,11 +27,11 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 
+/**
+ * Main class to organize most of the game.
+ * 
+ */
 public class GameManager extends StartGame implements KeyListener {
-	/**
-	 * Main class to organize most of the game.
-	 * 
-	 */
 	// General variables
 	private static GameManager manager = new GameManager();
 	protected static boolean move = true;
